@@ -1,0 +1,325 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    background-color: #f4f4f9;
+}
+
+.nav-container {
+    width: 15vw;
+    height: 100vh;
+    background-color: rgb(15, 18, 63);
+    display: flex;
+    flex-direction: column;
+}
+
+.nav1, .nav2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.nav2 {
+    margin-top: auto;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu {
+    width: 100%;
+    list-style-type: none;
+}
+
+.menu li {
+    padding: 17px 0;
+    cursor: pointer;
+}
+
+.menu li a {
+    color: #ffffff;
+    padding: 0 2em;
+    text-decoration: none;
+}
+
+.menu li:hover a, #active a {
+    color: rgb(254, 152, 30);
+}
+
+main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 10px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px;
+}
+
+.container-billetera p {
+    color: rgb(139, 156, 170);
+    font-size: 20px;
+    text-align: start;
+}
+
+.container-billetera .dinero {
+    font-weight: 800;
+    color: #ffffff;
+    font-size: 40px;
+}
+
+.container-billetera .gasto{
+    display: inline-block;
+    text-align: end;
+    width: 50%;
+    color: rgb(190, 89, 89);
+}
+
+.container-billetera .ingreso{
+    display: inline-block;
+    text-align: start;
+    width: 40%;
+    color: rgb(78, 160, 78);
+    margin-top: 1em;
+}
+
+.tipo-mov-ing{
+    display: inline-block;
+    text-align: start;
+    width: 60%;
+}
+
+.tipo-mov-egr{
+    display: inline-block;
+    text-align: end;
+    width: 20%;
+}
+
+.container-grafico p{
+    display: inline;
+}
+
+.chart-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #4caf50 0% calc(var(--ingresos) * 1%), 
+        #f44336 calc(var(--ingresos) * 1%) 100%
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.chart-container::before {
+    content: '';
+    width: 100px;
+    height: 100px;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.chart-label {
+    position: absolute;
+    font-size: 14px;
+    font-weight: 600;
+    color:#333;
+}
+
+.detalles {
+    font-size: 30px;
+    text-align: end;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+}
+
+.detalle-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 25px;
+}
+
+.punto-verde, .punto-rojo {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.punto-verde {
+    background-color: green;
+}
+
+.punto-rojo {
+    background-color: red;
+}
+
+.month {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.month-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.prev, .next {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: rgb(254, 152, 30);
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    font-weight: bold;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.days div {
+    padding: 3px;
+    margin: 1px 0;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.days .ingreso{
+    border: 0.1px solid white;
+    background-color: rgb(78, 160, 78);
+    color: black;
+    cursor: pointer;
+    height: 23px;
+    width: 42px;
+    font-weight: 700;
+}
+
+.days .egreso{
+    border: 0.1px solid white;
+    background-color: rgb(190, 89, 89);
+    color: black;
+    cursor: pointer;
+    height: 23px;
+    width: 42px;
+    font-weight: 700;
+}
+
+.days div:hover {
+    border: 0.1px solid white;
+    background-color: #ffffff;
+    color: black;
+    cursor: pointer;
+    height: 23px;
+    width: 42px;
+    font-weight: 700;
+}
+
+.prev-month, .next-month {
+    color: #837c7c;
+}
+
+.list-container{
+    background-color: rgb(15, 18, 63);
+    padding: 20px;
+    border-radius: 10px;
+    color: #ffffff;
+    text-align: center;
+    grid-column: 1 / span 3;
+    width: 100%;
+    height: 49vh;
+    display: grid;
+    flex-wrap: wrap;
+    grid-template-columns: 13% repeat(4, 22%);
+    grid-template-rows: auto;
+    position: relative;
+    text-align: center;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: space-between;
+}
+
+.container-billetera, .container-grafico, .calendar-container {
+    background-color: rgb(15, 18, 63);
+    padding: 20px;
+    border-radius: 10px;
+    color: #ffffff;
+    text-align: center;
+    height: 16em;
+}
+
+.container-billetera {
+    padding-top: 40px;
+}
+
+.container-grafico {
+    padding-top: 10px;
+}
+
+.calendar-container {
+    padding-top: 20px;
+}
+
+.table-category{
+    display: flex;
+    padding: 15px;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: larger;
+    height: 50px;
+}
+
+.finanzas__content {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: 1px solid white;
+    font-size: 1.2em;
+}
+
+.finanzas__content .ingreso{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    color: rgb(78, 160, 78);
+}
+
+.finanzas__content .gasto{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    color: rgb(190, 89, 89);
+}
