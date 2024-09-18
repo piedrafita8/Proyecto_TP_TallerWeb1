@@ -9,7 +9,7 @@ public class Objetivo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private Double metaMonto;
     private String nombre;
 
@@ -17,7 +17,7 @@ public class Objetivo {
     private Date fechaLimite;
 
     // Constructor, getters y setters
-    public Objetivo(Long id, Double metaMonto, String nombre, Date fechaLimite) {
+    public Objetivo(Integer id, Double metaMonto, String nombre, Date fechaLimite) {
         this.id = id;
         this.metaMonto = metaMonto;
         this.nombre = nombre;
@@ -28,11 +28,11 @@ public class Objetivo {
 
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -9,7 +9,7 @@ public class Egreso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private Double monto;
     private String descripcion;
     private TipoMovimiento tipo_movimiento;
@@ -18,7 +18,7 @@ public class Egreso {
     private Date fecha;
 
     // Constructor, getters y setters
-    public Egreso(TipoMovimiento tipoMovimiento, Long id, Double monto, String descripcion, Date fecha) {
+    public Egreso(TipoMovimiento tipoMovimiento, Integer id, Double monto, String descripcion, Date fecha) {
         this.tipo_movimiento = tipoMovimiento;
         this.id = id;
         this.monto = monto;
@@ -26,11 +26,15 @@ public class Egreso {
         this.fecha = fecha;
     }
 
-    public Long getId() {
+    public Egreso() {
+
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
