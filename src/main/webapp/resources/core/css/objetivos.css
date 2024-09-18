@@ -1,0 +1,77 @@
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+  color: #333;
+  text-align: center;
+}
+.add-goal-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.add-goal-form input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.add-goal-form button {
+  padding: 10px 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.goals-list {
+  list-style-type: none;
+  padding: 0;
+}
+.goal-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+.goal-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.goal-progress {
+  margin-bottom: 10px;
+}
+progress {
+  width: 100%;
+  height: 20px;
+}
+.add-money-form {
+  display: flex;
+  gap: 10px;
+}
+.add-money-form input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.add-money-form button {
+  padding: 5px 10px;
+  background-color: #008cba;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
