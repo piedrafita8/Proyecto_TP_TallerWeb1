@@ -1,9 +1,10 @@
 package com.tallerwebi.dominio;
 
-import java.util.List;
+import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 
 public interface ServicioIngreso {
-    List<Ingreso> getAllIngresos();
-    Ingreso crearIngreso(Ingreso ingreso);
-    // Otros métodos
+
+    Ingreso consultarIngreso(Integer monto, Integer id);
+    void registrar(Ingreso ingreso) throws RecursoNoEncontrado;
+
 }
