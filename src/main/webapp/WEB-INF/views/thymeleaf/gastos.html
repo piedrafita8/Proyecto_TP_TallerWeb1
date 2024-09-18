@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../../resources/core/css/gastos.css">
+
+</head>
+<body>
+<div class="nav-container">
+    <div class="nav1">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <ul class="menu">
+                <li id="active">
+                    <a href="index.html">Esquema</a>
+                </li>
+
+                <li>
+                    <a href="ingreso.html">Ingresos</a>
+                </li>
+
+                <li>
+                    <a href="gastos.html">Gastos</a>
+                </li>
+
+                <li>
+                    <a href="objetivos.html">Objetivos</a>
+                </li>
+
+                <li>
+                    <a href="ajustes.html">Ajustes</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="nav2">
+        <nav>
+            <ul class="menu">
+                <li>
+                    <a href="ayuda.html">Centro de Ayuda</a>
+                </li>
+
+                <li>
+                    <a href="contacto.html">Contacto</a>
+                </li>
+
+                <li>
+                    <a href="#">Cerrar sesion</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<main class="col-md-10 ms-sm-auto px-md-4">
+    <div class="conteinerGastos">
+        <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+        <h2 class="text-light">GASTOS</h2>
+     </div>
+
+    <!-- Formulario -->
+    <div class="card bg-dark text-light p-4">
+        <div class="card-body">
+            <h3>$ 60,000 ARS</h3>
+            <div class="form-group">
+                <label for="categorias">Categorías</label>
+                <div id="categorias" class="d-flex justify-content-between my-3">
+                    <button class="btn btn-outline-light">Salud</button>
+                    <button class="btn btn-outline-light">Transporte</button>
+                    <button class="btn btn-outline-light">Café</button>
+                    <button class="btn btn-outline-light">Casa</button>
+                    <button class="btn btn-outline-light">Regalos</button>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" class="form-control bg-primary text-light">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="comentario">Comentario</label>
+                <textarea id="comentario" class="form-control bg-primary text-light"></textarea>
+            </div>
+
+            <button class="btn btn-primary w-100">Añadir</button>
+        </div>
+    </div>
+    </div>
+</main>
+
+</body>
+</html>
