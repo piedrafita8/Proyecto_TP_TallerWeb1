@@ -6,11 +6,17 @@
 
 body {
     font-family: "Poppins", sans-serif;
-    width: 100vw;
     min-height: 100vh;
     display: flex;
     flex-direction: row;
     background-color: #f4f4f9;
+}
+
+h1{
+    color: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+    font-size: 35px;
 }
 
 .nav-container {

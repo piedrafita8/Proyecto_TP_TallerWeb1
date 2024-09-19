@@ -12,6 +12,13 @@ body {
     background-color: #f4f4f9;
 }
 
+h1{
+    color: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+    font-size: 35px;
+}
+
 .nav-container {
     width: 15vw;
     height: 100vh;

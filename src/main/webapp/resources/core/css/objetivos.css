@@ -1,3 +1,9 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
@@ -12,10 +18,21 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-h1 {
+
+h1{
+  color: #f4f4f4;
+  text-align: center;
+  padding: 20px;
+  font-size: 35px;
+}
+
+h2 {
   color: #333;
   text-align: center;
+  padding: 20px;
+  font-size: 35px;
 }
+
 .add-goal-form {
   display: flex;
   gap: 10px;
