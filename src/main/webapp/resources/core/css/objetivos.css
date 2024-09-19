@@ -75,3 +75,6 @@ progress {
   border-radius: 4px;
   cursor: pointer;
 }
+.menu li:hover a, #active a {
+  color: rgb(254, 152, 30);
+}

@@ -181,3 +181,6 @@ input[type="date"]::placeholder, textarea::placeholder {
     background-color: #5A5EDD;
     transition: background-color 0.3s ease-in-out;
 }
+.menu li:hover a, #active a {
+    color: rgb(254, 152, 30);
+}
