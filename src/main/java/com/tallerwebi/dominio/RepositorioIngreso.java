@@ -2,9 +2,9 @@ package com.tallerwebi.dominio;
 
 public interface RepositorioIngreso {
 
-    Ingreso buscarMontoIngreso(Integer montoIngreso);
+    Ingreso buscarMontoIngreso(Double montoIngreso, Integer id);
     void guardar(Ingreso ingreso);
-    Ingreso buscar(Integer montoABuscar);
+    Ingreso buscar(Double montoABuscar);
     void modificar(Ingreso ingreso);
 
 }

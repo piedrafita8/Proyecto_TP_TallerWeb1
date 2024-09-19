@@ -9,7 +9,7 @@ public class RepositorioIngresoImpl implements RepositorioIngreso {
     private SessionFactory sessionFactory;
 
     @Override
-    public Ingreso buscarMontoIngreso(Integer montoIngreso) {
+    public Ingreso buscarMontoIngreso(Integer montoIngreso, Integer id) {
         return null;
     }
 

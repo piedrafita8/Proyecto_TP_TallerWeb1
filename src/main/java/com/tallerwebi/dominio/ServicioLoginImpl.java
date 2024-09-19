@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class ServicioLoginImpl implements ServicioLogin {
 
-    private RepositorioUsuario repositorioUsuario;
+    private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
     public ServicioLoginImpl(RepositorioUsuario repositorioUsuario){
@@ -29,7 +29,7 @@ public class ServicioLoginImpl implements ServicioLogin {
     public void registrar(Usuario usuario) throws UsuarioExistente {
         Usuario usuarioEncontrado = repositorioUsuario.buscarUsuario(usuario.getEmail(), usuario.getPassword());
         if(usuarioEncontrado != null){
-            throw new UsuarioExistente();
+            throw new UsuarioExistente("El usuario ya existe");
         }
         repositorioUsuario.guardar(usuario);
     }

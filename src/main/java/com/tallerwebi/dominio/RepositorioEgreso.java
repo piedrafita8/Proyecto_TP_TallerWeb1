@@ -2,9 +2,9 @@ package com.tallerwebi.dominio;
 
 public interface RepositorioEgreso {
 
-    Egreso buscarMontoEgreso(Integer montoEgreso);
+    Egreso buscarMontoEgreso(Double montoEgreso, Integer id);
     void guardar(Egreso egreso);
-    Egreso buscar(Integer montoABuscar);
+    Egreso buscar(Double montoABuscar);
     void modificar(Egreso egreso);
 
 }

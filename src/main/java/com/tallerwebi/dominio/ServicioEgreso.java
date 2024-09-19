@@ -4,7 +4,7 @@ import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 
 public interface ServicioEgreso {
 
-    Egreso consultarEgreso(Integer monto, Integer id);
+    Egreso consultarEgreso(Double monto, Integer id);
     void registrar(Egreso egreso) throws RecursoNoEncontrado;
 
 }
