@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    background-color: #f4f4f9;
+}
+
+h1{
+    color: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+    font-size: 35px;
+}
+
+.nav-container {
+    width: 15vw;
+    height: 100vh;
+    background-color: rgb(15, 18, 63);
+    display: flex;
+    flex-direction: column;
+}
+
+.nav1, .nav2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.nav2 {
+    margin-top: auto;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu {
+    width: 100%;
+    list-style-type: none;
+}
+
+.menu li {
+    padding: 17px 0;
+    cursor: pointer;
+}
+
+.menu li a {
+    color: #ffffff;
+    padding: 0 2em;
+    text-decoration: none;
+}
+
+.menu li:hover a, #active a {
+    color: rgb(254, 152, 30);
+}
+
+main {
+    display: flex;
+    justify-content: center; /* Centra el contenido */
+    align-items: flex-start; /* Alinea el contenido al inicio del eje vertical */
+    height: 100vh; /* Para ocupar el alto completo de la pantalla */
+    width: 100%;
+}
+
+.contact-container {
+    background-color: rgb(15, 18, 63);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+    border-radius: 20px;
+    color: white;
+    width: 80%;
+    margin: 2em;
+}
+
+h3 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 1em;
+}
+
+.columns-container {
+    display: flex;
+    justify-content: space-between; /* Los separa a la izquierda y derecha */
+    width: 100%;
+}
+
+.column1-contacto, .column2-contacto {
+    display: flex;
+    flex-direction: column;
+    width: 48%; /* Ambos divs ocupan el 48% para dejar espacio entre ellos */
+    padding: 1em;
+    border-left: 3px solid #ffffff;
+    border-right: 3px solid #ffffff;
+}
+
+.column1-contacto article, .column2-contacto article{
+    align-items: flex-start;
+    text-align: center;
+    padding-bottom: 2em;
+    font-size: 2em;
+}
+
+.column2-contacto #redes{
+    align-items: flex-end;
+    text-align: center;
+    padding-bottom: 0.5em;
+    color: #5A5EDD;
+    font-size: 1.9em;
+}
+
+i{
+    color: #5A5EDD;
+}
+
+#horario-atencion{
+    text-align: center;
+    font-size: 2em;
+    padding-top: 1em;
+}

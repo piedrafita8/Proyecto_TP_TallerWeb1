@@ -68,7 +68,7 @@ main {
     justify-content: center; /* Centra el contenido */
     align-items: flex-start; /* Alinea el contenido al inicio del eje vertical */
     height: 100vh; /* Para ocupar el alto completo de la pantalla */
-    width: 100vw;
+    width: 100%;
 }
 /* Estilos generales para el contenedor de gastos */
 .conteinerGastos {
@@ -170,8 +170,6 @@ input[type="date"], input[type="number"], textarea {
 
 input[type="date"]::placeholder, textarea::placeholder {
     color: #B0B0E0; /* Color gris claro para los placeholders */
-
-
 }
 
 /* Botón Añadir */
