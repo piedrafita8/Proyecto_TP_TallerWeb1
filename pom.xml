@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>11</jdk.version>
-        <spring.version>5.2.22.RELEASE</spring.version>
+        <spring.version>6.0.7</spring.version>
         <servletapi.version>4.0.4</servletapi.version>
         <thymeleaf.spring.version>3.0.15.RELEASE</thymeleaf.spring.version>
         <webjars.version>5.2.0</webjars.version>
@@ -111,6 +111,11 @@
             <groupId>com.tallerwebi</groupId>
             <artifactId>tallerwebi-base</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>5.2.22.RELEASE</version>
         </dependency>
         <!-- compile only, deployed container will provide this -->
         <!--
