@@ -1,0 +1,98 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #f4f4f9 ;
+
+}
+
+header {
+    background-color: #0F123FFF;
+    width: 100vw;
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.title a {
+    text-decoration: none;
+    color: white;
+    font-size: 4rem;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.container {
+
+    width: 50%;
+    padding: 20px;
+
+    box-shadow:8px 8px 8px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.mainbox {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.loginText{
+    margin-bottom: 1.5em;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0F123FFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2C387E;
+}
+
+.linkText {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    color: #0F123FFF;
+    text-decoration: none;
+    font-size: 1.3em;
+}
+
+.linkText:hover {
+    text-decoration: underline;
+}
