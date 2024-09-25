@@ -1,10 +1,13 @@
 package com.tallerwebi.dominio;
 
+import java.util.List;
+
 public interface RepositorioEgreso {
 
-    Egreso buscarMontoEgreso(Double montoEgreso, Integer id);
+    void eliminar(Egreso egreso);
     void guardar(Egreso egreso);
-    Egreso buscar(Double montoABuscar);
+    Egreso buscar(Double montoABuscar, Integer idABuscar);
     void modificar(Egreso egreso);
-
+    List<Egreso> obtener();
+    void actualizar(Egreso egreso);
 }

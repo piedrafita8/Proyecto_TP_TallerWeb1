@@ -1,8 +1,7 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Auto;
-import com.tallerwebi.dominio.Modelo;
-import com.tallerwebi.dominio.RepositorioAuto;
+import com.tallerwebi.dominio.Egreso;
+import com.tallerwebi.dominio.RepositorioEgreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,23 +32,18 @@ public class RepositorioEgresoImplTest {
 
     @Test
     @Transactional
-    public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoEntoncesLoEncuentroEnLaBaseDeDatos(){
+    public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoConMonto12000EntoncesLoEncuentroEnLaBaseDeDatos(){
         Egreso egreso = new Egreso();
-        egreso.setDescripcion("Focus");
-        this.sessionFactory.getCurrentSession().save(modelo);
+        egreso.setMonto(12000.0);
+        this.sessionFactory.getCurrentSession().save(egreso);
+        this.repositorioEgreso.guardar(egreso);
 
-        Auto auto = new Auto();
-
-        auto.setModelo(modelo);
-
-        this.repositorioEgreso.guardar(auto);
-
-        String hql = "SELECT a FROM Auto a INNER JOIN a.modelo WHERE a.modelo.descripcion = :modelo";
+        String hql = "SELECT e FROM Egreso e INNER JOIN e.monto WHERE e.monto = :monto";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("modelo", "Focus");
-        Auto autoObtenido = (Auto)query.getSingleResult();
+        query.setParameter("monto", 12000.0);
+        Egreso egresoObtenido = (Egreso)query.getSingleResult();
 
-        assertThat(autoObtenido, equalTo(auto));
+        assertThat(egresoObtenido, equalTo(egreso));
     }
 
 }
