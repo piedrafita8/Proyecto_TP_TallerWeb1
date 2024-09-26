@@ -1,11 +1,14 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Egreso;
-import com.tallerwebi.dominio.Ingreso;
 import com.tallerwebi.dominio.RepositorioEgreso;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class RepositorioEgresoImpl implements RepositorioEgreso {
@@ -28,10 +31,18 @@ public class RepositorioEgresoImpl implements RepositorioEgreso {
 
     @Override
     public Egreso buscar(Double montoABuscar, Integer idABuscar) {
-        return (Egreso) sessionFactory.getCurrentSession().createCriteria(Egreso.class)
-                .add(Restrictions.eq("monto", montoABuscar))
-                .add(Restrictions.eq("id", idABuscar))
-                .uniqueResult();
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Egreso> query = builder.createQuery(Egreso.class);
+        Root<Egreso> root = query.from(Egreso.class);
+
+        // Crear las condiciones de búsqueda
+        Predicate montoPredicate = builder.equal(root.get("monto"), montoABuscar);
+        Predicate idPredicate = builder.equal(root.get("id"), idABuscar);
+
+        // Unir las condiciones
+        query.where(builder.and(montoPredicate, idPredicate));
+
+        return (Egreso) sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
     }
 
     @Override

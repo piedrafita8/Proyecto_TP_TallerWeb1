@@ -6,6 +6,10 @@ import com.tallerwebi.dominio.RepositorioIngreso;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class RepositorioIngresoImpl implements RepositorioIngreso {
@@ -28,10 +32,18 @@ public class RepositorioIngresoImpl implements RepositorioIngreso {
 
     @Override
     public Ingreso buscar(Double montoABuscar, Integer idABuscar) {
-        return (Ingreso) sessionFactory.getCurrentSession().createCriteria(Ingreso.class)
-                .add(Restrictions.eq("monto", montoABuscar))
-                .add(Restrictions.eq("id", idABuscar))
-                .uniqueResult();
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Ingreso> query = builder.createQuery(Ingreso.class);
+        Root<Ingreso> root = query.from(Ingreso.class);
+
+        // Crear las condiciones de búsqueda
+        Predicate montoPredicate = builder.equal(root.get("monto"), montoABuscar);
+        Predicate idPredicate = builder.equal(root.get("id"), idABuscar);
+
+        // Unir las condiciones
+        query.where(builder.and(montoPredicate, idPredicate));
+
+        return (Ingreso) sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
     }
 
     @Override
