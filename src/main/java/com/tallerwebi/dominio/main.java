@@ -1,32 +1,37 @@
 package com.tallerwebi.dominio;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class main {
 
-    public static Connection conexionBD(String bd){
-        Connection conexion;
-        String host = "jdbc:mysql://127.0.0.1:3306";
-        String user = "root";
-        String pass = "";
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://127.0.0.1:3306/BaseDeDatosApiTallerWeb1?serverTimezone=UTC";
+        String userName = "root";
+        String password = "";
 
         System.out.println("Cargando...");
 
         try {
-            conexion = DriverManager.getConnection(host+bd, user, pass);
+            Connection conexion = DriverManager.getConnection(url, userName, password);
+            Statement statement = conexion.createStatement();
+
+            ResultSet resultado = statement.executeQuery("SELECT * FROM Usuario");
+
+            while (resultado.next()) {
+                System.out.println(resultado.getString("id_usuario") + " | " +
+                        resultado.getString("email") + " | " +
+                        resultado.getString("contrasenia") + " | " +
+                        resultado.getString("rol"));
+            }
+
             System.out.println("Conexion exitosa");
+
+            conexion.close();
+            statement.close();
+            resultado.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
-
-        return conexion;
-    }
-
-    public static void main(String[] args) {
-        Connection bd = conexionBD("BaseDeDatosApiTallerWeb1");
     }
 
 }
