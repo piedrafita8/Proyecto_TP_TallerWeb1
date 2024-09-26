@@ -21,11 +21,15 @@ import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioIngresoImplTest {
+public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
 
     @Autowired
     private SessionFactory sessionFactory;
     private RepositorioIngreso repositorioIngreso;
+
+    public RepositorioIngresoImplTest(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 
     @BeforeEach
     public void init(){

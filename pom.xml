@@ -19,7 +19,9 @@
         <mockito.version>5.3.1</mockito.version>
         <hibernate.version>5.4.24.Final</hibernate.version>
         <playwright.version>1.36.0</playwright.version>
-        <hsqldb.version>2.3.2</hsqldb.version>
+        <hsqldb.version>2.7.1</hsqldb.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -76,7 +78,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
+            <version>5.3.21</version>
             <scope>test</scope>
         </dependency>
 

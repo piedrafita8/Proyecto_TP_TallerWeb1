@@ -33,17 +33,22 @@ public class RepositorioEgresoImplTest {
     @Test
     @Transactional
     public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoConMonto12000EntoncesLoEncuentroEnLaBaseDeDatos(){
+        // Crear un objeto Egreso con el monto deseado
         Egreso egreso = new Egreso();
         egreso.setMonto(12000.0);
-        this.sessionFactory.getCurrentSession().save(egreso);
+
+        // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
         this.repositorioEgreso.guardar(egreso);
 
-        String hql = "SELECT e FROM Egreso e INNER JOIN e.monto WHERE e.monto = :monto";
+        // Hacer la consulta HQL para encontrar el egreso guardado
+        String hql = "SELECT e FROM Egreso e WHERE e.monto = :monto";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("monto", 12000.0);
-        Egreso egresoObtenido = (Egreso)query.getSingleResult();
 
+        // Obtener el resultado de la consulta
+        Egreso egresoObtenido = (Egreso) query.getSingleResult();
+
+        // Verificar que el egreso guardado es el mismo que el obtenido
         assertThat(egresoObtenido, equalTo(egreso));
     }
-
 }
