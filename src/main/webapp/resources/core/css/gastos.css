@@ -1,0 +1,192 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    background-color: #f4f4f9;
+}
+
+h1{
+    color: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+    font-size: 35px;
+}
+
+.nav-container {
+    width: 15vw;
+    height: 100vh;
+    background-color: rgb(15, 18, 63);
+    display: flex;
+    flex-direction: column;
+}
+
+.nav1, .nav2 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.nav2 {
+    margin-top: auto;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu {
+    width: 100%;
+    list-style-type: none;
+}
+
+.menu li {
+    padding: 17px 0;
+    cursor: pointer;
+}
+
+.menu li a {
+    color: #ffffff;
+    padding: 0 2em;
+    text-decoration: none;
+}
+
+.menu li:hover a, #active a {
+    color: rgb(254, 152, 30);
+}
+
+main {
+    display: flex;
+    justify-content: center; /* Centra el contenido */
+    align-items: flex-start; /* Alinea el contenido al inicio del eje vertical */
+    height: 100vh; /* Para ocupar el alto completo de la pantalla */
+    width: 100%;
+}
+/* Estilos generales para el contenedor de gastos */
+.conteinerGastos {
+
+    background-color: #1F1A3D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+    border-radius: 20px;
+    color: white;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin-top: 2em;
+
+
+
+
+}
+
+/* Título de gastos */
+.conteinerGastos h2 {
+
+    text-align: center;
+    width: 15em;
+    border-radius: 1.5em ;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+i{
+    font-size: 2em;
+    text-align: center;
+}
+
+/* Estilos del Card (Tarjeta) principal del formulario */
+.card {
+    background-color: #1F1A3D;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    border: none;
+    width: 100%; /* El card también ocupa todo el ancho disponible */
+    text-align: center;
+    row-gap: 5px;
+
+
+
+
+}
+
+.card-body h3 {
+    text-align: center;
+    letter-spacing: 3px;
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 20px;
+
+    border-radius: 1.5em ;
+
+}
+
+/* Estilos para las categorías (Botones) */
+
+    #categorias button {
+        background-color: transparent;
+        border: 2px solid #7A7EFF; /* Borde blanco */
+        color: white;
+        border-radius: 12px;
+        padding: 10px 35px ;
+        font-size: 1.5rem;
+        transition: all 0.3s ease-in-out;
+        margin: 20px 10px; /* Espacio entre botones */
+
+
+
+    }
+
+#categorias button:hover {
+    background-color: #7A7EFF; /* Cambio de color al pasar el mouse */
+    color: #202060; /* Color del texto cambia al azul oscuro */
+}
+
+/* Estilos para los inputs de fecha y comentario */
+input[type="date"], input[type="number"], textarea {
+    background-color: #2C387E;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    padding: 1px;
+    font-size: 2rem;
+    width: 100%;
+    height: 2.5em;
+    text-align: left;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+input[type="date"]::placeholder, textarea::placeholder {
+    color: #B0B0E0; /* Color gris claro para los placeholders */
+}
+
+/* Botón Añadir */
+.btn-primary {
+    background-color: #7A7EFF;
+    border: none;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #5A5EDD;
+    transition: background-color 0.3s ease-in-out;
+}
+.menu li:hover a, #active a {
+    color: rgb(254, 152, 30);
+}

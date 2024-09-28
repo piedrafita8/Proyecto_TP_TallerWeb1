@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Objetivo</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../../resources/core/css/index.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../../resources/core/css/objetivos.css"
+    />
+  </head>
+  <body>
+    <div class="nav-container">
+      <div class="nav1">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+          <ul class="menu">
+            <h1>Finanzas SAT</h1>
+            <li >
+              <a href="index.html">Esquema</a>
+            </li>
+
+            <li>
+              <a href="ingreso.html">Ingresos</a>
+            </li>
+
+            <li>
+              <a href="gastos.html">Gastos</a>
+            </li>
+
+            <li id="active">
+              <a href="objetivos.html">Objetivos</a>
+            </li>
+
+            <li>
+              <a href="ajustes.html">Ajustes</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="nav2">
+        <nav>
+          <ul class="menu">
+            <li>
+              <a href="ayuda.html">Centro de Ayuda</a>
+            </li>
+
+            <li>
+              <a href="contacto.html">Contacto</a>
+            </li>
+
+            <li>
+              <a href="login.html">Cerrar sesion</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>Objetivos de Ahorro</h2>
+
+      <form class="add-goal-form">
+        <input type="text" placeholder="Nombre del Objetivo" required />
+        <input type="number" placeholder="Monto del objetivo" required />
+        <button type="submit">Crear Objetivo</button>
+      </form>
+
+      <ul class="goals-list">
+        <!-- Acá se ejecuta el .JS para mostrar los objetivos -->
+      </ul>
+    </div>
+    <script src="../../../resources/core/js/objetivos.js"></script>
+  </body>
+</html>

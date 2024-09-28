@@ -10,8 +10,6 @@ public class Egreso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-
     private Double monto;
     private String descripcion;
     private TipoMovimiento tipo_movimiento;
@@ -19,7 +17,7 @@ public class Egreso {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    // Constructor, getters y setters
+    // Constructor
     public Egreso(TipoMovimiento tipoMovimiento, Integer id, Double monto, String descripcion, Date fecha) {
         this.tipo_movimiento = tipoMovimiento;
         this.id = id;
@@ -28,10 +26,12 @@ public class Egreso {
         this.fecha = fecha;
     }
 
+    // Constructor por default
     public Egreso() {
 
     }
 
+    // Getters y Setters
     public Integer getId() {
         return id;
     }

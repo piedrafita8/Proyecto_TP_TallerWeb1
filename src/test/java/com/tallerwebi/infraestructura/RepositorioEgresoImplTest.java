@@ -1,14 +1,14 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Auto;
-import com.tallerwebi.dominio.Modelo;
-import com.tallerwebi.dominio.RepositorioAuto;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -20,36 +20,37 @@ import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioEgresoImplTest {
+public class RepositorioEgresoImplTest{
 
     @Autowired
     private SessionFactory sessionFactory;
-    private RepositorioEgreso repositorioEgreso;
+    private RepositorioEgreso RepositorioEgreso;
 
     @BeforeEach
     public void init(){
-        this.repositorioEgreso = new RepositorioEgresoImpl(sessionFactory);
+        this.RepositorioEgreso = new RepositorioEgresoImpl(sessionFactory);
     }
 
     @Test
     @Transactional
-    public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoEntoncesLoEncuentroEnLaBaseDeDatos(){
+    @Rollback
+    public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoConMonto12000EntoncesLoEncuentroEnLaBaseDeDatos(){
+        // Crear un objeto Egreso con el monto deseado
         Egreso egreso = new Egreso();
-        egreso.setDescripcion("Focus");
-        this.sessionFactory.getCurrentSession().save(modelo);
+        egreso.setMonto(12000.0);
 
-        Auto auto = new Auto();
+        // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
+        this.RepositorioEgreso.guardar(egreso);
 
-        auto.setModelo(modelo);
-
-        this.repositorioEgreso.guardar(auto);
-
-        String hql = "SELECT a FROM Auto a INNER JOIN a.modelo WHERE a.modelo.descripcion = :modelo";
+        // Hacer la consulta HQL para encontrar el egreso guardado
+        String hql = "SELECT e.monto FROM Egreso e WHERE e.monto = :monto";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("modelo", "Focus");
-        Auto autoObtenido = (Auto)query.getSingleResult();
+        query.setParameter("monto", 12000.0);
 
-        assertThat(autoObtenido, equalTo(auto));
+        // Obtener el resultado de la consulta
+        Egreso egresoObtenido = (Egreso) query.getSingleResult();
+
+        // Verificar que el egreso guardado es el mismo que el obtenido
+        assertThat(egresoObtenido, equalTo(egreso));
     }
-
 }
