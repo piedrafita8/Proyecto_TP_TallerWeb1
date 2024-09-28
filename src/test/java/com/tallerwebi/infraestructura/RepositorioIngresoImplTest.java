@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Modelo;
-import com.tallerwebi.dominio.RepositorioModelo;
+import com.tallerwebi.dominio.Ingreso;
+import com.tallerwebi.dominio.RepositorioIngreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,11 +21,15 @@ import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioIngresoImplTest {
+public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
 
     @Autowired
     private SessionFactory sessionFactory;
     private RepositorioIngreso repositorioIngreso;
+
+    public RepositorioIngresoImplTest(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 
     @BeforeEach
     public void init(){
@@ -34,58 +38,57 @@ public class RepositorioIngresoImplTest {
 
     @Test
     @Transactional
-    @Rollback
-    public void dadoQueExisteUnRepositorioModeloCuandoGuardoUnModeloEntoncesLoEncuentroEnLaBaseDeDatos(){
-        Modelo modelo = new Modelo();
-        modelo.setDescripcion("Focus");
+    public void dadoQueExisteUnRepositorioIngresoCuandoAgregoUnIngresoConMonto130000EntoncesLoEncuentroEnLaBaseDeDatos(){
+        Ingreso ingreso = new Ingreso();
+        ingreso.setMonto(130000.0);
+        this.sessionFactory.getCurrentSession().save(ingreso);
+        this.repositorioIngreso.guardar(ingreso);
 
-        this.repositorioModelo.guardar(modelo);
-
-        String hql = "FROM Modelo WHERE descripcion = :descripcion";
+        String hql = "SELECT i FROM Ingreso i INNER JOIN i.monto WHERE i.monto = :monto";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("descripcion", "Focus");
-        Modelo modeloObtenido = (Modelo)query.getSingleResult();
+        query.setParameter("monto", 130000.0);
+        Ingreso ingresoObtenido = (Ingreso)query.getSingleResult();
 
-        assertThat(modeloObtenido, equalTo(modelo));
+        assertThat(ingresoObtenido, equalTo(ingreso));
     }
 
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioModeloCuandoGuardo3ModelosEntoncesEncuentro3ModelosEnLaBaseDeDatos(){
-        Modelo focus = new Modelo();
-        focus.setDescripcion("Focus");
-        Modelo gol = new Modelo();
-        gol.setDescripcion("Gol");
-        Modelo palio = new Modelo();
-        palio.setDescripcion("Palio");
-        this.sessionFactory.getCurrentSession().save(focus);
-        this.sessionFactory.getCurrentSession().save(gol);
-        this.sessionFactory.getCurrentSession().save(palio);
+    public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentro3IngresosEnLaBaseDeDatos(){
+        Ingreso ingreso1 = new Ingreso();
+        ingreso1.setMonto(130000.0);
+        Ingreso ingreso2 = new Ingreso();
+        ingreso2.setMonto(80000.0);
+        Ingreso ingreso3 = new Ingreso();
+        ingreso3.setMonto(199000.0);
+        this.sessionFactory.getCurrentSession().save(ingreso1);
+        this.sessionFactory.getCurrentSession().save(ingreso2);
+        this.sessionFactory.getCurrentSession().save(ingreso3);
 
-        List<Modelo> modelosObtenidos = this.repositorioModelo.obtener();
+        List<Ingreso> ingresosObtenidos = this.repositorioIngreso.obtener();
 
         int cantidadEsperada = 3;
-        assertThat(modelosObtenidos.size(), equalTo(cantidadEsperada));
+        assertThat(ingresosObtenidos.size(), equalTo(cantidadEsperada));
     }
 
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioModeloCuandoActualizoUnModeloEntoncesLoEncuentroEnLaBaseDeDatos(){
-        Modelo modelo = new Modelo();
-        modelo.setDescripcion("Focus");
-        this.sessionFactory.getCurrentSession().save(modelo);
-        String nuevaDescripcion = "Gol";
-        modelo.setDescripcion(nuevaDescripcion);
+    public void dadoQueExisteUnRepositorioIngresoCuandoActualizoUnIngresoEntoncesLoEncuentroEnLaBaseDeDatos(){
+        Ingreso ingreso = new Ingreso();
+        ingreso.setMonto(130000.0);
+        this.sessionFactory.getCurrentSession().save(ingreso);
+        Double nuevoMonto = 178000.0;
+        ingreso.setMonto(nuevoMonto);
 
-        this.repositorioModelo.actualizar(modelo);
+        this.repositorioIngreso.actualizar(ingreso);
 
-       Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Modelo WHERE descripcion = :descripcion");
-       query.setParameter("descripcion", "Gol");
+       Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Ingreso WHERE monto = :monto");
+       query.setParameter("monto", 178000.0);
 
-       Modelo modeloObtenido = (Modelo)query.getSingleResult();
+       Ingreso ingresoObtenido = (Ingreso)query.getSingleResult();
 
-        assertThat(modeloObtenido.getDescripcion(), equalTo(nuevaDescripcion));
+        assertThat(ingresoObtenido.getDescripcion(), equalTo(nuevoMonto));
     }
 }

@@ -10,6 +10,7 @@ public class Objetivo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private Double metaMonto;
     private String nombre;
 

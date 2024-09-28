@@ -10,6 +10,7 @@ public class Ingreso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private Double monto;
     private String descripcion;
     private TipoMovimiento tipo_movimiento;
