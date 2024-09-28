@@ -38,6 +38,7 @@ public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
 
     @Test
     @Transactional
+    @Rollback
     public void dadoQueExisteUnRepositorioIngresoCuandoAgregoUnIngresoConMonto130000EntoncesLoEncuentroEnLaBaseDeDatos(){
         Ingreso ingreso = new Ingreso();
         ingreso.setMonto(130000.0);

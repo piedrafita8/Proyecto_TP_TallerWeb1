@@ -1,9 +1,7 @@
 package com.tallerwebi.presentacion;
 
-
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,11 +13,11 @@ import java.util.List;
 
 @Controller
 public class ControladorEgreso {
-    @Autowired
+
     private ServicioEgreso egresoService;
 
     @GetMapping
-    public List<Egreso> getAllEgresos() {
+    public List<Egreso> todosLosEgresos() {
         return egresoService.getAllEgresos();
     }
 

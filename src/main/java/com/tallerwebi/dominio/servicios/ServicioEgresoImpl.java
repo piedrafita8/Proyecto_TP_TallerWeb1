@@ -14,11 +14,11 @@ import java.util.List;
 @Transactional
 public class ServicioEgresoImpl implements ServicioEgreso {
 
-    private final RepositorioEgreso RepositorioEgreso;
+    private static RepositorioEgreso repositorioEgreso;
 
     @Autowired
-    public ServicioEgresoImpl(RepositorioEgreso RepositorioEgreso){
-        this.RepositorioEgreso = RepositorioEgreso;
+    public ServicioEgresoImpl(RepositorioEgreso repositorioEgreso){
+        ServicioEgresoImpl.repositorioEgreso = repositorioEgreso;
     }
 
     @Override
