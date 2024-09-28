@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
 
-import com.tallerwebi.dominio.Egreso;
-import com.tallerwebi.dominio.ServicioEgreso;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

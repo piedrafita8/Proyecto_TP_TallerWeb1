@@ -1,4 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.models;
+
+import com.tallerwebi.dominio.enums.TipoMovimiento;
 
 import javax.persistence.*;
 import java.util.Date;

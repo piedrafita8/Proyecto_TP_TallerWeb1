@@ -1,4 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.interfaces;
+
+import com.tallerwebi.dominio.models.Egreso;
 
 import java.util.List;
 

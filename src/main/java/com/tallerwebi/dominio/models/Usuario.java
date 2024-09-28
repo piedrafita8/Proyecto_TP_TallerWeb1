@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

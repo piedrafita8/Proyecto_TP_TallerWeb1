@@ -1,6 +1,9 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicios;
 
+import com.tallerwebi.dominio.interfaces.ServicioEgreso;
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
+import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,35 +14,35 @@ import java.util.List;
 @Transactional
 public class ServicioEgresoImpl implements ServicioEgreso {
 
-    private final RepositorioEgreso repositorioEgreso;
+    private final RepositorioEgreso RepositorioEgreso;
 
     @Autowired
-    public ServicioEgresoImpl(RepositorioEgreso repositorioEgreso){
-        this.repositorioEgreso = repositorioEgreso;
+    public ServicioEgresoImpl(RepositorioEgreso RepositorioEgreso){
+        this.RepositorioEgreso = RepositorioEgreso;
     }
 
     @Override
     public Egreso consultarEgreso(Double monto, Integer id) {
-        return repositorioEgreso.buscar(monto, id);
+        return RepositorioEgreso.buscar(monto, id);
     }
 
     @Override
     public void registrar(Egreso egreso) throws RecursoNoEncontrado {
-        Egreso recursoEncontrado = repositorioEgreso.buscar(egreso.getMonto(), egreso.getId());
+        Egreso recursoEncontrado = RepositorioEgreso.buscar(egreso.getMonto(), egreso.getId());
         if(recursoEncontrado == null){
             throw new RecursoNoEncontrado("El recurso no se encuentra");
         }
-        repositorioEgreso.guardar(egreso);
+        RepositorioEgreso.guardar(egreso);
     }
 
     @Override
     public Egreso crearEgreso(Egreso egreso) {
-        repositorioEgreso.guardar(egreso);  // Guarda el nuevo egreso en la base de datos
+        RepositorioEgreso.guardar(egreso);  // Guarda el nuevo egreso en la base de datos
         return egreso;
     }
 
     @Override
     public List<Egreso> getAllEgresos() {
-        return repositorioEgreso.obtener();
+        return RepositorioEgreso.obtener();
     }
 }
