@@ -24,15 +24,11 @@ import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
+public class RepositorioIngresoImplTest{
 
     @Autowired
     private SessionFactory sessionFactory;
     private RepositorioIngreso RepositorioIngreso;
-
-    public RepositorioIngresoImplTest(SessionFactory sessionFactory) {
-        super(sessionFactory);
-    }
 
     @BeforeEach
     public void init(){
@@ -72,11 +68,20 @@ public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
     @Rollback
     public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentro3IngresosEnLaBaseDeDatos(){
         Ingreso ingreso1 = new Ingreso();
-        ingreso1.setMonto(130000.0);
+        ingreso1.setMonto(245000.0);
+        ingreso1.setFecha(16092024);
+        ingreso1.setTipo_movimiento(INGRESO);
+        ingreso1.setDescripcion("Ingreso de un prestamo bancario");
         Ingreso ingreso2 = new Ingreso();
         ingreso2.setMonto(80000.0);
+        ingreso2.setFecha(11092024);
+        ingreso2.setTipo_movimiento(INGRESO);
+        ingreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
         Ingreso ingreso3 = new Ingreso();
         ingreso3.setMonto(199000.0);
+        ingreso3.setFecha(1092024);
+        ingreso3.setTipo_movimiento(INGRESO);
+        ingreso3.setDescripcion("Ingreso proveniente de beca");
         this.sessionFactory.getCurrentSession().save(ingreso1);
         this.sessionFactory.getCurrentSession().save(ingreso2);
         this.sessionFactory.getCurrentSession().save(ingreso3);
@@ -92,18 +97,24 @@ public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
     @Rollback
     public void dadoQueExisteUnRepositorioIngresoCuandoActualizoUnIngresoEntoncesLoEncuentroEnLaBaseDeDatos(){
         Ingreso ingreso = new Ingreso();
-        ingreso.setMonto(130000.0);
+        ingreso.setMonto(30000.0);
+        ingreso.setFecha(28092024);
+        ingreso.setTipo_movimiento(INGRESO);
+        ingreso.setDescripcion("Ingreso de inversiones");
         this.sessionFactory.getCurrentSession().save(ingreso);
-        Double nuevoMonto = 178000.0;
+        Double nuevoMonto = 37500.0;
         ingreso.setMonto(nuevoMonto);
 
         this.RepositorioIngreso.actualizar(ingreso);
+        this.sessionFactory.getCurrentSession().save(ingreso);
 
-       Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Ingreso WHERE monto = :monto");
-       query.setParameter("monto", 178000.0);
+       Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Ingreso i WHERE i.monto = :monto AND i.fecha = :fecha AND i.descripcion = :descripcion");
+       query.setParameter("monto", 37500.0);
+       query.setParameter("fecha", 28092024);
+       query.setParameter("descripcion", "Ingreso de inversiones");
 
-       Ingreso ingresoObtenido = (Ingreso)query.getSingleResult();
+       Ingreso ingresoObtenido = (Ingreso) query.getSingleResult();
 
-        assertThat(ingresoObtenido.getDescripcion(), equalTo(nuevoMonto));
+        assertThat(ingresoObtenido.getMonto(), equalTo(nuevoMonto));
     }
 }
