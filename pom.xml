@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.tallerwebi</groupId>
     <artifactId>tallerwebi-base</artifactId>
@@ -9,21 +9,22 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>11</jdk.version>
-        <spring.version>6.0.7</spring.version>
-        <servletapi.version>4.0.4</servletapi.version>
-        <thymeleaf.spring.version>3.0.15.RELEASE</thymeleaf.spring.version>
+        <jdk.version>11</jdk.version> <!-- Java 11 -->
+        <spring.version>5.2.22.RELEASE</spring.version> <!-- Spring 5.2.22 -->
+        <servletapi.version>4.0.4</servletapi.version> <!-- Servlet API 4 -->
+        <thymeleaf.spring.version>3.0.15.RELEASE</thymeleaf.spring.version> <!-- Thymeleaf compatible con Spring 5 -->
         <webjars.version>5.2.0</webjars.version>
         <hamcrest.version>2.2</hamcrest.version>
         <junit.version>5.9.0</junit.version>
         <mockito.version>5.3.1</mockito.version>
-        <hibernate.version>5.4.24.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version> <!-- Hibernate 5 compatible con Spring 5 -->
         <playwright.version>1.36.0</playwright.version>
-        <hsqldb.version>2.3.2</hsqldb.version>
+        <hsqldb.version>2.7.1</hsqldb.version>
+        <maven.compiler.source>${jdk.version}</maven.compiler.source>
+        <maven.compiler.target>${jdk.version}</maven.compiler.target>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -38,13 +39,26 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
+            <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -56,7 +70,7 @@
 
         <dependency>
             <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
+            <artifactId>thymeleaf-spring5</artifactId> <!-- Thymeleaf para Spring 5 -->
             <version>${thymeleaf.spring.version}</version>
         </dependency>
 
@@ -74,9 +88,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -113,44 +127,15 @@
             <version>${playwright.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.tallerwebi</groupId>
             <artifactId>tallerwebi-base</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version>5.2.22.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>5.2.22.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>5.2.22.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>5.2.22.RELEASE</version>
-        </dependency>
-        <!-- compile only, deployed container will provide this -->
-        <!--
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servletapi.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        -->
     </dependencies>
 
     <build>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -171,14 +156,11 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin para ejecutar las pruebas -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version> <!-- Ajusta la versión según tus necesidades -->
-
+                <version>3.0.0-M5</version>
                 <configuration>
-                    <!-- Configuración específica para las pruebas -->
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>

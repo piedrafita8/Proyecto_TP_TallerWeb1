@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Ingreso;
-import com.tallerwebi.dominio.RepositorioIngreso;
+import com.tallerwebi.dominio.models.Ingreso;
+import com.tallerwebi.dominio.interfaces.RepositorioIngreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,24 +21,30 @@ import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioIngresoImplTest {
+public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
 
     @Autowired
     private SessionFactory sessionFactory;
-    private RepositorioIngreso repositorioIngreso;
+
+    private RepositorioIngreso RepositorioIngreso;
+
+    public RepositorioIngresoImplTest(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 
     @BeforeEach
     public void init(){
-        this.repositorioIngreso = new RepositorioIngresoImpl(sessionFactory);
+        this.RepositorioIngreso = new RepositorioIngresoImpl(sessionFactory);
     }
 
     @Test
     @Transactional
+    @Rollback
     public void dadoQueExisteUnRepositorioIngresoCuandoAgregoUnIngresoConMonto130000EntoncesLoEncuentroEnLaBaseDeDatos(){
         Ingreso ingreso = new Ingreso();
         ingreso.setMonto(130000.0);
         this.sessionFactory.getCurrentSession().save(ingreso);
-        this.repositorioIngreso.guardar(ingreso);
+        this.RepositorioIngreso.guardar(ingreso);
 
         String hql = "SELECT i FROM Ingreso i INNER JOIN i.monto WHERE i.monto = :monto";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -62,9 +68,9 @@ public class RepositorioIngresoImplTest {
         this.sessionFactory.getCurrentSession().save(ingreso2);
         this.sessionFactory.getCurrentSession().save(ingreso3);
 
-        List<Ingreso> ingresosObtenidos = this.repositorioIngreso.obtener();
+        List<Ingreso> ingresosObtenidos = this.RepositorioIngreso.obtener();
 
-        int cantidadEsperada = 3;
+        Integer cantidadEsperada = 3;
         assertThat(ingresosObtenidos.size(), equalTo(cantidadEsperada));
     }
 
@@ -78,7 +84,7 @@ public class RepositorioIngresoImplTest {
         Double nuevoMonto = 178000.0;
         ingreso.setMonto(nuevoMonto);
 
-        this.repositorioIngreso.actualizar(ingreso);
+        this.RepositorioIngreso.actualizar(ingreso);
 
        Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Ingreso WHERE monto = :monto");
        query.setParameter("monto", 178000.0);

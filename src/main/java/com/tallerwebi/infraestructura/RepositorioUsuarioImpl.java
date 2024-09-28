@@ -1,17 +1,21 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.models.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
-    private final SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     @Autowired
     public RepositorioUsuarioImpl(SessionFactory sessionFactory){
@@ -20,12 +24,20 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     public Usuario buscarUsuario(String email, String password) {
-
         final Session session = sessionFactory.getCurrentSession();
-        return (Usuario) session.createCriteria(Usuario.class)
-                .add(Restrictions.eq("email", email))
-                .add(Restrictions.eq("password", password))
-                .uniqueResult();
+
+        // Usar CriteriaBuilder y CriteriaQuery para crear la consulta
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Usuario> query = builder.createQuery(Usuario.class);
+        Root<Usuario> root = query.from(Usuario.class);
+
+        // Crear las condiciones de búsqueda
+        Predicate conditionEmail = builder.equal(root.get("email"), email);
+        Predicate conditionPassword = builder.equal(root.get("password"), password);
+        query.where(builder.and(conditionEmail, conditionPassword));
+
+        // Ejecutar la consulta
+        return session.createQuery(query).uniqueResult();
     }
 
     @Override
@@ -35,14 +47,22 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     public Usuario buscar(String email) {
-        return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
-                .add(Restrictions.eq("email", email))
-                .uniqueResult();
+        final Session session = sessionFactory.getCurrentSession();
+
+        // Usar CriteriaBuilder y CriteriaQuery para crear la consulta
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Usuario> query = builder.createQuery(Usuario.class);
+        Root<Usuario> root = query.from(Usuario.class);
+
+        // Crear la condición de búsqueda
+        query.where(builder.equal(root.get("email"), email));
+
+        // Ejecutar la consulta
+        return session.createQuery(query).uniqueResult();
     }
 
     @Override
     public void modificar(Usuario usuario) {
         sessionFactory.getCurrentSession().update(usuario);
     }
-
 }
