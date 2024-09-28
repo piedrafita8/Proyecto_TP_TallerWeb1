@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -38,14 +39,19 @@ public class RepositorioEgresoImplTest{
         // Crear un objeto Egreso con el monto deseado
         Egreso egreso = new Egreso();
         egreso.setMonto(12000.0);
+        egreso.setDescripcion("Gasto para pagar en la verduleria");
+        egreso.setFecha(21092024);
+        egreso.setTipo_movimiento(EGRESO);
 
         // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
         this.RepositorioEgreso.guardar(egreso);
 
         // Hacer la consulta HQL para encontrar el egreso guardado
-        String hql = "SELECT e.monto FROM Egreso e WHERE e.monto = :monto";
+        String hql = "SELECT e FROM Egreso e WHERE e.monto = :monto AND e.descripcion = :descripcion AND e.fecha = :fecha";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("monto", 12000.0);
+        query.setParameter("descripcion", "Gasto para pagar en la verduleria");
+        query.setParameter("fecha", 21092024);
 
         // Obtener el resultado de la consulta
         Egreso egresoObtenido = (Egreso) query.getSingleResult();

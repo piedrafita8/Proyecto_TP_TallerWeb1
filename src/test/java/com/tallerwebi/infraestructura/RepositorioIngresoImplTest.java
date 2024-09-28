@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.interfaces.RepositorioIngreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
@@ -16,6 +17,8 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
+import static com.tallerwebi.dominio.enums.TipoMovimiento.INGRESO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -25,7 +28,6 @@ public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
 
     @Autowired
     private SessionFactory sessionFactory;
-
     private RepositorioIngreso RepositorioIngreso;
 
     public RepositorioIngresoImplTest(SessionFactory sessionFactory) {
@@ -40,17 +42,28 @@ public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioIngresoCuandoAgregoUnIngresoConMonto130000EntoncesLoEncuentroEnLaBaseDeDatos(){
+    public void dadoQueExisteUnRepositorioIngresoCuandoAgregoUnIngresoConMonto400000EntoncesLoEncuentroEnLaBaseDeDatos(){
+        // Crear un objeto Egreso con el monto deseado
         Ingreso ingreso = new Ingreso();
-        ingreso.setMonto(130000.0);
-        this.sessionFactory.getCurrentSession().save(ingreso);
+        ingreso.setMonto(400000.0);
+        ingreso.setDescripcion("Ingreso con origen de mi sueldo");
+        ingreso.setFecha(28092024);
+        ingreso.setTipo_movimiento(INGRESO);
+
+        // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
         this.RepositorioIngreso.guardar(ingreso);
 
-        String hql = "SELECT i FROM Ingreso i INNER JOIN i.monto WHERE i.monto = :monto";
+        // Hacer la consulta HQL para encontrar el egreso guardado
+        String hql = "SELECT i FROM Ingreso i WHERE i.monto = :monto AND i.descripcion = :descripcion AND i.fecha = :fecha";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("monto", 130000.0);
-        Ingreso ingresoObtenido = (Ingreso)query.getSingleResult();
+        query.setParameter("monto", 400000.0);
+        query.setParameter("descripcion", "Ingreso con origen de mi sueldo");
+        query.setParameter("fecha", 28092024);
 
+        // Obtener el resultado de la consulta
+        Ingreso ingresoObtenido = (Ingreso) query.getSingleResult();
+
+        // Verificar que el egreso guardado es el mismo que el obtenido
         assertThat(ingresoObtenido, equalTo(ingreso));
     }
 

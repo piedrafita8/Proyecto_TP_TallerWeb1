@@ -12,15 +12,14 @@ public class Ingreso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private Double monto;
     private String descripcion;
     private TipoMovimiento tipo_movimiento;
-
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
+    private Integer fecha;
 
     // Constructor, getters y setters
-    public Ingreso(TipoMovimiento tipoMovimiento, Integer id, Double monto, String descripcion, Date fecha) {
+    public Ingreso(TipoMovimiento tipoMovimiento, Integer id, Double monto, String descripcion, Integer fecha) {
         this.tipo_movimiento = tipoMovimiento;
         this.id = id;
         this.monto = monto;
@@ -56,11 +55,11 @@ public class Ingreso {
         this.descripcion = descripcion;
     }
 
-    public Date getFecha() {
+    public Integer getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(Integer fecha) {
         this.fecha = fecha;
     }
 
