@@ -25,6 +25,7 @@ public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
 
     @Autowired
     private SessionFactory sessionFactory;
+
     private RepositorioIngreso RepositorioIngreso;
 
     public RepositorioIngresoImplTest(SessionFactory sessionFactory) {
@@ -69,7 +70,7 @@ public class RepositorioIngresoImplTest extends RepositorioIngresoImpl {
 
         List<Ingreso> ingresosObtenidos = this.RepositorioIngreso.obtener();
 
-        int cantidadEsperada = 3;
+        Integer cantidadEsperada = 3;
         assertThat(ingresosObtenidos.size(), equalTo(cantidadEsperada));
     }
 

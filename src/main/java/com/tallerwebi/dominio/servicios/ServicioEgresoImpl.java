@@ -14,35 +14,35 @@ import java.util.List;
 @Transactional
 public class ServicioEgresoImpl implements ServicioEgreso {
 
-    private static RepositorioEgreso repositorioEgreso;
+    private final RepositorioEgreso repositorioEgreso;  // Eliminar el uso de static
 
     @Autowired
     public ServicioEgresoImpl(RepositorioEgreso repositorioEgreso){
-        ServicioEgresoImpl.repositorioEgreso = repositorioEgreso;
+        this.repositorioEgreso = repositorioEgreso;  // Usar 'this' para la inyección de dependencia
     }
 
     @Override
     public Egreso consultarEgreso(Double monto, Integer id) {
-        return RepositorioEgreso.buscar(monto, id);
+        return repositorioEgreso.buscar(monto, id);  // Llamar al método usando la instancia repositorioEgreso
     }
 
     @Override
     public void registrar(Egreso egreso) throws RecursoNoEncontrado {
-        Egreso recursoEncontrado = RepositorioEgreso.buscar(egreso.getMonto(), egreso.getId());
+        Egreso recursoEncontrado = repositorioEgreso.buscar(egreso.getMonto(), egreso.getId());  // Llamar a través de la instancia
         if(recursoEncontrado == null){
             throw new RecursoNoEncontrado("El recurso no se encuentra");
         }
-        RepositorioEgreso.guardar(egreso);
+        repositorioEgreso.guardar(egreso);
     }
 
     @Override
     public Egreso crearEgreso(Egreso egreso) {
-        RepositorioEgreso.guardar(egreso);  // Guarda el nuevo egreso en la base de datos
+        repositorioEgreso.guardar(egreso);
         return egreso;
     }
 
     @Override
     public List<Egreso> getAllEgresos() {
-        return RepositorioEgreso.obtener();
+        return repositorioEgreso.obtener();
     }
 }
