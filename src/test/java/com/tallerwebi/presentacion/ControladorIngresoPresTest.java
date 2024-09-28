@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.mockito.Mockito.*;
 
-public class ControladorIngresoTest {
+public class ControladorIngresoPresTest {
 
 	private ControladorLogin controladorLogin;
 	private Usuario usuarioMock;
