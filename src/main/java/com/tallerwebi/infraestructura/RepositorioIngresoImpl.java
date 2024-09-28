@@ -1,10 +1,8 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Egreso;
-import com.tallerwebi.dominio.Ingreso;
-import com.tallerwebi.dominio.RepositorioIngreso;
+import com.tallerwebi.dominio.models.Ingreso;
+import com.tallerwebi.dominio.interfaces.RepositorioIngreso;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

@@ -1,4 +1,7 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.interfaces;
+
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.models.Objetivo;
 
 public interface RepositorioObjetivo {
 

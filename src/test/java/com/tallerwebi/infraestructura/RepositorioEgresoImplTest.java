@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Egreso;
-import com.tallerwebi.dominio.RepositorioEgreso;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,11 +23,11 @@ public class RepositorioEgresoImplTest {
 
     @Autowired
     private SessionFactory sessionFactory;
-    private RepositorioEgreso repositorioEgreso;
+    private RepositorioEgreso RepositorioEgreso;
 
     @BeforeEach
     public void init(){
-        this.repositorioEgreso = new RepositorioEgresoImpl(sessionFactory);
+        this.RepositorioEgreso = new RepositorioEgresoImpl(sessionFactory);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class RepositorioEgresoImplTest {
         egreso.setMonto(12000.0);
 
         // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
-        this.repositorioEgreso.guardar(egreso);
+        this.RepositorioEgreso.guardar(egreso);
 
         // Hacer la consulta HQL para encontrar el egreso guardado
         String hql = "SELECT e FROM Egreso e WHERE e.monto = :monto";

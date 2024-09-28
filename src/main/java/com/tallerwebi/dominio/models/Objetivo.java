@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.models;
 
 import javax.persistence.*;
 import java.util.Date;

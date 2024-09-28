@@ -1,5 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.interfaces;
 
+import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 
 import java.util.List;

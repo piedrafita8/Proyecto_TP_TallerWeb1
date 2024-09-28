@@ -1,9 +1,8 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Egreso;
-import com.tallerwebi.dominio.RepositorioEgreso;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
