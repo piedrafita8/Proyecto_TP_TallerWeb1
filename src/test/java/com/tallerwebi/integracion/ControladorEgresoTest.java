@@ -1,6 +1,6 @@
 package com.tallerwebi.integracion;
 
-import com.tallerwebi.dominio.models.Usuario;
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,47 +32,56 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
 public class ControladorEgresoTest {
 
-	private Usuario usuarioMock;
+	private Egreso egresoMock;
 
 	@Autowired
 	private WebApplicationContext wac;
 	private MockMvc mockMvc;
 
-
 	@BeforeEach
 	public void init(){
-		usuarioMock = mock(Usuario.class);
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+		egresoMock = mock(Egreso.class);
+		when(egresoMock.getMonto()).thenReturn(150.00);
+		when(egresoMock.getDescripcion()).thenReturn("Compra de supermercado");
+
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	}
 
 	@Test
-	public void debeRetornarLaPaginaLoginCuandoSeNavegaALaRaiz() throws Exception {
-
+	public void debeRedirigirALaPaginaDeEgresosCuandoSeNavegaALaRaiz() throws Exception {
 		MvcResult result = this.mockMvc.perform(get("/"))
-				/*.andDo(print())*/
 				.andExpect(status().is3xxRedirection())
 				.andReturn();
 
 		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
-		assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assert modelAndView != null;
+		assertThat("redirect:/egreso", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
 		assertThat(true, is(modelAndView.getModel().isEmpty()));
 	}
 
 	@Test
-	public void debeRetornarLaPaginaLoginCuandoSeNavegaALLogin() throws Exception {
-
-		MvcResult result = this.mockMvc.perform(get("/login"))
+	public void debeRetornarLaPaginaEgresoConDatosCorrectos() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/egreso"))
 				.andExpect(status().isOk())
 				.andReturn();
 
 		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("login"));
-		assertThat(modelAndView.getModel().get("datosLogin").toString(),  containsString("com.tallerwebi.presentacion.DatosLogin"));
+		assert modelAndView != null;
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("egreso"));
 
+		assertThat(modelAndView.getModel().get("datosEgreso").toString(), containsString("com.tallerwebi.presentacion.DatosEgreso"));
+	}
+
+	@Test
+	public void debeContenerDescripcionYMontoCorrectosEnLaPaginaDeEgreso() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/egreso"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		ModelAndView modelAndView = result.getModelAndView();
+		assert modelAndView != null;
+
+		assertThat(modelAndView.getModel().get("montoEgreso").toString(), equalToIgnoringCase("15000.00"));
+		assertThat(modelAndView.getModel().get("descripcionEgreso").toString(), containsString("Compra de materiales"));
 	}
 }
-
-

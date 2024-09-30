@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -19,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioEgresoImplTest {
+public class RepositorioEgresoImplTest{
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -32,6 +33,7 @@ public class RepositorioEgresoImplTest {
 
     @Test
     @Transactional
+    @Rollback
     public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoConMonto12000EntoncesLoEncuentroEnLaBaseDeDatos(){
         // Crear un objeto Egreso con el monto deseado
         Egreso egreso = new Egreso();
@@ -41,7 +43,7 @@ public class RepositorioEgresoImplTest {
         this.RepositorioEgreso.guardar(egreso);
 
         // Hacer la consulta HQL para encontrar el egreso guardado
-        String hql = "SELECT e FROM Egreso e WHERE e.monto = :monto";
+        String hql = "SELECT e.monto FROM Egreso e WHERE e.monto = :monto";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("monto", 12000.0);
 

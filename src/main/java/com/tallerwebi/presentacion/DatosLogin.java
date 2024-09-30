@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 public class DatosLogin {
+
     private String email;
     private String password;
 
