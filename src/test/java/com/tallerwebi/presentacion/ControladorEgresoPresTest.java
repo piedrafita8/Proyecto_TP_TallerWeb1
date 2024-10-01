@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.mockito.Mockito.*;
 
-public class ControladorEgresoTest {
+public class ControladorEgresoPresTest {
 
 	private ControladorEgreso controladorEgreso; // Cambiar el controlador a ControladorEgreso
 	private Egreso egresoMock;                   // Mock del modelo Egreso
@@ -61,7 +61,7 @@ public class ControladorEgresoTest {
 		// Simular una excepción RecursoNoEncontrado
 		doThrow(new RecursoNoEncontrado("El egreso no existe")).when(servicioEgresoMock).consultarEgreso(150.00, 1);
 
-		// Ejecutar el método de consultar un egreso inexistente
+		// Ejecutar el metodo de consultar un egreso inexistente
 		ModelAndView modelAndView = controladorEgreso.verDetalleEgreso(150.00, 1, requestMock);
 
 		// Validar que la vista sea la de error
@@ -86,7 +86,7 @@ public class ControladorEgresoTest {
 		// Simular un error al registrar un egreso
 		doThrow(new RecursoNoEncontrado("Error al registrar el egreso")).when(servicioEgresoMock).registrar(any(Egreso.class));
 
-		// Ejecutar el método de registrar el egreso
+		// Ejecutar el metodo de registrar el egreso
 		ModelAndView modelAndView = controladorEgreso.registrarEgreso(egresoMock, requestMock);
 
 		// Validar que la vista sea la de error con el mensaje adecuado
