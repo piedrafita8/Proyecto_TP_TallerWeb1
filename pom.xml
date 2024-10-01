@@ -128,11 +128,7 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.tallerwebi</groupId>
-            <artifactId>tallerwebi-base</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+
     </dependencies>
 
     <build>
