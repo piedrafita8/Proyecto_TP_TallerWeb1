@@ -34,8 +34,6 @@ public class RepositorioObjetivoImplTest {
     @Transactional
     public void dadoQueExisteUnRepositorioObjetivoCuandoCreoUnObjetivoConMonto50000EntoncesLoEncuentroEnLaBaseDeDatos(){
         // Crear un objeto Objetivo con el monto deseado
-        // Creaer asjfdkjfdksj
-        // askjdhasljkhfasjkh
         Objetivo objetivo = new Objetivo();
         objetivo.setMontoObjetivo(50000.0);
         objetivo.setMontoActual(0.0);
