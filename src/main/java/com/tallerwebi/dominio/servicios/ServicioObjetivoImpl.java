@@ -1,9 +1,6 @@
 package com.tallerwebi.dominio.servicios;
 
-import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
-import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
-import com.tallerwebi.dominio.interfaces.RepositorioObjetivo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
