@@ -42,7 +42,7 @@ public class RepositorioEgresoImplTest{
     public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoConMonto12000EntoncesLoEncuentroEnLaBaseDeDatos(){
         // Crear un objeto Egreso con el monto deseado
         Egreso egreso = new Egreso();
-        egreso.setMonto(120000.0);
+        egreso.setMonto(12000.0);
         egreso.setDescripcion("Gasto para pagar en la verduleria");
         egreso.setFecha(21092024);
         egreso.setTipo_movimiento(EGRESO);
