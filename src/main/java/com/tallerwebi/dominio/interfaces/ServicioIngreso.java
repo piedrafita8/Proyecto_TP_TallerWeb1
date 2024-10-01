@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ServicioIngreso {
 
-    Ingreso consultarIngreso(Double monto, Integer id);
+    Ingreso consultarIngreso(Double monto, Integer fecha);
     void registrar(Ingreso ingreso) throws RecursoNoEncontrado;
     List<Ingreso> getAllIngresos();
     Ingreso crearIngreso(Ingreso ingreso);
