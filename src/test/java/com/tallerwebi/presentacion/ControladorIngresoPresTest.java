@@ -25,7 +25,6 @@ public class ControladorIngresoPresTest {
 	private HttpSession sessionMock;
 	private ServicioIngreso ServicioIngresoMock;
 
-
 	@BeforeEach
 	public void init(){
 		datosIngresoMock = new DatosIngreso(450000.0, "Ingreso proveniente de mi sueldo", 1102024);

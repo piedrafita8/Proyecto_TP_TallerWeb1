@@ -24,7 +24,6 @@ public class ControladorEgresoPresTest {
 	private HttpServletRequest requestMock;
     private ServicioEgreso servicioEgresoMock;   // Mock del servicio de egreso
 
-
 	@BeforeEach
 	public void init(){
 		// Inicializar el mock del modelo Egreso con datos de ejemplo
