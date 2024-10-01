@@ -2,7 +2,7 @@ package com.tallerwebi.dominio;
 
 import java.sql.*;
 
-public class main {
+public class Main {
 
     public static void main(String[] args) {
         String url = "jdbc:mysql://127.0.0.1:3306/BaseDeDatosApiTallerWeb1?serverTimezone=UTC";
