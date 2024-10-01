@@ -19,7 +19,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
-import static com.tallerwebi.dominio.enums.TipoMovimiento.INGRESO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
