@@ -27,10 +27,10 @@ public class ControladorEgreso {
         this.egresoService = egresoService;
     }
 
-    @GetMapping("/")
-    public ModelAndView redirigirARaiz() {
-        return new ModelAndView("redirect:/gastos");
-    }
+//    @GetMapping("/")
+//    public ModelAndView redirigirARaiz() {
+//        return new ModelAndView("redirect:/gastos");
+//    }
 
     // Metodo para obtener todos los egresos
     @GetMapping("/gastos")
