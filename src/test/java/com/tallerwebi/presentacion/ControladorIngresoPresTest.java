@@ -1,10 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.interfaces.ServicioIngreso;
-import com.tallerwebi.dominio.interfaces.ServicioLogin;
 import com.tallerwebi.dominio.models.Ingreso;
-import com.tallerwebi.dominio.models.Usuario;
-import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,19 +33,20 @@ public class ControladorIngresoPresTest {
 		controladorIngreso = new ControladorIngreso(ServicioIngresoMock);
 	}
 
-//	@Test
-//	public void loginConUsuarioYPasswordInorrectosDeberiaLlevarALoginNuevamente(){
-//		// preparacion
-//		when(ServicioIngresoMock.consultarUsuario(anyString(), anyString())).thenReturn(null);
-//
-//		// ejecucion
-//		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
-//
-//		// validacion
-//		assertThat(modelAndView.getViewName(), equalToIgnoringCase("login"));
-//		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Usuario o clave incorrecta"));
-//		verify(sessionMock, times(0)).setAttribute("ROL", "ADMIN");
-//	}
+	@Test
+	public void ingresoSinDescripcionySinMontoDeberiaInsistirEnCompletarLaInformacion() {
+		// Preparación
+		DatosIngreso datosIngresoInvalido = new DatosIngreso(null, null, 0); // Sin descripción ni monto
+
+		when(requestMock.getSession()).thenReturn(sessionMock);
+
+		// Ejecución
+		ModelAndView modelAndView = controladorIngreso.validarIngreso(datosIngresoInvalido, requestMock);
+
+		// Validación
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/ingreso"));
+		verify(sessionMock, times(1)).setAttribute("error", "Por favor, completa la información del ingreso.");
+	}
 	
 	@Test
 	public void ingresoConMontoYDescripcionCorrectosDeberiaLLevarAEsquema(){
@@ -66,41 +64,4 @@ public class ControladorIngresoPresTest {
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/esquema"));
 		verify(sessionMock, times(1)).setAttribute("Ingreso proveniente de mi sueldo", ingresoEncontradoMock.getDescripcion());
 	}
-
-//	@Test
-//	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistente {
-//
-//		// ejecucion
-//		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
-//
-//		// validacion
-//		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
-//		verify(ServicioLoginMock, times(1)).registrar(usuarioMock);
-//	}
-
-//	@Test
-//	public void registrarmeSiUsuarioExisteDeberiaVolverAFormularioYMostrarError() throws UsuarioExistente {
-//		// preparacion
-//		doThrow(UsuarioExistente.class).when(ServicioLoginMock).registrar(usuarioMock);
-//
-//		// ejecucion
-//		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
-//
-//		// validacion
-//		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
-//		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El usuario ya existe"));
-//	}
-//
-//	@Test
-//	public void errorEnRegistrarmeDeberiaVolverAFormularioYMostrarError() throws UsuarioExistente {
-//		// preparacion
-//		doThrow(RuntimeException.class).when(ServicioLoginMock).registrar(usuarioMock);
-//
-//		// ejecucion
-//		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
-//
-//		// validacion
-//		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
-//		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
-//	}
 }

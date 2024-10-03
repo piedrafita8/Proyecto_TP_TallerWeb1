@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.interfaces.RepositorioIngreso;
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

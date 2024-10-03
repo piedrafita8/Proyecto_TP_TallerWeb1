@@ -4,13 +4,14 @@ import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
+import com.tallerwebi.presentacion.DatosEgreso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service("servicioEgreso")
+@Service
 @Transactional
 public class ServicioEgresoImpl implements ServicioEgreso {
 

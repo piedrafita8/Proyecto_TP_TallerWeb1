@@ -2,7 +2,6 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
-import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
-import static com.tallerwebi.dominio.enums.TipoMovimiento.INGRESO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -42,10 +40,9 @@ public class RepositorioEgresoImplTest{
     public void dadoQueExisteUnRepositorioEgresoCuandoIngresoUnGastoConMonto12000EntoncesLoEncuentroEnLaBaseDeDatos(){
         // Crear un objeto Egreso con el monto deseado
         Egreso egreso = new Egreso();
-        egreso.setMonto(120000.0);
+        egreso.setMonto(12000.0);
         egreso.setDescripcion("Gasto para pagar en la verduleria");
         egreso.setFecha(21092024);
-        egreso.setTipo_movimiento(EGRESO);
 
         // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
         this.RepositorioEgreso.guardar(egreso);
@@ -71,17 +68,14 @@ public class RepositorioEgresoImplTest{
         Egreso egreso1 = new Egreso();
         egreso1.setMonto(27900.0);
         egreso1.setFecha(14102024);
-        egreso1.setTipo_movimiento(EGRESO);
         egreso1.setDescripcion("Ingreso de un prestamo bancario");
         Egreso egreso2 = new Egreso();
         egreso2.setMonto(88900.0);
         egreso2.setFecha(20102024);
-        egreso2.setTipo_movimiento(EGRESO);
         egreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
         Egreso egreso3 = new Egreso();
         egreso3.setMonto(95000.0);
         egreso3.setFecha(11102024);
-        egreso3.setTipo_movimiento(EGRESO);
         egreso3.setDescripcion("Ingreso proveniente de beca");
         this.sessionFactory.getCurrentSession().save(egreso1);
         this.sessionFactory.getCurrentSession().save(egreso2);
@@ -100,7 +94,6 @@ public class RepositorioEgresoImplTest{
         Egreso egreso = new Egreso();
         egreso.setMonto(30000.0);
         egreso.setFecha(28092024);
-        egreso.setTipo_movimiento(EGRESO);
         egreso.setDescripcion("Gasto para pagar kisko");
         this.sessionFactory.getCurrentSession().save(egreso);
         String nuevaDescripcion = "Gasto para pagar almacen";

@@ -33,17 +33,25 @@ public class ControladorIngreso {
     }
 
     @RequestMapping(path = "/validar-ingreso", method = RequestMethod.POST)
-    public ModelAndView validarIngreso(@ModelAttribute("datosIngreso") DatosIngreso datosIngresoMock, HttpServletRequest requestMock) {
-        ModelMap model = new ModelMap();
+    public ModelAndView validarIngreso(DatosIngreso datosIngreso, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
 
-        Ingreso ingresoBuscado = ingresoService.consultarIngreso(datosIngresoMock.getMonto(), datosIngresoMock.getFecha());
-        if (ingresoBuscado != null) {
-            requestMock.getSession().setAttribute("Ingreso proveniente de mi sueldo", ingresoBuscado.getDescripcion());
-            return new ModelAndView("redirect:/esquema");
-        } else {
-            model.put("error", "Ingreso o clave incorrecta");
+        if (datosIngreso.getDescripcion() == null || datosIngreso.getMonto() == null || datosIngreso.getMonto() <= 0) {
+            modelAndView.setViewName("redirect:/ingreso"); // Asegúrate de que esto sea correcto
+            request.getSession().setAttribute("error", "Por favor, completa la información del ingreso.");
+            return modelAndView;
         }
-        return new ModelAndView("ingreso", model);
+
+        // Lógica para manejar el ingreso válido
+        Ingreso ingresoEncontrado = ingresoService.consultarIngreso(datosIngreso.getMonto(), datosIngreso.getFecha());
+        if (ingresoEncontrado != null) {
+            modelAndView.setViewName("redirect:/esquema");
+            request.getSession().setAttribute(ingresoEncontrado.getDescripcion(), ingresoEncontrado.getDescripcion());
+        } else {
+            modelAndView.setViewName("redirect:/ingreso"); // Redirigir de nuevo si no se encuentra el ingreso
+        }
+
+        return modelAndView;
     }
 
     // Otros métodos como PUT, DELETE

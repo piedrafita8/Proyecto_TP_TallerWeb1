@@ -23,7 +23,6 @@ public class ControladorLoginTest {
 	private HttpSession sessionMock;
 	private ServicioLogin ServicioLoginMock;
 
-
 	@BeforeEach
 	public void init(){
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
