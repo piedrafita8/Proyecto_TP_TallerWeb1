@@ -3,10 +3,9 @@ package com.tallerwebi.dominio.models;
 import com.tallerwebi.dominio.enums.TipoMovimiento;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "ingreso")
+@Table(name = "Ingreso")
 public class Ingreso {
 
     @Id

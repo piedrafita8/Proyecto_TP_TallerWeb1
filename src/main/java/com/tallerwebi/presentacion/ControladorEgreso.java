@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,19 +19,36 @@ import java.util.List;
 @Controller
 public class ControladorEgreso {
 
-    private final ServicioEgreso egresoService;
+    private ServicioEgreso egresoService;
 
     // Constructor
-    public ControladorEgreso(ServicioEgreso servicioEgreso) {
-        this.egresoService = servicioEgreso;
+    @Autowired
+    public ControladorEgreso(ServicioEgreso egresoService) {
+        this.egresoService = egresoService;
+    }
+
+    @GetMapping("/")
+    public ModelAndView redirigirARaiz() {
+        return new ModelAndView("redirect:/gastos");
     }
 
     // Metodo para obtener todos los egresos
     @GetMapping("/gastos")
-    public ModelAndView verEgresos(HttpServletRequest request) {
-        List<Egreso> egresos = egresoService.getAllEgresos();
-        ModelAndView modelAndView = new ModelAndView("gastos");
-        modelAndView.addObject("egresos", egresos);
+    public ModelAndView verEgresos(Integer id, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            // Consultar el egreso por ID para ver si existe (esto es opcional si quieres una consulta específica)
+            Egreso egreso = egresoService.consultarEgreso(12345.00, id);
+
+            // Si se encuentra, mostrar la vista de egreso
+            List<Egreso> listaEgresos = egresoService.getAllEgresos();
+            modelAndView.setViewName("egreso");
+            modelAndView.addObject("datosEgreso", listaEgresos);
+        } catch (RecursoNoEncontrado e) {
+            // Si no se encuentra el egreso, mostrar vista de error con el mensaje
+            modelAndView.setViewName("errorEgreso");
+            modelAndView.addObject("error", e.getMessage());
+        }
         return modelAndView;
     }
 
@@ -42,21 +61,33 @@ public class ControladorEgreso {
 
     // Metodo para registrar un nuevo egreso y redirigir
     public ModelAndView registrarEgreso(Egreso egreso, HttpServletRequest request) {
-        try {
-            egresoService.crearEgreso(egreso);
-            return new ModelAndView("confirmacion");
-        } catch (Exception e) {
-            ModelAndView modelAndView = new ModelAndView("nuevo-egreso");
-            modelAndView.addObject("error", "Error al registrar el egreso: " + e.getMessage());
+        ModelAndView modelAndView = new ModelAndView();
+
+        // Verificar si la descripción está vacía
+        if (egreso.getDescripcion() == null || egreso.getDescripcion().isEmpty()) {
+            modelAndView.addObject("error", "La descripción no puede estar vacía");
+            modelAndView.setViewName("error");
             return modelAndView;
         }
+
+        // Verificar si la descripción está vacía
+        if (egreso.getMonto() == null) {
+            modelAndView.addObject("error", "El monto no puede estar vacío");
+            modelAndView.setViewName("error");
+            return modelAndView;
+        }
+
+        // Lógica para registrar el egreso (se omite en este caso)
+        egresoService.crearEgreso(egreso);
+        modelAndView.setViewName("exito");
+        return modelAndView;
     }
 
     // Metodo para ver los detalles de un egreso específico
-    public ModelAndView verDetalleEgreso(@RequestParam double monto, @RequestParam int id, HttpServletRequest request) {
-        Egreso egreso = egresoService.consultarEgreso(monto, id);
-        ModelAndView modelAndView = new ModelAndView("detalle-egreso");
-        modelAndView.addObject("egreso", egreso);
+    public ModelAndView verDetalleEgreso(@RequestParam double monto, @RequestParam int id, HttpServletRequest request) throws RecursoNoEncontrado {
+        Egreso listaEgresos = egresoService.consultarEgreso(monto, id);
+        ModelAndView modelAndView = new ModelAndView("egresos");
+        modelAndView.addObject("datosEgreso", listaEgresos);
         return modelAndView;
     }
 }

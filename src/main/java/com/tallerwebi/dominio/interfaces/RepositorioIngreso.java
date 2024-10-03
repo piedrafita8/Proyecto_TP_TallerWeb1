@@ -1,9 +1,11 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.models.Ingreso;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface RepositorioIngreso {
 
     void eliminar(Ingreso ingreso);

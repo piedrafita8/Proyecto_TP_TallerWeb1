@@ -1,9 +1,11 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.models.Egreso;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface RepositorioEgreso {
 
     void eliminar(Egreso egreso);

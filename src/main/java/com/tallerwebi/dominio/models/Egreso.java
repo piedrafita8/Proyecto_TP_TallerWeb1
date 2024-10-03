@@ -5,7 +5,7 @@ import com.tallerwebi.dominio.enums.TipoMovimiento;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "egreso")
+@Table(name = "egresos")
 public class Egreso {
 
     @Id
@@ -14,13 +14,17 @@ public class Egreso {
 
     private Double monto;
     private String descripcion;
-    private TipoMovimiento tipo_movimiento;
     private Integer fecha;
 
     // Constructor
-    public Egreso(TipoMovimiento tipoMovimiento, Integer id, Double monto, String descripcion, Integer fecha) {
-        this.tipo_movimiento = tipoMovimiento;
+    public Egreso(Integer id, Double monto, String descripcion, Integer fecha) {
         this.id = id;
+        this.monto = monto;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+    }
+
+    public Egreso(Double monto, String descripcion, Integer fecha) {
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -64,12 +68,5 @@ public class Egreso {
         this.fecha = fecha;
     }
 
-    public TipoMovimiento getTipo_movimiento() {
-        return tipo_movimiento;
-    }
-
-    public void setTipo_movimiento(TipoMovimiento tipo_movimiento) {
-        this.tipo_movimiento = tipo_movimiento;
-    }
 }
 
