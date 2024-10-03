@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../../../resources/core/css/index.css">
+    <link rel="stylesheet" th:href="../../../resources/core/css/index.css">
+
+
+
+
 </head>
 <body>
     <div class="nav-container">
@@ -219,6 +223,8 @@
             <article class="finanzas__content">
                 <p>...</p>
             </article>
+        </section>
     </main>
 </body>
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </html>

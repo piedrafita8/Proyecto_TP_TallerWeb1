@@ -25,16 +25,16 @@ public class ControladorEgreso {
     }
 
     // Metodo para obtener todos los egresos
-    @GetMapping("/egresos")
+    @GetMapping("/gastos")
     public ModelAndView verEgresos(HttpServletRequest request) {
         List<Egreso> egresos = egresoService.getAllEgresos();
-        ModelAndView modelAndView = new ModelAndView("lista-egresos");
+        ModelAndView modelAndView = new ModelAndView("gastos");
         modelAndView.addObject("egresos", egresos);
         return modelAndView;
     }
 
     // Metodo para crear un nuevo egreso
-    @PostMapping("/egreso")
+    @PostMapping("/gastos")
     public ResponseEntity<Egreso> crearEgreso(@RequestBody Egreso egreso) {
         Egreso nuevoEgreso = egresoService.crearEgreso(egreso);
         return new ResponseEntity<>(nuevoEgreso, HttpStatus.CREATED);
@@ -44,7 +44,7 @@ public class ControladorEgreso {
     public ModelAndView registrarEgreso(Egreso egreso, HttpServletRequest request) {
         try {
             egresoService.crearEgreso(egreso);
-            return new ModelAndView("redirect:/egresos");
+            return new ModelAndView("confirmacion");
         } catch (Exception e) {
             ModelAndView modelAndView = new ModelAndView("nuevo-egreso");
             modelAndView.addObject("error", "Error al registrar el egreso: " + e.getMessage());

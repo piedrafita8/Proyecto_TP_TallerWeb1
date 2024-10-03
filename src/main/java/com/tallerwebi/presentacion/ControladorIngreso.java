@@ -39,7 +39,7 @@ public class ControladorIngreso {
         Ingreso ingresoBuscado = ingresoService.consultarIngreso(datosIngresoMock.getMonto(), datosIngresoMock.getFecha());
         if (ingresoBuscado != null) {
             requestMock.getSession().setAttribute("Ingreso proveniente de mi sueldo", ingresoBuscado.getDescripcion());
-            return new ModelAndView("redirect:/esquema");
+            return new ModelAndView("redirect:/index");
         } else {
             model.put("error", "Ingreso o clave incorrecta");
         }

@@ -30,6 +30,10 @@ public class ControladorLogin {
         modelo.put("datosLogin", new DatosLogin());
         return new ModelAndView("login", modelo);
     }
+    @RequestMapping("/style")
+    public String style() {
+        return "add-css-js-demo";
+    }
 
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
@@ -38,7 +42,7 @@ public class ControladorLogin {
         Usuario usuarioBuscado = ServicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/index");
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }
@@ -67,9 +71,9 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
+    @RequestMapping(path = "/index", method = RequestMethod.GET)
     public ModelAndView irAHome() {
-        return new ModelAndView("home");
+        return new ModelAndView("index");
     }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
