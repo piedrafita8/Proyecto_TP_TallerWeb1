@@ -21,12 +21,12 @@ public class ControladorIngreso {
         this.ingresoService = ingresoService;
     }
 
-    @GetMapping
+    @GetMapping("/ingreso")
     public List<Ingreso> todosLosIngresos() {
         return ingresoService.getAllIngresos();
     }
 
-    @PostMapping
+    @PostMapping("/ingreso")
     public ResponseEntity<Ingreso> crearIngreso(@RequestBody Ingreso ingreso) {
         Ingreso nuevoIngreso = ingresoService.crearIngreso(ingreso);
         return new ResponseEntity<>(nuevoIngreso, HttpStatus.CREATED);
@@ -35,7 +35,7 @@ public class ControladorIngreso {
     @RequestMapping(path = "/validar-ingreso", method = RequestMethod.POST)
     public ModelAndView validarIngreso(DatosIngreso datosIngreso, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-
+      
         if (datosIngreso.getDescripcion() == null || datosIngreso.getMonto() == null || datosIngreso.getMonto() <= 0) {
             modelAndView.setViewName("redirect:/ingreso"); // Asegúrate de que esto sea correcto
             request.getSession().setAttribute("error", "Por favor, completa la información del ingreso.");

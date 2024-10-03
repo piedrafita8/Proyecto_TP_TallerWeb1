@@ -4,7 +4,6 @@ import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
