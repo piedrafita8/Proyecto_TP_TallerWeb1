@@ -17,13 +17,13 @@ public class ControladorObjetivos {
     private ServicioObjetivo servicioObjetivo;
 
     // Obtener todos los objetivos
-    @GetMapping
+    @GetMapping("/objetivos")
     public List<Objetivo> getAllObjetivos() {
         return servicioObjetivo.obtenerTodosLosObjetivos();
     }
 
     // Crear un nuevo objetivo
-    @PostMapping
+    @PostMapping("/objetivos")
     public ResponseEntity<Objetivo> crearObjetivo(@RequestBody Objetivo objetivo) {
         try {
             servicioObjetivo.crearObjetivo(objetivo);

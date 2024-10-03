@@ -49,7 +49,6 @@ public class ControladorEgreso {
             modelAndView.setViewName("errorEgreso");
             modelAndView.addObject("error", e.getMessage());
         }
-
         return modelAndView;
     }
 
