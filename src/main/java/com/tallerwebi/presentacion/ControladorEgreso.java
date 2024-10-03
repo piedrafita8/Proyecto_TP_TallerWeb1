@@ -27,11 +27,6 @@ public class ControladorEgreso {
         this.egresoService = egresoService;
     }
 
-    @GetMapping("/")
-    public ModelAndView redirigirARaiz() {
-        return new ModelAndView("redirect:/gastos");
-    }
-
     // Metodo para obtener todos los egresos
     @GetMapping("/gastos")
     public ModelAndView verEgresos(Integer id, HttpServletRequest request) {
@@ -42,7 +37,7 @@ public class ControladorEgreso {
 
             // Si se encuentra, mostrar la vista de egreso
             List<Egreso> listaEgresos = egresoService.getAllEgresos();
-            modelAndView.setViewName("egreso");
+            modelAndView.setViewName("gastos");
             modelAndView.addObject("datosEgreso", listaEgresos);
         } catch (RecursoNoEncontrado e) {
             // Si no se encuentra el egreso, mostrar vista de error con el mensaje
@@ -86,7 +81,7 @@ public class ControladorEgreso {
     // Metodo para ver los detalles de un egreso específico
     public ModelAndView verDetalleEgreso(@RequestParam double monto, @RequestParam int id, HttpServletRequest request) throws RecursoNoEncontrado {
         Egreso listaEgresos = egresoService.consultarEgreso(monto, id);
-        ModelAndView modelAndView = new ModelAndView("egresos");
+        ModelAndView modelAndView = new ModelAndView("gastos");
         modelAndView.addObject("datosEgreso", listaEgresos);
         return modelAndView;
     }

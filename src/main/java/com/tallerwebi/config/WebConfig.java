@@ -15,12 +15,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Configura el mapeo de recursos para CSS
-        registry.addResourceHandler("/resources/**")
-                .addResourceLocations("file:src/main/webapp/resources/");
 
-    }
 }
 
