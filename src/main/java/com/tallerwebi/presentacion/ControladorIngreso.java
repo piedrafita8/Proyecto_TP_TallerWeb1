@@ -21,12 +21,12 @@ public class ControladorIngreso {
         this.ingresoService = ingresoService;
     }
 
-    @GetMapping
+    @GetMapping("/ingreso")
     public List<Ingreso> todosLosIngresos() {
         return ingresoService.getAllIngresos();
     }
 
-    @PostMapping
+    @PostMapping("/ingreso")
     public ResponseEntity<Ingreso> crearIngreso(@RequestBody Ingreso ingreso) {
         Ingreso nuevoIngreso = ingresoService.crearIngreso(ingreso);
         return new ResponseEntity<>(nuevoIngreso, HttpStatus.CREATED);
