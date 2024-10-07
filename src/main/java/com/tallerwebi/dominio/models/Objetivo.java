@@ -17,17 +17,16 @@ public class Objetivo {
     @Temporal(TemporalType.DATE)
     private Date fechaLimite;
 
-    // Constructor, getters y setters
-    public Objetivo(Integer id, Double montoObjetivo, String nombre, Date fechaLimite, Double montoActual) {
-        this.id = id;
-        this.montoObjetivo = montoObjetivo;
-        this.nombre = nombre;
-        this.fechaLimite = fechaLimite;
-        this.montoActual = montoActual;
+    // Constructor vacío requerido por JPA
+    public Objetivo() {
     }
 
-    public Objetivo() {
-
+    // Constructor con todos los campos excepto id
+    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite) {
+        this.nombre = nombre;
+        this.montoObjetivo = montoObjetivo;
+        this.fechaLimite = fechaLimite;
+        this.montoActual = 0.0; // Inicializamos en 0
     }
 
     public Integer getId() {

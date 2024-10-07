@@ -4,54 +4,56 @@ import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
 import com.tallerwebi.dominio.models.Objetivo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
+@RequestMapping("/objetivos")
 public class ControladorObjetivos {
     @Autowired
     private ServicioObjetivo servicioObjetivo;
 
-    // Obtener todos los objetivos
-    @GetMapping("/objetivos")
-    public List<Objetivo> getAllObjetivos() {
-        return servicioObjetivo.obtenerTodosLosObjetivos();
+    @GetMapping
+    public String mostrarObjetivos(Model model) {
+        List<Objetivo> objetivos = servicioObjetivo.obtenerTodosLosObjetivos();
+        model.addAttribute("objetivos", objetivos);
+        return "objetivos";
     }
 
-    // Crear un nuevo objetivo
-    @PostMapping("/objetivos")
-    public ResponseEntity<Objetivo> crearObjetivo(@RequestBody Objetivo objetivo) {
+    @PostMapping
+    public String crearObjetivo(@RequestParam String nombre,
+                                @RequestParam Double montoObjetivo,
+                                @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaLimite,
+                                RedirectAttributes redirectAttributes) {
         try {
-            servicioObjetivo.crearObjetivo(objetivo);
-            return new ResponseEntity<>(objetivo, HttpStatus.CREATED);
+            Objetivo nuevoObjetivo = new Objetivo(nombre, montoObjetivo, fechaLimite);
+            servicioObjetivo.crearObjetivo(nuevoObjetivo);
+            redirectAttributes.addFlashAttribute("mensaje", "Objetivo creado exitosamente");
         } catch (ObjetivoExistente e) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            redirectAttributes.addFlashAttribute("error", "El objetivo ya existe");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al crear el objetivo: " + e.getMessage());
         }
+        return "redirect:/objetivos";
     }
 
-    // Consultar un objetivo por ID y nombre
-    @GetMapping("/{id}/{nombre}")
-    public ResponseEntity<Objetivo> consultarObjetivo(@PathVariable Integer id) {
-        Objetivo objetivo = servicioObjetivo.consultarObjetivo(id);
-        return objetivo != null ? new ResponseEntity<>(objetivo, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    // Actualizar el monto actual del objetivo
-    @PutMapping("/{id}/actualizarMonto")
-    public ResponseEntity<Void> actualizarMonto(@PathVariable Integer id, @RequestParam Double montoAAgregar) {
+    @PostMapping("/{id}/actualizarMonto")
+    public String actualizarMonto(@PathVariable Integer id, @RequestParam Double montoAAgregar, RedirectAttributes redirectAttributes) {
         servicioObjetivo.actualizarObjetivo(id, montoAAgregar);
-        return new ResponseEntity<>(HttpStatus.OK);
+        redirectAttributes.addFlashAttribute("mensaje", "Monto actualizado exitosamente");
+        return "redirect:/objetivos";
     }
 
-    // Eliminar un objetivo
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarObjetivo(@PathVariable Integer id) {
+    public String eliminarObjetivo(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         servicioObjetivo.eliminarObjetivo(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        redirectAttributes.addFlashAttribute("mensaje", "Objetivo eliminado exitosamente");
+        return "redirect:/objetivos";
     }
 }
