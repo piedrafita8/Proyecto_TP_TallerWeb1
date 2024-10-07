@@ -26,7 +26,7 @@ public class ControladorEgreso {
     public ControladorEgreso(ServicioEgreso egresoService) {
         this.egresoService = egresoService;
     }
-
+  
     // Metodo para obtener todos los egresos
     @GetMapping("/gastos")
     public ModelAndView verEgresos(Integer id, HttpServletRequest request) {

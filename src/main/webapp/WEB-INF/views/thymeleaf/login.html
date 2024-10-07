@@ -1,16 +1,13 @@
 <!DOCTYPE HTML>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Taller Web I</title>
-
-
-
-
     <!-- custom style -->
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" href="../../../resources/core/css/login.css">
 
 </head>
 
@@ -20,8 +17,6 @@
     <header>
         <h1 class="title">
             <a href="login.html">FINANZAS SAT</a></h1>
-
-
     </header>
 
 
@@ -33,9 +28,12 @@
                 <h3 class="loginText">Iniciar Sesion</h3>
 
 
-                <input th:field="*{email}" placeholder="E-Mail" id="email" type="email" class="form-control" required/>
-                <input th:field="*{password}" placeholder="Contraseña" type="password" id="password" class="form-control" required/>
-
+                <label for="email">
+                    <input th:field="*{email}" placeholder="E-Mail" id="email" type="email" class="form-control" required/>
+                </label>
+                <label for="password">
+                    <input th:field="*{password}" placeholder="Contraseña" type="password" id="password" class="form-control" required/>
+                </label>
                 <button id="btn-login" class="btn btn-lg btn-primary btn-block" Type="Submit">Login</button>
 
                 <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
@@ -45,9 +43,6 @@
         </div>
     </div>
 </main>
-<!-- /.container -->
-
-<!-- Boostrap core js -->
 
 </body>
 </html>
