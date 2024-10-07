@@ -94,7 +94,7 @@ public class RepositorioEgresoImplTest{
         Egreso egreso = new Egreso();
         egreso.setMonto(30000.0);
         egreso.setFecha(28092024);
-        egreso.setDescripcion("Gasto para pagar kisko");
+        egreso.setDescripcion("Gasto para pagar kiosko");
         this.sessionFactory.getCurrentSession().save(egreso);
         String nuevaDescripcion = "Gasto para pagar almacen";
         egreso.setDescripcion(nuevaDescripcion);
