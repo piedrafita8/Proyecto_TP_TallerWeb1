@@ -29,10 +29,13 @@
       <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
         <h3 class="loginText">Nuevo Usuario</h3>
 
+        <label for="email">
+          <input th:field="*{email}" placeholder="Ingrese su E-Mail" type="email" id="email" class="form-control" required/>
+        </label>
 
-        <input th:field="*{email}" placeholder="Ingrese su E-Mail" type="email" id="email" class="form-control" required/>
-        <input th:field="*{password}" placeholder="Ingrese su contraseña" type="password" id="password" class="form-control" required/>
-
+        <label for="password">
+          <input th:field="*{password}" placeholder="Ingrese su contraseña" type="password" id="password" class="form-control" required/>
+        </label>
         <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" Type="Submit">Registrarme</button>
         <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
         </p>
