@@ -1,11 +1,9 @@
 package com.tallerwebi.dominio.models;
 
-import com.tallerwebi.dominio.enums.TipoMovimiento;
-
 import javax.persistence.*;
 
 @Entity
-@Table(name = "egresos")
+@Table(name = "Egreso")
 public class Egreso {
 
     @Id
@@ -19,12 +17,6 @@ public class Egreso {
     // Constructor
     public Egreso(Integer id, Double monto, String descripcion, Integer fecha) {
         this.id = id;
-        this.monto = monto;
-        this.descripcion = descripcion;
-        this.fecha = fecha;
-    }
-
-    public Egreso(Double monto, String descripcion, Integer fecha) {
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;

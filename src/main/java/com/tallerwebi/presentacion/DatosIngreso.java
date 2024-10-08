@@ -1,7 +1,5 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.enums.TipoMovimiento;
-
 public class DatosIngreso {
 
     private Double monto;

@@ -1,6 +1,5 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.models.Egreso;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,81 +15,53 @@ import static org.mockito.Mockito.*;
 
 public class ControladorEgresoPresTest {
 
-	private HttpSession sessionMock;
+	private ControladorEgreso controladorEgreso;
+	private Egreso egresoMock;
 	private DatosEgreso datosEgresoMock;
-	private ControladorEgreso controladorEgreso; // Cambiar el controlador a ControladorEgreso
-	private Egreso egresoMock;                   // Mock del modelo Egreso
 	private HttpServletRequest requestMock;
-    private ServicioEgreso servicioEgresoMock;   // Mock del servicio de egreso
+	private HttpSession sessionMock;
+	private ServicioEgreso ServicioEgresoMock;
 
 	@BeforeEach
 	public void init(){
-		// Inicializar el mock del modelo Egreso con datos de ejemplo
-		datosEgresoMock = new DatosEgreso(32000.00, "Compra de insumos de oficina", 25102024);
+		datosEgresoMock = new DatosEgreso(30000.0, "Egreso para insumos de oficina", 19102024);
 		egresoMock = mock(Egreso.class);
-		when(egresoMock.getMonto()).thenReturn(32000.00);
-		when(egresoMock.getDescripcion()).thenReturn("Compra de insumos de oficina");
-
-		// Inicializar los mocks de HttpServletRequest y HttpSession
+		when(egresoMock.getDescripcion()).thenReturn("Egreso para insumos de oficina");
 		requestMock = mock(HttpServletRequest.class);
-        sessionMock = mock(HttpSession.class);
-
-		// Crear mock del servicio de egreso y del controlador
-		servicioEgresoMock = mock(ServicioEgreso.class);
-		controladorEgreso = new ControladorEgreso(servicioEgresoMock);
+		sessionMock = mock(HttpSession.class);
+		ServicioEgresoMock = mock(ServicioEgreso.class);
+		controladorEgreso = new ControladorEgreso(ServicioEgresoMock);
 	}
 
 	@Test
-	public void egresoSinDescripcionAgregadoDebeMarcarComoError() {
-		// Crear un objeto Egreso sin descripción
-		Egreso datosEgresoSinDescripcion = new Egreso(32000.00, "", 25102024);
+	public void egresoSinDescripcionySinMontoDeberiaInsistirEnCompletarLaInformacion() {
+		// Preparación
+		DatosEgreso datosEgresoInvalido = new DatosEgreso(null, null, 5102024); // Sin descripción ni monto
 
-		// Simular la obtención de la sesión a partir de la request
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
-		// Llamar al metodo del controlador con el egreso sin descripción
-		ModelAndView modelAndView = controladorEgreso.registrarEgreso(datosEgresoSinDescripcion, requestMock);
+		// Ejecución
+		ModelAndView modelAndView = controladorEgreso.validarEgreso(datosEgresoInvalido, requestMock);
 
-		// Verificar que no se llame al servicio de crear egreso
-		verify(servicioEgresoMock, never()).crearEgreso(any());
-
-		// Verificar que el modelo contenga un mensaje de error
-		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("La descripción no puede estar vacía"));
+		// Validación
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/egreso"));
+		verify(sessionMock, times(1)).setAttribute("error", "Por favor, completa la información del egreso.");
 	}
 
-
-
 	@Test
-	public void debeMostrarErrorSiNoEncuentraElEgreso() throws RecursoNoEncontrado {
-		// Simular que el servicio lanza una excepción cuando no encuentra el egreso
-		when(servicioEgresoMock.consultarEgreso(12345.00, 1)).thenThrow(new RecursoNoEncontrado("Egreso no encontrado"));
+	public void egresoConMontoYDescripcionCorrectosDeberiaLLevarAEsquema(){
+		// preparacion
+		Egreso egresoEncontradoMock = mock(Egreso.class);
+		when(egresoEncontradoMock.getDescripcion()).thenReturn("Egreso para insumos de oficina");
 
-		// Llamar al metodo del controlador con un id de egreso inexistente
-		ModelAndView modelAndView = controladorEgreso.verEgresos(1, requestMock);
-
-		// Verificar que el controlador muestre la vista de error
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("errorEgreso"));
-		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Egreso no encontrado"));
-	}
-
-
-	@Test
-	public void egresoSinMontoAgregadoDebeMarcarComoError() {
-		// Crear un objeto Egreso sin descripción
-		Egreso datosEgresoSinMonto = new Egreso();
-		datosEgresoSinMonto.setDescripcion("Compra de insumos de oficina");
-		datosEgresoSinMonto.setFecha(22102024);
-
-		// Simular la obtención de la sesión a partir de la request
 		when(requestMock.getSession()).thenReturn(sessionMock);
+		when(ServicioEgresoMock.consultarEgreso(30000.0, 19102024)).thenReturn(egresoEncontradoMock);
 
-		// Llamar al metodo del controlador con el egreso sin descripción
-		ModelAndView modelAndView = controladorEgreso.registrarEgreso(datosEgresoSinMonto, requestMock);
+		// ejecucion
+		ModelAndView modelAndView = controladorEgreso.validarEgreso(datosEgresoMock, requestMock);
 
-		// Verificar que no se llame al servicio de crear egreso
-		verify(servicioEgresoMock, never()).crearEgreso(any());
-
-		// Verificar que el modelo contenga un mensaje de error
-		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El monto no puede estar vacío"));
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/esquema"));
+		verify(sessionMock, times(1)).setAttribute("Egreso para insumos de oficina", egresoEncontradoMock.getDescripcion());
 	}
 }

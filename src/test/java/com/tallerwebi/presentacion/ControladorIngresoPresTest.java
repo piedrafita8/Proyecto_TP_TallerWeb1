@@ -36,7 +36,7 @@ public class ControladorIngresoPresTest {
 	@Test
 	public void ingresoSinDescripcionySinMontoDeberiaInsistirEnCompletarLaInformacion() {
 		// Preparación
-		DatosIngreso datosIngresoInvalido = new DatosIngreso(null, null, 0); // Sin descripción ni monto
+		DatosIngreso datosIngresoInvalido = new DatosIngreso(null, null, 5102024); // Sin descripción ni monto
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
