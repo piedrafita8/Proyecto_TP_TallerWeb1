@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.servicios.ServicioEgresoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -55,7 +56,7 @@ public class ControladorEgreso {
     @PostMapping("/gastos")
     public ModelAndView crearEgreso(
             @RequestParam("monto") Double monto,
-            @RequestParam("fecha") LocalDate fecha,
+            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("tipoEgreso") TipoEgreso tipoEgreso, HttpServletRequest requestMock) {
 
