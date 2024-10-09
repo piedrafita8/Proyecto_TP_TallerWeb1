@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.models.Egreso;
@@ -9,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
@@ -26,7 +29,7 @@ public class ControladorEgresoPresTest {
 	@BeforeEach
 	public void init(){
 		// Inicializar el mock del modelo Egreso con datos de ejemplo
-		datosEgresoMock = new DatosEgreso(32000.00, "Compra de insumos de oficina", 25102024);
+		datosEgresoMock = new DatosEgreso(32000.00, "Compra de insumos de oficina",LocalDate.of(2022, 12, 20));
 		egresoMock = mock(Egreso.class);
 		when(egresoMock.getMonto()).thenReturn(32000.00);
 		when(egresoMock.getDescripcion()).thenReturn("Compra de insumos de oficina");
@@ -43,13 +46,13 @@ public class ControladorEgresoPresTest {
 	@Test
 	public void egresoSinDescripcionAgregadoDebeMarcarComoError() {
 		// Crear un objeto Egreso sin descripción
-		Egreso datosEgresoSinDescripcion = new Egreso(32000.00, "", 25102024);
+		//Egreso datosEgresoSinDescripcion = new Egreso(32000.00, "", 25102024);
 
 		// Simular la obtención de la sesión a partir de la request
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
 		// Llamar al metodo del controlador con el egreso sin descripción
-		ModelAndView modelAndView = controladorEgreso.registrarEgreso(datosEgresoSinDescripcion, requestMock);
+		ModelAndView modelAndView = controladorEgreso.crearEgreso(23000.00,LocalDate.of(2022, 12, 20), "", TipoEgreso.SUPERMERCADO,requestMock );
 
 		// Verificar que no se llame al servicio de crear egreso
 		verify(servicioEgresoMock, never()).crearEgreso(any());
@@ -69,7 +72,7 @@ public class ControladorEgresoPresTest {
 		ModelAndView modelAndView = controladorEgreso.verEgresos(1, requestMock);
 
 		// Verificar que el controlador muestre la vista de error
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("errorEgreso"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("gastos"));
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Egreso no encontrado"));
 	}
 
@@ -77,20 +80,18 @@ public class ControladorEgresoPresTest {
 	@Test
 	public void egresoSinMontoAgregadoDebeMarcarComoError() {
 		// Crear un objeto Egreso sin descripción
-		Egreso datosEgresoSinMonto = new Egreso();
-		datosEgresoSinMonto.setDescripcion("Compra de insumos de oficina");
-		datosEgresoSinMonto.setFecha(22102024);
+
 
 		// Simular la obtención de la sesión a partir de la request
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
 		// Llamar al metodo del controlador con el egreso sin descripción
-		ModelAndView modelAndView = controladorEgreso.registrarEgreso(datosEgresoSinMonto, requestMock);
+		ModelAndView modelAndView = controladorEgreso.crearEgreso(null, LocalDate.of(2022, 12, 20), "Compra de insumos de oficina", TipoEgreso.SUPERMERCADO ,requestMock);
 
 		// Verificar que no se llame al servicio de crear egreso
 		verify(servicioEgresoMock, never()).crearEgreso(any());
 
 		// Verificar que el modelo contenga un mensaje de error
-		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El monto no puede estar vacío"));
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El monto no puede ser nulo o menor a cero"));
 	}
 }

@@ -30,24 +30,19 @@ public class ControladorLogin {
         modelo.put("datosLogin", new DatosLogin());
         return new ModelAndView("login", modelo);
     }
-    @RequestMapping("/style")
-    public String style() {
-        return "add-css-js-demo";
-    }
+    @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+    public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
 
-//    @Reqndex");uestMapping(path = "/validar-login", method = RequestMethod.POST)
-//            public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
-//                ModelMap model = new ModelMap();
-//
-//                Usuario usuarioBuscado = ServicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
-//                if (usuarioBuscado != null) {
-//                    request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-//                    return new ModelAndView("redirect:/i
-//        } else {
-//            model.put("error", "Usuario o clave incorrecta");
-//        }
-//        return new ModelAndView("login", model);
-//    }
+        Usuario usuarioBuscado = ServicioLogin.consultarUsuario(datosLogin.getUsername(), datosLogin.getPassword());
+        if (usuarioBuscado != null) {
+            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+            return new ModelAndView("redirect:/index");
+        } else {
+            model.put("error", "Usuario o clave incorrecta");
+        }
+        return new ModelAndView("login", model);
+    }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {

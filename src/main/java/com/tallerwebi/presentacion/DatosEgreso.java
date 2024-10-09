@@ -1,19 +1,25 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.enums.TipoEgreso;
+
+import java.time.LocalDate;
+
 public class DatosEgreso {
 
     private Double monto;
     private String descripcion;
-    private Integer fecha;
+    private LocalDate fecha;
+
 
     public DatosEgreso() {
 
     }
 
-    public DatosEgreso(Double monto, String descripcion, Integer fecha) {
+    public DatosEgreso(Double monto, String descripcion, LocalDate fecha) {
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
+
     }
 
     public Double getMonto() {
@@ -32,11 +38,11 @@ public class DatosEgreso {
         this.descripcion = descripcion;
     }
 
-    public Integer getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Integer fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 }

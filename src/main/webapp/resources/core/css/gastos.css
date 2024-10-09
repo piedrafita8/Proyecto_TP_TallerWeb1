@@ -134,7 +134,7 @@ i{
 
 /* Estilos para las categorías (Botones) */
 
-    #categorias button {
+   .btn {
         background-color: transparent;
         border: 2px solid #7A7EFF; /* Borde blanco */
         color: white;
@@ -147,12 +147,19 @@ i{
 
 
     }
+.btn:hover {
+    background-color: #7A7EFF;
+    color: #202060;
 
-#categorias button:hover {
-    background-color: #7A7EFF; /* Cambio de color al pasar el mouse */
-    color: #202060; /* Color del texto cambia al azul oscuro */
 }
 
+
+/* Clase que aplicaremos al botón seleccionado */
+.active {
+    background-color: #7A7EFF;
+    color: #202060;
+
+}
 /* Estilos para los inputs de fecha y comentario */
 input[type="date"], input[type="number"], textarea {
     background-color: #2C387E;
