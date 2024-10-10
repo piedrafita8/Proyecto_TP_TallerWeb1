@@ -141,15 +141,14 @@
                 <div class="next-month">6</div>
             </div>
         </div>
-        <div class="container-esquema">
-            <h2>Esquema Financiero</h2>
+        <div class="container-index">
+            <h2>Bienvenido a Finanzas SAT</h2>
 
             <div class="egresos-section">
                 <h3>Egresos Recientes</h3>
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Fecha</th>
                         <th>Descripción</th>
                         <th>Monto</th>
                         <th>Tipo</th>
@@ -157,15 +156,33 @@
                     </thead>
                     <tbody>
                     <tr th:each="egreso : ${egresos}">
-                        <td th:text="${egreso.descripcion}"></td>
-                        <td th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
-                        <td th:text="${egreso.tipoEgreso}"></td>
+                        <td data-label="Descripción" th:text="${egreso.descripcion}"></td>
+                        <td data-label="Monto" th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
+                        <td data-label="Tipo" th:text="${egreso.tipoEgreso}"></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Add other sections of your esquema here -->
+            <div class="ingresos-section">
+                <h3>Ingresos Recientes</h3>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                        <th>Tipo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ingreso : ${ingresos}">
+                        <td data-label="Descripción" th:text="${ingreso.descripcion}"></td>
+                        <td data-label="Monto" th:text="${#numbers.formatDecimal(ingreso.monto, 1, 2)}"></td>
+                        <td data-label="Tipo" th:text="${ingreso.tipoIngreso}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 </body>
