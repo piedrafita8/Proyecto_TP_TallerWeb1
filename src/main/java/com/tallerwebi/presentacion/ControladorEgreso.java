@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,8 +33,15 @@ public class ControladorEgreso {
         this.egresoService = egresoService;
     }
 
-    // Metodo para obtener todos los egresos
+    // Mostrar la vista de ingreso
     @GetMapping("/gastos")
+    public String mostrarEgreso(Model model) {
+        model.addAttribute("datosEgreso", new DatosIngreso());
+        return "gastos";
+    }
+
+    // Metodo para obtener todos los egresos
+    @GetMapping("api/gastos")
     public ModelAndView verEgresos(Integer id, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         try {
