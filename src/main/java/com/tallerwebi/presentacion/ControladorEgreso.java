@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.enums.TipoEgreso;
+import com.tallerwebi.dominio.enums.TipoMovimiento;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
@@ -46,7 +47,7 @@ public class ControladorEgreso {
         ModelAndView modelAndView = new ModelAndView();
         try {
             // Consultar el egreso por ID para ver si existe (esto es opcional si quieres una consulta específica)
-            Egreso egreso = egresoService.consultarEgreso(12345.00, id);
+            egresoService.consultarEgreso(12345.00, id);
 
             // Si se encuentra, mostrar la vista de egreso
             List<Egreso> listaEgresos = egresoService.getAllEgresos();
@@ -66,6 +67,7 @@ public class ControladorEgreso {
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam("descripcion") String descripcion,
+            @RequestParam("tipoMovimiento") TipoMovimiento tipoMovimiento,
             @RequestParam("tipoEgreso") TipoEgreso tipoEgreso, HttpServletRequest requestMock) {
 
         ModelAndView modelAndView = new ModelAndView();
@@ -82,7 +84,7 @@ public class ControladorEgreso {
         }
 
         // Crear el objeto Egreso
-        Egreso egreso = new Egreso(monto, descripcion, fecha);
+        Egreso egreso = new Egreso(monto, descripcion, fecha, tipoEgreso, tipoMovimiento);
 
 
         // Guardar el egreso
@@ -95,7 +97,7 @@ public class ControladorEgreso {
 
     // Metodo para ver los detalles de un egreso específico
     @GetMapping("/gasto/detalle")
-    public ModelAndView verDetalleEgreso(@RequestParam("monto") double monto, @RequestParam("id") int id) throws RecursoNoEncontrado {
+    public ModelAndView verDetalleEgreso(@RequestParam("monto") Double monto, @RequestParam("id") Integer id) throws RecursoNoEncontrado {
         ModelAndView modelAndView = new ModelAndView();
         Egreso egreso = egresoService.consultarEgreso(monto, id);  // Usar la instancia egresoService
 

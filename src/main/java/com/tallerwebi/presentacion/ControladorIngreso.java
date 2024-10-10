@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.interfaces.ServicioIngreso;
 import org.springframework.http.HttpStatus;
@@ -15,24 +16,27 @@ import java.util.List;
 @Controller
 public class ControladorIngreso {
 
-    private final ServicioIngreso ingresoService;
+    private ServicioIngreso ingresoService;
 
     public ControladorIngreso(ServicioIngreso ingresoService) {
         this.ingresoService = ingresoService;
     }
 
-    // Mostrar la vista de ingreso
     @GetMapping("/ingreso")
-    public String mostrarIngreso(Model model) {
-        model.addAttribute("datosIngreso", new DatosIngreso());
-        return "ingreso";
-    }
-
-    // Metodo separado para obtener todos los ingresos en formato JSON
-    @GetMapping("/api/ingresos")
-    @ResponseBody
-    public List<Ingreso> todosLosIngresos() {
-        return ingresoService.getAllIngresos();
+    public ModelAndView verIngresos(Integer id, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        // Consultar el egreso por ID para ver si existe (esto es opcional si quieres una consulta específica)
+        try {
+            ingresoService.consultarIngreso(173345.00, id);
+            List<Ingreso> listaIngresos = ingresoService.getAllIngresos();
+            modelAndView.setViewName("ingreso");
+            modelAndView.addObject("datosIngreso", listaIngresos);
+        } catch (RecursoNoEncontrado e) {
+            // Si no se encuentra el ingreso, mostrar vista de error con el mensaje
+            modelAndView.setViewName("ingreso");
+            modelAndView.addObject("error", e.getMessage());
+        }
+        return modelAndView;
     }
 
     // Crear un nuevo ingreso (formato JSON)
@@ -44,7 +48,7 @@ public class ControladorIngreso {
 
     // Validar un ingreso y redirigir según el resultado
     @PostMapping("/validar-ingreso")
-    public ModelAndView validarIngreso(DatosIngreso datosIngreso, HttpServletRequest request) {
+    public ModelAndView validarIngreso(DatosIngreso datosIngreso, HttpServletRequest request) throws RecursoNoEncontrado {
         ModelAndView modelAndView = new ModelAndView();
 
         if (datosIngreso.getDescripcion() == null || datosIngreso.getMonto() == null || datosIngreso.getMonto() <= 0) {
@@ -53,7 +57,7 @@ public class ControladorIngreso {
             return modelAndView;
         }
 
-        Ingreso ingresoEncontrado = ingresoService.consultarIngreso(datosIngreso.getMonto(), datosIngreso.getFecha());
+        Ingreso ingresoEncontrado = ingresoService.consultarIngreso(datosIngreso.getMonto(), datosIngreso.getId());
         if (ingresoEncontrado != null) {
             modelAndView.setViewName("redirect:/esquema");
             request.getSession().setAttribute(ingresoEncontrado.getDescripcion(), ingresoEncontrado.getDescripcion());

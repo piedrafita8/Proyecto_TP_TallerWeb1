@@ -2,14 +2,18 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.enums.TipoMovimiento;
 
+import java.time.LocalDate;
+
 public class DatosIngreso {
 
+    private Integer id;
     private Double monto;
     private String descripcion;
-    private Integer fecha;
+    private LocalDate fecha;
 
     // Constructor, getters y setters
-    public DatosIngreso(Double monto, String descripcion, Integer fecha) {
+    public DatosIngreso(Integer id, Double monto, String descripcion, LocalDate fecha) {
+        this.id = id;
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -35,12 +39,19 @@ public class DatosIngreso {
         this.descripcion = descripcion;
     }
 
-    public Integer getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Integer fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

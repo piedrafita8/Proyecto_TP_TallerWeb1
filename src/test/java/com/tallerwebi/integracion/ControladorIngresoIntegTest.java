@@ -16,6 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,6 +47,5 @@ public class ControladorIngresoIntegTest {
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("ingreso"));
 		assertThat(modelAndView.getModel().containsKey("datosIngreso"), is(true)); // Verificar la clave directamente
 	}
-
 
 }
