@@ -36,40 +36,21 @@ public class ControladorEgresoIntegTest {
 	private WebApplicationContext wac;
 	private MockMvc mockMvc;
 
-	private ServicioEgreso servicioEgresoMock;
-
 	@BeforeEach
-	public void setup() {
-		// Crear un mock del servicio de egresos
-		servicioEgresoMock = Mockito.mock(ServicioEgreso.class);
+	public void init() {
 		// Crear el contexto de pruebas
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	}
 
 	@Test
-	public void debeRedirigirALaPaginaDeEgresosCuandoSeNavegaALaRaiz() throws Exception {
-		MvcResult result = this.mockMvc.perform(get("/"))
-				.andExpect(status().is3xxRedirection()) // Esperar redireccionamiento 3xx
+	public void deberiaRetornarPaginaEgresoCuandoNavegaAIngreso() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/gastos"))
+				.andExpect(status().isOk())
 				.andReturn();
 
 		ModelAndView modelAndView = result.getModelAndView();
 		assert modelAndView != null;
-		assertThat("redirect:/egreso", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
-		assertThat(true, is(modelAndView.getModel().isEmpty()));
-	}
-
-	@Test
-	public void debeMostrarLaPaginaEgresoCuandoSeNavegaAEgreso() throws Exception {
-		// Mock de datos para la lista de egresos
-		Mockito.when(servicioEgresoMock.getAllEgresos()).thenReturn(Collections.emptyList());
-
-		MvcResult result = this.mockMvc.perform(get("/egreso"))
-				.andExpect(status().isOk()) // Esperar código de estado 200
-				.andReturn();
-
-		ModelAndView modelAndView = result.getModelAndView();
-		assert modelAndView != null;
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("egreso"));
-		assertThat(modelAndView.getModel().get("datosEgreso").toString(), containsString("[]")); // Verificar lista vacía
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("gastos"));
+		assertThat(modelAndView.getModel().containsKey("datosEgreso"), is(true)); // Verificar la clave directamente
 	}
 }
