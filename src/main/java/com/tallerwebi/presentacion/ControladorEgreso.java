@@ -65,13 +65,11 @@ public class ControladorEgreso {
         // Validación de los campos
         if (descripcion == null || descripcion.isEmpty()) {
             modelAndView.addObject("error", "La descripción no puede estar vacía");
-            modelAndView.setViewName("error");
             return modelAndView;
         }
 
         if (monto == null || monto <= 0) {
             modelAndView.addObject("error", "El monto no puede ser nulo o menor a cero");
-            modelAndView.setViewName("error");
             return modelAndView;
         }
 

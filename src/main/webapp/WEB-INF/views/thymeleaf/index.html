@@ -141,87 +141,32 @@
                 <div class="next-month">6</div>
             </div>
         </div>
-        <section class="list-container">
-            <article class="table-category">
-                <h4>Categoria</h4>
-            </article>
-            <article class="table-category">
-                <h4>Tipo</h4>
-            </article>
-            <article class="table-category">
-                <h4>Monto</h4>
-            </article>
-            <article class="table-category">
-                <h4>Fecha</h4>
-            </article>
-            <article class="table-category">
-                <h4>Comentarios</h4>
-            </article>
+        <div class="container-esquema">
+            <h2>Esquema Financiero</h2>
 
-            <article class="finanzas__content">
-                <p>Sueldo</p>
-            </article>
-            <article class="finanzas__content">
-                <p class="ingreso">Ingreso</p>
-            </article>
-            <article class="finanzas__content">
-                <p>$450.000,00</p>
-            </article>
-            <article class="finanzas__content">
-                <p>03-09-2024</p>
-            </article>
-            <article class="finanzas__content">
-                <p>...</p>
-            </article>
+            <div class="egresos-section">
+                <h3>Egresos Recientes</h3>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                        <th>Tipo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="egreso : ${egresos}">
+                        <td th:text="${egreso.descripcion}"></td>
+                        <td th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
+                        <td th:text="${egreso.tipoEgreso}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <article class="finanzas__content">
-                <p>Comida</p>
-            </article>
-            <article class="finanzas__content">
-                <p class="gasto">Egreso</p>
-            </article>
-            <article class="finanzas__content">
-                <p>$2.099,66</p>
-            </article>
-            <article class="finanzas__content">
-                <p>05-09-2024</p>
-            </article>
-            <article class="finanzas__content">
-                <p>...</p>
-            </article>
-
-            <article class="finanzas__content">
-                <p>Alquiler</p>
-            </article>
-            <article class="finanzas__content">
-                <p class="gasto">Egreso</p>
-            </article>
-            <article class="finanzas__content">
-                <p>$60.000,00</p>
-            </article>
-            <article class="finanzas__content">
-                <p>07-09-2024</p>
-            </article>
-            <article class="finanzas__content">
-                <p>...</p>
-            </article>
-
-            <article class="finanzas__content">
-                <p>Prestamo</p>
-            </article>
-            <article class="finanzas__content">
-                <p class="ingreso">Ingreso</p>
-            </article>
-            <article class="finanzas__content">
-                <p>$80.000,00</p>
-            </article>
-            <article class="finanzas__content">
-                <p>09-09-2024</p>
-            </article>
-            <article class="finanzas__content">
-                <p>...</p>
-            </article>
-        </section>
+            <!-- Add other sections of your esquema here -->
+        </div>
     </main>
 </body>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>

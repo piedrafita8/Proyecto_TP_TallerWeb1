@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.interfaces.ServicioLogin;
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class ControladorLogin {
 
     private ServicioLogin ServicioLogin;
+    private ServicioEgreso servicioEgreso;
 
     @Autowired
-    public ControladorLogin(ServicioLogin ServicioLogin){
+    public ControladorLogin(ServicioLogin ServicioLogin, ServicioEgreso servicioEgreso){
         this.ServicioLogin = ServicioLogin;
+        this.servicioEgreso = servicioEgreso;
     }
 
     @RequestMapping("/login")
@@ -68,7 +73,10 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
     public ModelAndView irAHome() {
-        return new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("index");
+        List<Egreso> egresos = servicioEgreso.getAllEgresos();
+        modelAndView.addObject("egresos", egresos);
+        return modelAndView;
     }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
