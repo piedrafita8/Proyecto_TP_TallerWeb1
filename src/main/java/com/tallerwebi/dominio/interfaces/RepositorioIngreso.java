@@ -3,6 +3,7 @@ package com.tallerwebi.dominio.interfaces;
 import com.tallerwebi.dominio.models.Ingreso;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository

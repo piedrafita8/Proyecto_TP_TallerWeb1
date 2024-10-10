@@ -1,12 +1,13 @@
 package com.tallerwebi.dominio.models;
 
 import com.tallerwebi.dominio.enums.TipoEgreso;
+import com.tallerwebi.dominio.enums.TipoMovimiento;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "egresos")
+@Table(name = "Egreso")
 public class Egreso {
 
     @Id
@@ -18,20 +19,24 @@ public class Egreso {
     private LocalDate fecha;
     @Enumerated(EnumType.STRING)
     private TipoEgreso tipoEgreso;
+    private TipoMovimiento tipoMovimiento;
 
     // Constructor
-    public Egreso(Integer id, Double monto, String descripcion, LocalDate fecha, TipoEgreso tipoEgreso) {
+    public Egreso(Integer id, Double monto, String descripcion, LocalDate fecha, TipoEgreso tipoEgreso, TipoMovimiento tipoMovimiento) {
         this.id = id;
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.tipoEgreso = tipoEgreso;
+        this.tipoMovimiento = tipoMovimiento;
     }
 
-    public Egreso(Double monto, String descripcion, LocalDate fecha) {
+    public Egreso(Double monto, String descripcion, LocalDate fecha, TipoEgreso tipoEgreso, TipoMovimiento tipoMovimiento) {
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.tipoEgreso = tipoEgreso;
+        this.tipoMovimiento = tipoMovimiento;
     }
 
     // Constructor por default
@@ -76,6 +81,12 @@ public class Egreso {
 
     public void setTipoEgreso(TipoEgreso tipoEgreso) {this.tipoEgreso = tipoEgreso;}
 
+    public TipoMovimiento getTipoMovimiento() {
+        return tipoMovimiento;
+    }
 
+    public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
+        this.tipoMovimiento = tipoMovimiento;
+    }
 }
 
