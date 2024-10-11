@@ -183,7 +183,7 @@ main {
 
 .calendar {
     max-width: 400px;
-    height: 87%;
+    height: 100%;
     padding: 5px;
     border: 1px solid #ddd;
     background-color: rgb(15, 18, 63);
