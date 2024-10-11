@@ -25,6 +25,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
     private ApplicationContext applicationContext;
     
     @Override
+<<<<<<< HEAD
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("/css/");
@@ -34,6 +35,13 @@ public class SpringWebConfig implements WebMvcConfigurer {
                 .addResourceLocations("/images/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("/classpath:/META-INF/resources/webjars/");
+=======
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/css/**").addResourceLocations("/resources/core/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/resources/core/js/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
+
+>>>>>>> c7bde8a (Se agrego funcionalidad de calendario)
     }
 
     @Override
