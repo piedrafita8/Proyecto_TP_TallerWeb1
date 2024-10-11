@@ -90,136 +90,49 @@
             <div class="days-of-week" id="daysOfWeek"></div>
             <div class="days" id="daysContainer"></div>
         </div>
+        <div class="container-index">
+            <h2>Bienvenido a Finanzas SAT</h2>
 
-        <section class="list-container">
-            <article class="table-category">
-                <h4>Categoria</h4>
-            </article>
-            <article class="table-category">
-                <h4>Tipo</h4>
-            </article>
-            <article class="table-category">
-                <h4>Monto</h4>
-            </article>
-            <article class="table-category">
-                <h4>Fecha</h4>
-            </article>
-            <article class="table-category">
-                <h4>Comentarios</h4>
-            </article>
+            <div class="egresos-section">
+                <h3>Egresos Recientes</h3>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                        <th>Tipo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="egreso : ${egresos}">
+                        <td data-label="Descripción" th:text="${egreso.descripcion}"></td>
+                        <td data-label="Monto" th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
+                        <td data-label="Tipo" th:text="${egreso.tipoEgreso}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p class="ingreso"></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p class="gasto"></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p class="gasto"></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p class="ingreso"></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p class="ingreso"></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p class="ingreso"></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p class="ingreso"></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-            <article class="finanzas__content">
-                <p></p>
-            </article>
-        </section>
+            <div class="ingresos-section">
+                <h3>Ingresos Recientes</h3>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                        <th>Tipo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ingreso : ${ingresos}">
+                        <td data-label="Descripción" th:text="${ingreso.descripcion}"></td>
+                        <td data-label="Monto" th:text="${#numbers.formatDecimal(ingreso.monto, 1, 2)}"></td>
+                        <td data-label="Tipo" th:text="${ingreso.tipoIngreso}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 </body>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
