@@ -23,7 +23,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public Usuario buscarUsuario(String email, String password) {
+    public Usuario buscarUsuario(String username, String password) {
         final Session session = sessionFactory.getCurrentSession();
 
         // Usar CriteriaBuilder y CriteriaQuery para crear la consulta
@@ -32,9 +32,9 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         Root<Usuario> root = query.from(Usuario.class);
 
         // Crear las condiciones de búsqueda
-        Predicate conditionEmail = builder.equal(root.get("email"), email);
+        Predicate conditionUsername = builder.equal(root.get("username"), username);
         Predicate conditionPassword = builder.equal(root.get("password"), password);
-        query.where(builder.and(conditionEmail, conditionPassword));
+        query.where(builder.and(conditionUsername, conditionPassword));
 
         // Ejecutar la consulta
         return session.createQuery(query).uniqueResult();

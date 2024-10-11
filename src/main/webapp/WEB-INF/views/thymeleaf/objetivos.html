@@ -1,81 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Objetivo</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="../../../resources/core/css/index.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="../../../resources/core/css/objetivos.css"
-    />
-  </head>
-  <body>
-    <div class="nav-container">
-      <div class="nav1">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-          <ul class="menu">
-            <h1>Finanzas SAT</h1>
-            <li >
-              <a href="index.html">Esquema</a>
-            </li>
-
-            <li>
-              <a href="ingreso.html">Ingresos</a>
-            </li>
-
-            <li>
-              <a href="gastos.html">Gastos</a>
-            </li>
-
-            <li id="active">
-              <a href="objetivos.html">Objetivos</a>
-            </li>
-
-<!--            <li>-->
-<!--              <a href="ajustes.html">Ajustes</a>-->
-<!--            </li>-->
-          </ul>
-        </nav>
-      </div>
-
-      <div class="nav2">
-        <nav>
-          <ul class="menu">
-<!--            <li>-->
-<!--              <a href="ayuda.html">Centro de Ayuda</a>-->
-<!--            </li>-->
-
-            <li>
-              <a href="contacto.html">Contacto</a>
-            </li>
-
-            <li>
-              <a href="login.html">Cerrar sesion</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-
-    <div class="container">
-      <h2>Objetivos de Ahorro</h2>
-
-      <form class="add-goal-form">
-        <label><input type="text" placeholder="Nombre del Objetivo" required /></label>
-        <label><input type="number" placeholder="Monto del objetivo" required /></label>
-        <button type="submit">Crear Objetivo</button>
-      </form>
-
-      <ul class="goals-list">
-        <!-- Acá se ejecuta el .JS para mostrar los objetivos -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Objetivos</title>
+  <link rel="stylesheet" th:href="@{/css/objetivos.css}">
+  <link rel="stylesheet" href="../../../resources/core/css/objetivos.css">
+</head>
+<body>
+<div class="nav-container">
+  <div class="nav1">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <ul class="menu">
+        <h1>Finanzas SAT</h1>
+        <li><a th:href="@{/index}">Esquema</a></li>
+        <li><a th:href="@{/ingreso}">Ingresos</a></li>
+        <li><a th:href="@{/gastos}">Gastos</a></li>
+        <li id="active"><a th:href="@{/objetivos}">Objetivos</a></li>
+<!--        <li><a th:href="@{/ajustes}">Ajustes</a></li>-->
       </ul>
-    </div>
-    <script src="../../../resources/core/js/objetivos.js"></script>
-  </body>
+    </nav>
+  </div>
+  <div class="nav2">
+    <nav>
+      <ul class="menu">
+<!--        <li><a th:href="@{/ayuda}">Centro de Ayuda</a></li>-->
+        <li><a th:href="@{/contacto}" href="contacto.html">Contacto</a></li>
+        <li><a th:href="@{/login}">Cerrar sesión</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<div class="container">
+  <h2>Objetivos de Ahorro</h2>
+
+  <form class="add-goal-form" th:action="@{/objetivos}" method="post">
+    <input type="text" name="nombre" placeholder="Nombre del Objetivo" required />
+    <input type="number" name="montoObjetivo" placeholder="Monto del objetivo" required />
+    <input type="date" name="fechaLimite" placeholder="Fecha límite" required />
+    <button type="submit">Crear Objetivo</button>
+  </form>
+
+  <ul class="goals-list">
+    <li th:each="objetivo : ${objetivos}">
+      <h3 th:text="${objetivo.nombre}">Nombre del Objetivo</h3>
+      <p>Monto Objetivo: $<span th:text="${#numbers.formatDecimal(objetivo.montoObjetivo, 0, 'COMMA', 2, 'POINT')}">0.00</span></p>
+      <p>Monto Actual: $<span th:text="${#numbers.formatDecimal(objetivo.montoActual, 0, 'COMMA', 2, 'POINT')}">0.00</span></p>
+      <p>Fecha Límite: <span th:text="${#dates.format(objetivo.fechaLimite, 'dd-MM-yyyy')}">01-01-2023</span></p>
+      <form th:action="@{/objetivos/{id}/actualizarMonto(id=${objetivo.id})}" method="post">
+        <input type="number" name="montoAAgregar" placeholder="Monto a agregar" required />
+        <button type="submit">Actualizar Monto</button>
+      </form>
+      <form th:action="@{/objetivos/{id}(id=${objetivo.id})}" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <button type="submit">Eliminar Objetivo</button>
+      </form>
+    </li>
+  </ul>
+</div>
+</body>
 </html>

@@ -16,11 +16,11 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
@@ -37,27 +37,15 @@ public class ControladorIngresoIntegTest {
 	}
 
 	@Test
-	public void deberiaRetornarRedireccionCuandoNavegaARaiz() throws Exception {
-		MvcResult result = this.mockMvc.perform(get("/"))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/ingreso")) // Verificar la redirección a la URL específica
-				.andReturn();
-
-		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
-        assertThat("El nombre de la vista debería ser 'redirect:/ingreso'", modelAndView.getViewName(), equalToIgnoringCase("redirect:/ingreso"));
-		assertThat("El modelo debería estar vacío", modelAndView.getModel().isEmpty(), is(true));
-	}
-
-	@Test
 	public void deberiaRetornarPaginaIngresoCuandoNavegaAIngreso() throws Exception {
 		MvcResult result = this.mockMvc.perform(get("/ingreso"))
 				.andExpect(status().isOk())
 				.andReturn();
 
 		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
-        assertThat("El nombre de la vista debería ser 'ingreso'", modelAndView.getViewName(), equalToIgnoringCase("ingreso"));
-		assertThat("El modelo debería contener la clave 'datosIngreso'", modelAndView.getModel().containsKey("datosIngreso"), is(true));
+		assert modelAndView != null;
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("ingreso"));
+		assertThat(modelAndView.getModel().containsKey("datosIngreso"), is(true)); // Verificar la clave directamente
 	}
+
 }

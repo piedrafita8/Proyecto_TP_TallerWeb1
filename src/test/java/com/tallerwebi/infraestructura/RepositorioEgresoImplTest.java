@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
@@ -42,17 +44,21 @@ public class RepositorioEgresoImplTest{
         Egreso egreso = new Egreso();
         egreso.setMonto(12000.0);
         egreso.setDescripcion("Gasto para pagar en la verduleria");
-        egreso.setFecha(21092024);
+        egreso.setFecha(LocalDate.of(2022, 12, 20));
+        egreso.setTipoEgreso(TipoEgreso.SUPERMERCADO);
+        egreso.setTipoMovimiento(EGRESO);
 
         // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
         this.RepositorioEgreso.guardar(egreso);
 
         // Hacer la consulta HQL para encontrar el egreso guardado
-        String hql = "SELECT e FROM Egreso e WHERE e.monto = :monto AND e.descripcion = :descripcion AND e.fecha = :fecha";
+        String hql = "SELECT e FROM Egreso e WHERE e.monto = :monto AND e.descripcion = :descripcion AND e.fecha = :fecha AND e.tipoEgreso = :tipoEgreso AND e.tipoMovimiento = :tipoMovimiento ";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("monto", 12000.0);
         query.setParameter("descripcion", "Gasto para pagar en la verduleria");
-        query.setParameter("fecha", 21092024);
+        query.setParameter("fecha", (LocalDate.of(2022, 12, 20)));
+        query.setParameter("tipoEgreso", TipoEgreso.SUPERMERCADO);
+        query.setParameter("tipoMovimiento", EGRESO);
 
         // Obtener el resultado de la consulta
         Egreso egresoObtenido = (Egreso) query.getSingleResult();
@@ -66,17 +72,23 @@ public class RepositorioEgresoImplTest{
     @Rollback
     public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentro3IngresosEnLaBaseDeDatos(){
         Egreso egreso1 = new Egreso();
-        egreso1.setMonto(27900.0);
-        egreso1.setFecha(14102024);
-        egreso1.setDescripcion("Ingreso de un prestamo bancario");
+        egreso1.setMonto(1000.0);
+        egreso1.setFecha(LocalDate.of(2022, 12, 20));
+        egreso1.setDescripcion("Gasto para pagar el transporte");
+        egreso1.setTipoEgreso(TipoEgreso.TRANSPORTE);
+        egreso1.setTipoMovimiento(EGRESO);
         Egreso egreso2 = new Egreso();
-        egreso2.setMonto(88900.0);
-        egreso2.setFecha(20102024);
-        egreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
+        egreso2.setMonto(80000.0);
+        egreso2.setFecha(LocalDate.of(2022, 12, 20));
+        egreso2.setDescripcion("Gasto para pagar el combustible en la estacion de servicio");
+        egreso2.setTipoEgreso(TipoEgreso.COMBUSTIBLE);
+        egreso1.setTipoMovimiento(EGRESO);
         Egreso egreso3 = new Egreso();
-        egreso3.setMonto(95000.0);
-        egreso3.setFecha(11102024);
-        egreso3.setDescripcion("Ingreso proveniente de beca");
+        egreso3.setMonto(3000.0);
+        egreso3.setFecha(LocalDate.of(2022, 12, 20));
+        egreso3.setDescripcion("Gasto para abonar la consulta por obra social");
+        egreso3.setTipoEgreso(TipoEgreso.SALUD);
+        egreso1.setTipoMovimiento(EGRESO);
         this.sessionFactory.getCurrentSession().save(egreso1);
         this.sessionFactory.getCurrentSession().save(egreso2);
         this.sessionFactory.getCurrentSession().save(egreso3);
@@ -93,8 +105,10 @@ public class RepositorioEgresoImplTest{
     public void dadoQueExisteUnRepositorioEgresoCuandoActualizoUnIngresoEntoncesLoEncuentroEnLaBaseDeDatos(){
         Egreso egreso = new Egreso();
         egreso.setMonto(30000.0);
-        egreso.setFecha(28092024);
-        egreso.setDescripcion("Gasto para pagar kisko");
+        egreso.setFecha(LocalDate.of(2022, 12, 20));
+        egreso.setDescripcion("Gasto para pagar kiosko");
+        egreso.setTipoMovimiento(EGRESO);
+        egreso.setTipoEgreso(TipoEgreso.SUPERMERCADO);
         this.sessionFactory.getCurrentSession().save(egreso);
         String nuevaDescripcion = "Gasto para pagar almacen";
         egreso.setDescripcion(nuevaDescripcion);
@@ -102,10 +116,12 @@ public class RepositorioEgresoImplTest{
         this.RepositorioEgreso.actualizar(egreso);
         this.sessionFactory.getCurrentSession().save(egreso);
 
-        Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Egreso e WHERE e.monto = :monto AND e.fecha = :fecha AND e.descripcion = :descripcion");
+        Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Egreso e WHERE e.monto = :monto AND e.fecha = :fecha AND e.descripcion = :descripcion AND e.tipoEgreso = :tipoEgreso AND e.tipoMovimiento = :tipoMovimiento");
         query.setParameter("monto", 30000.0);
-        query.setParameter("fecha", 28092024);
+        query.setParameter("fecha",LocalDate.of(2022, 12, 20));
         query.setParameter("descripcion", "Gasto para pagar almacen");
+        query.setParameter("tipoMovimiento", EGRESO);
+        query.setParameter("tipoEgreso", TipoEgreso.SUPERMERCADO);
 
         Egreso egresosObtenido = (Egreso) query.getSingleResult();
 

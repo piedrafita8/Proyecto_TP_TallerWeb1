@@ -3,14 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Taller Web I</title>
-
-
-
-
   <!-- custom style -->
   <link rel="stylesheet" th:href="@{/css/login.css}">
+  <link rel="stylesheet" href="../../../resources/core/css/login.css">
 
 </head>
 
@@ -29,6 +25,10 @@
       <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
         <h3 class="loginText">Nuevo Usuario</h3>
 
+        <label for="username">
+          <input th:field="*{username}" placeholder="Ingrese nombre de usuario" type="text" id="username" class="form-control" required/>
+        </label>
+
         <label for="email">
           <input th:field="*{email}" placeholder="Ingrese su E-Mail" type="email" id="email" class="form-control" required/>
         </label>
@@ -46,8 +46,8 @@
   </div>
 
 </main>
-<!-- /.container -->
-
 <!-- Boostrap core js -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script src="../../../resources/core/js/registrarse.js"></script>
 </body>
 </html>
