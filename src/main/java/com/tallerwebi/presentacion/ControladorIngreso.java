@@ -6,7 +6,6 @@ import com.tallerwebi.dominio.interfaces.ServicioIngreso;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,7 +21,6 @@ public class ControladorIngreso {
         this.ingresoService = ingresoService;
     }
 
-    @GetMapping("/ingreso")
     public ModelAndView verIngresos(Integer id, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         // Consultar el egreso por ID para ver si existe (esto es opcional si quieres una consulta específica)

@@ -2,7 +2,7 @@
   "name": "tallerwebi",
   "version": "1.0.0",
   "description": "Pruebas unitarias en javascript",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "test": "vitest"
   },

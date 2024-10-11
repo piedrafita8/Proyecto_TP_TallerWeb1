@@ -19,7 +19,6 @@ public class ControladorObjetivos {
     @Autowired
     private ServicioObjetivo servicioObjetivo;
 
-    @GetMapping
     public String mostrarObjetivos(Model model) {
         List<Objetivo> objetivos = servicioObjetivo.obtenerTodosLosObjetivos();
         model.addAttribute("objetivos", objetivos);
