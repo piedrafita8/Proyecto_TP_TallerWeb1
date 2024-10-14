@@ -4,57 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finanzas SAT</title>
-<!--    <link rel="stylesheet" href="../../../resources/core/css/index.css">-->
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <link rel="stylesheet" href="../../../resources/core/css/index.css">
 </head>
 <body>
-    <div class="nav-container">
-        <div class="nav1">
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-                <ul class="menu">
-                    <h1>Finanzas SAT</h1>
-                    <li id="active">
-                        <a href="index.html">Esquema</a>
-                    </li>
-        
-                    <li>
-                        <a href="ingreso.html">Ingresos</a>
-                    </li>
-        
-                    <li>
-                        <a href="gastos.html">Gastos</a>
-                    </li>
-        
-                    <li>
-                        <a href="objetivos.html">Objetivos</a>
-                    </li>
-        
-<!--                    <li>-->
-<!--                        <a href="ajustes.html">Ajustes</a>-->
-<!--                    </li>-->
-                </ul>
-            </nav>
-        </div>
-        
-        <div class="nav2">
-            <nav>
-                <ul class="menu">
-<!--                    <li>-->
-<!--                        <a href="ayuda.html">Centro de Ayuda</a>-->
-<!--                    </li>-->
-        
-                    <li>
-                        <a href="contacto.html">Contacto</a>
-                    </li>
-        
-                    <li>
-                        <a href="login.html">Cerrar sesion</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+<div class="nav-container">
+    <div class="nav1">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <ul class="menu">
+                <h1>Finanzas SAT</h1>
+                <li id="active"><a href="index.html">Esquema</a></li>
+                <li><a href="ingreso.html">Ingresos</a></li>
+                <li><a href="gastos.html">Gastos</a></li>
+                <li><a href="objetivos.html">Objetivos</a></li>
+                <!--        <li><a th:href="@{/ajustes}">Ajustes</a></li>-->
+            </ul>
+        </nav>
     </div>
+    <div class="nav2">
+        <nav>
+            <ul class="menu">
+                <!--        <li><a th:href="@{/ayuda}">Centro de Ayuda</a></li>-->
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="login.html">Cerrar sesión</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
 
     <main>
         <div class="container-billetera">
