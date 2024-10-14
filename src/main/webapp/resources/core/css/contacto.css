@@ -79,8 +79,9 @@ main {
     padding: 2em;
     border-radius: 20px;
     color: white;
-    width: 80%;
-    margin: 2em;
+    width: 85%;
+    height: 95vh;
+    margin: 1.5em;
 }
 
 h3 {

@@ -69,10 +69,11 @@ main {
     align-items: flex-start; /* Alinea el contenido al inicio del eje vertical */
     height: 100vh; /* Para ocupar el alto completo de la pantalla */
     width: 100%;
-}
-/* Estilos generales para el contenedor de gastos */
-.conteinerGastos {
 
+}
+
+/* Estilos generales para el contenedor de gastos */
+.container{
     background-color: #1F1A3D;
     display: flex;
     flex-direction: column;
@@ -82,22 +83,19 @@ main {
     color: white;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     width: 50%;
-    margin-top: 2em;
-
-
-
+    margin-top: 1em;
 
 }
 
 /* Título de gastos */
-.conteinerGastos h2 {
-
+.container h2 {
     text-align: center;
     width: 15em;
     border-radius: 1.5em ;
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 20px;
+
 }
 
 i{
@@ -116,9 +114,6 @@ i{
     text-align: center;
     row-gap: 5px;
 
-
-
-
 }
 
 .card-body h3 {
@@ -127,32 +122,27 @@ i{
     color: white;
     font-size: 2rem;
     margin-bottom: 20px;
-
     border-radius: 1.5em ;
 
 }
 
 /* Estilos para las categorías (Botones) */
+.btn {
+    background-color: transparent;
+    border: 2px solid #7A7EFF; /* Borde blanco */
+    color: white;
+    border-radius: 12px;
+    padding: 10px 35px ;
+    font-size: 1.5rem;
+    transition: all 0.3s ease-in-out;
+    margin: 20px 10px; /* Espacio entre botones */
+}
 
-   .btn {
-        background-color: transparent;
-        border: 2px solid #7A7EFF; /* Borde blanco */
-        color: white;
-        border-radius: 12px;
-        padding: 10px 35px ;
-        font-size: 1.5rem;
-        transition: all 0.3s ease-in-out;
-        margin: 20px 10px; /* Espacio entre botones */
-
-
-
-    }
 .btn:hover {
     background-color: #7A7EFF;
     color: #202060;
 
 }
-
 
 /* Clase que aplicaremos al botón seleccionado */
 .active {
@@ -196,4 +186,8 @@ input[type="date"]::placeholder, textarea::placeholder {
 }
 .menu li:hover a, #active a {
     color: rgb(254, 152, 30);
+}
+
+label{
+    font-size: 20px;
 }

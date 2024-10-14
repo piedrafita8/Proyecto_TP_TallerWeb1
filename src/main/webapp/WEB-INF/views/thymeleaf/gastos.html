@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
-
 </head>
 <body>
 <div class="nav-container">
@@ -38,58 +36,56 @@
 </div>
 
 <main class="col-md-10 ms-sm-auto px-md-4">
-    <div class="conteinerGastos">
+    <div class="container">
         <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
-        <h2 class="text-light">GASTOS</h2>
-     </div>
+            <h2 class="text-light">GASTOS</h2>
+        </div>
+        <!-- Formulario -->
+        <div class="card bg-dark text-light p-4">
+            <div class="card-body">
+                <form th:action="@{/gastos}" method="post">
+                    <label for="monto">Ingresa el monto del Gasto</label>
+                    <input type="number" name="monto" id="monto">
+                        <div class="form-group mb-3">
+                            <label for="categorias">Categorías</label>
+                            <div id="categorias" class="d-flex justify-content-between my-3">
+                                <button type="button" class="btn" onclick="seleccionarCategoria('SALUD')">
+                                    <i class="fa-solid fa-suitcase-medical"></i> Salud
+                                </button>
+                                <button type="button" class="btn" onclick="seleccionarCategoria('TRANSPORTE')">
+                                    <i class="fa-solid fa-bus"></i> Transporte
+                                </button>
+                                <button type="button" class="btn" onclick="seleccionarCategoria('CAFE')">
+                                    <i class="fa-solid fa-mug-saucer"></i> Café
+                                </button>
+                                <button type="button" class="btn" onclick="seleccionarCategoria('COMBUSTIBLE')">
+                                    <i class="fa-solid fa-gas-pump"></i> Combustible
+                                </button>
+                                <button type="button" class="btn" onclick="seleccionarCategoria('SUPERMERCADO')">
+                                    <i class="fa-solid fa-store"></i> Supermercado
+                                </button>
+                            </div>
+                        </div>
 
-    <!-- Formulario -->
-    <div class="card bg-dark text-light p-4">
-        <div class="card-body">
-            <form th:action="@{/gastos}" method="post">
-            <label for="monto">Ingresa el monto del Gasto</label>
-            <input type="number" name="monto" id="monto">
-                <div class="form-group mb-3">
-                    <label for="categorias">Categorías</label>
-                    <div id="categorias" class="d-flex justify-content-between my-3">
-                        <button type="button" class="btn active" onclick="seleccionarCategoria('SALUD')">
-                            <i class="fa-solid fa-suitcase-medical"></i> Salud
-                        </button>
-                        <button type="button" class="btn " onclick="seleccionarCategoria('TRANSPORTE')">
-                            <i class="fa-solid fa-bus"></i> Transporte
-                        </button>
-                        <button type="button" class="btn " onclick="seleccionarCategoria('CAFE')">
-                            <i class="fa-solid fa-mug-saucer"></i> Café
-                        </button>
-                        <button type="button" class="btn " onclick="seleccionarCategoria('COMBUSTIBLE')">
-                            <i class="fa-solid fa-gas-pump"></i> Combustible
-                        </button>
-                        <button type="button" class="btn " onclick="seleccionarCategoria('SUPERMERCADO')">
-                            <i class="fa-solid fa-store"></i> Supermercado
-                        </button>
+                        <input type="hidden" name="tipoEgreso" id="categoriaSeleccionada" required>
+
+                    <div class="form-group mb-3">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" id="fecha" name="fecha" class="form-control bg-primary text-light">
                     </div>
-                </div>
 
-                <input type="hidden" name="tipoEgreso" id="categoriaSeleccionada" required>
+                    <div class="form-group mb-3">
+                        <label for="comentario">Comentario</label>
+                        <textarea id="comentario" name="descripcion" class="form-control bg-primary text-light"></textarea>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label for="fecha">Fecha</label>
-                <input type="date" id="fecha" name="fecha" class="form-control bg-primary text-light">
+                    <button type="submit" class="btn-primary w-100">Añadir</button>
+                </form>
             </div>
-
-            <div class="form-group mb-3">
-                <label for="comentario">Comentario</label>
-                <textarea id="comentario" name="descripcion" class="form-control bg-primary text-light"></textarea>
-            </div>
-
-            <button type="submit" class=" btn-primary w-100">Añadir</button>
-            </form>
-            </div>
-     </div>
+        </div>
     </div>
 </main>
 <script src="../../../resources/core/js/gastos.js"></script>
-
-
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>
