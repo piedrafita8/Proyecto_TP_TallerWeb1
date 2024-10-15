@@ -3,7 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.enums.TipoIngreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.interfaces.RepositorioIngreso;
-import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
+import com.tallerwebi.infraestructura.config.HibernateTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,13 +18,12 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
 import static com.tallerwebi.dominio.enums.TipoMovimiento.INGRESO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
+@ContextConfiguration(classes = {HibernateTestConfig.class})
 public class RepositorioIngresoImplTest{
 
     @Autowired

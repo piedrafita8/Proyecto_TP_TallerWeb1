@@ -3,7 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
-import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
+import com.tallerwebi.infraestructura.config.HibernateTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
+@ContextConfiguration(classes = {HibernateTestConfig.class})
 public class RepositorioEgresoImplTest{
 
     @Autowired

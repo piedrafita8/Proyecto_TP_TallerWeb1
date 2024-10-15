@@ -1,7 +1,7 @@
 package com.tallerwebi.integracion;
 
-import com.tallerwebi.integracion.config.HibernateTestConfig;
-import com.tallerwebi.integracion.config.SpringWebTestConfig;
+import com.tallerwebi.infraestructura.config.HibernateTestConfig;
+import com.tallerwebi.infraestructura.config.SpringWebTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

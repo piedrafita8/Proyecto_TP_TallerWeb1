@@ -1,7 +1,7 @@
 package com.tallerwebi.integracion;
 
-import com.tallerwebi.integracion.config.HibernateTestConfig;
-import com.tallerwebi.integracion.config.SpringWebTestConfig;
+import com.tallerwebi.infraestructura.config.HibernateTestConfig;
+import com.tallerwebi.infraestructura.config.SpringWebTestConfig;
 import com.tallerwebi.dominio.models.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
