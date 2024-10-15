@@ -23,25 +23,25 @@ public class SpringWebConfig implements WebMvcConfigurer {
     // Spring + Thymeleaf need this
     @Autowired
     private ApplicationContext applicationContext;
-    
+
+    // COMENTO ESTAS LINEAS DE CODIGO POR EL ERROR DE NO MOSTRAR LOS ESTILOS
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/css/**")
+//                .addResourceLocations("/css/");
+//        registry.addResourceHandler("/js/**")
+//                .addResourceLocations("/js/");
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("/images/");
+//        registry.addResourceHandler("/webjars/**")
+//                .addResourceLocations("/classpath:/META-INF/resources/webjars/");
+//    }
+
     @Override
-<<<<<<< HEAD
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("/css/");
-        registry.addResourceHandler("/js/**")
-                .addResourceLocations("/js/");
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("/images/");
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("/classpath:/META-INF/resources/webjars/");
-=======
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**").addResourceLocations("/resources/core/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/core/js/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
-
->>>>>>> c7bde8a (Se agrego funcionalidad de calendario)
     }
 
     @Override
