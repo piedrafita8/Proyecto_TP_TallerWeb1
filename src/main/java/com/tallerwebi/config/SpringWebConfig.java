@@ -25,14 +25,10 @@ public class SpringWebConfig implements WebMvcConfigurer {
     private ApplicationContext applicationContext;
     
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("/css/");
-        registry.addResourceHandler("/js/**")
-                .addResourceLocations("/js/");
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("/images/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("/classpath:/META-INF/resources/webjars/");
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/css/**").addResourceLocations("/resources/core/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/resources/core/js/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
     }
 
     @Override
