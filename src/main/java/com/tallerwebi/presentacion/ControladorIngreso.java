@@ -1,7 +1,12 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.enums.TipoEgreso;
+import com.tallerwebi.dominio.enums.TipoIngreso;
+import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.interfaces.ServicioIngreso;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -28,41 +34,81 @@ public class ControladorIngreso {
         return "ingreso";
     }
 
-    // Metodo separado para obtener todos los ingresos en formato JSON
-    @GetMapping("/api/ingresos")
-    @ResponseBody
-    public List<Ingreso> todosLosIngresos() {
-        return ingresoService.getAllIngresos();
+    // Metodo para obtener todos los ingreso
+    @GetMapping("api/ingreso")
+    public ModelAndView verIngresos(Integer id, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            // Consultar el ingreso por ID para ver si existe (esto es opcional si quieres una consulta específica)
+            Ingreso ingreso = ingresoService.consultarIngreso(12345.00, id);
+
+            // Si se encuentra, mostrar la vista de ingreso
+            List<Ingreso> listaIngresos = ingresoService.getAllIngresos();
+            modelAndView.setViewName("ingreso");
+            modelAndView.addObject("datosIngreso", listaIngresos);
+        } catch (RecursoNoEncontrado e) {
+            // Si no se encuentra el egreso, mostrar vista de error con el mensaje
+            modelAndView.setViewName("ingreso");
+            modelAndView.addObject("error", e.getMessage());
+        }
+        return modelAndView;
     }
 
-    // Crear un nuevo ingreso (formato JSON)
+    // Metodo para crear un nuevo egreso
     @PostMapping("/ingreso")
-    public ResponseEntity<Ingreso> crearIngreso(@RequestBody Ingreso ingreso) {
-        Ingreso nuevoIngreso = ingresoService.crearIngreso(ingreso);
-        return new ResponseEntity<>(nuevoIngreso, HttpStatus.CREATED);
-    }
+    public ModelAndView crearIngreso(
+            @RequestParam("monto") Double monto,
+            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("tipoIngreso") TipoIngreso tipoIngreso, HttpServletRequest requestMock) {
 
-    // Validar un ingreso y redirigir según el resultado
-    @PostMapping("/validar-ingreso")
-    public ModelAndView validarIngreso(DatosIngreso datosIngreso, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
 
-        if (datosIngreso.getDescripcion() == null || datosIngreso.getMonto() == null || datosIngreso.getMonto() <= 0) {
-            modelAndView.setViewName("redirect:/ingreso");
-            request.getSession().setAttribute("error", "Por favor, completa la información del ingreso.");
+        // Validación de los campos
+        if (descripcion == null || descripcion.isEmpty()) {
+            modelAndView.addObject("error", "La descripción no puede estar vacía");
             return modelAndView;
         }
 
-        Ingreso ingresoEncontrado = ingresoService.consultarIngreso(datosIngreso.getMonto(), datosIngreso.getFecha());
-        if (ingresoEncontrado != null) {
-            modelAndView.setViewName("redirect:/esquema");
-            request.getSession().setAttribute(ingresoEncontrado.getDescripcion(), ingresoEncontrado.getDescripcion());
+        if (monto == null || monto <= 0) {
+            modelAndView.addObject("error", "El monto no puede ser nulo o menor a cero");
+            return modelAndView;
+        }
+
+        // Crear el objeto Ingreso
+        Ingreso ingreso = new Ingreso(monto, descripcion, fecha);
+
+
+        // Guardar el ingreso
+        ingresoService.crearIngreso(ingreso);
+
+        // Redirigir a la página de gastos
+        modelAndView.setViewName("redirect:/ingreso");
+        return modelAndView;
+    }
+
+
+    // Metodo para ver los detalles de un ingreso específico
+    @GetMapping("/ingreso/detalle")
+    public ModelAndView verDetalleIngreso(@RequestParam("monto") double monto, @RequestParam("id") int id) throws RecursoNoEncontrado {
+        ModelAndView modelAndView = new ModelAndView();
+        Ingreso ingreso = ingresoService.consultarIngreso(monto, id);  // Usar la instancia ingresoService
+
+        if (ingreso != null) {
+            modelAndView.setViewName("detalleIngreso");
+            modelAndView.addObject("datosIngreso", ingreso);
         } else {
-            modelAndView.setViewName("redirect:/ingreso");
+            throw new RecursoNoEncontrado("Ingreso no encontrado con monto: " + monto + " e id: " + id);
         }
 
         return modelAndView;
     }
 
-    // Otros métodos como PUT, DELETE podrían agregarse aquí si es necesario
+
+
+
+
+
+
+
 }

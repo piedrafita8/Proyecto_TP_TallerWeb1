@@ -79,9 +79,9 @@ public class ControladorLogin {
     public ModelAndView irAHome() {
         ModelAndView modelAndView = new ModelAndView("index");
         List<Egreso> egresos = ServicioEgreso.getAllEgresos();
-        List<Ingreso> ingresos = ServicioIngreso.getAllIngresos();
+        List<Ingreso> ingreso = ServicioIngreso.getAllIngresos();
         modelAndView.addObject("egresos", egresos);
-        modelAndView.addObject("ingresos", ingresos);
+        modelAndView.addObject("ingresos", ingreso);
         return modelAndView;
     }
 

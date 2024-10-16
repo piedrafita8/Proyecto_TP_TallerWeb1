@@ -1,8 +1,10 @@
 package com.tallerwebi.dominio.models;
 
+import com.tallerwebi.dominio.enums.TipoIngreso;
 import com.tallerwebi.dominio.enums.TipoMovimiento;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Ingreso")
@@ -14,12 +16,13 @@ public class Ingreso {
 
     private Double monto;
     private String descripcion;
-    private TipoMovimiento tipo_movimiento;
-    private Integer fecha;
+    @Enumerated(EnumType.STRING)
+    private TipoIngreso tipoIngreso;
+    private LocalDate fecha;
 
     // Constructor, getters y setters
-    public Ingreso(TipoMovimiento tipoMovimiento, Integer id, Double monto, String descripcion, Integer fecha) {
-        this.tipo_movimiento = tipoMovimiento;
+    public Ingreso(TipoIngreso tipoIngreso, Integer id, Double monto, String descripcion, LocalDate fecha) {
+        this.tipoIngreso = tipoIngreso;
         this.id = id;
         this.monto = monto;
         this.descripcion = descripcion;
@@ -28,6 +31,12 @@ public class Ingreso {
 
     public Ingreso() {
 
+    }
+
+    public Ingreso(Double monto, String descripcion, LocalDate fecha) {
+        this.monto = monto;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
     }
 
     public Integer getId() {
@@ -54,20 +63,21 @@ public class Ingreso {
         this.descripcion = descripcion;
     }
 
-    public Integer getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Integer fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public TipoMovimiento getTipo_movimiento() {
-        return tipo_movimiento;
+
+    public TipoIngreso getTipoIngreso() {
+        return tipoIngreso;
     }
 
-    public void setTipo_movimiento(TipoMovimiento tipo_movimiento) {
-        this.tipo_movimiento = tipo_movimiento;
+    public void setTipoIngreso(TipoIngreso tipoIngreso) {
+        this.tipoIngreso = tipoIngreso;
     }
 }
 
