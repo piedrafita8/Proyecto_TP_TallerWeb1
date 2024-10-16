@@ -1,5 +1,8 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.enums.TipoEgreso;
+import com.tallerwebi.dominio.enums.TipoIngreso;
+import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.ServicioIngreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
@@ -34,34 +39,21 @@ public class ControladorIngresoPresTest {
 	}
 
 	@Test
-	public void ingresoSinDescripcionySinMontoDeberiaInsistirEnCompletarLaInformacion() {
-		// Preparación
-		DatosIngreso datosIngresoInvalido = new DatosIngreso(null, null, 0); // Sin descripción ni monto
+	public void egresoSinDescripcionAgregadoDebeMarcarComoError() {
 
+
+		// Simular la obtención de la sesión a partir de la request
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
-		// Ejecución
-		ModelAndView modelAndView = controladorIngreso.validarIngreso(datosIngresoInvalido, requestMock);
+		// Llamar al metodo del controlador con el ingreso sin descripción
+		ModelAndView modelAndView = controladorIngreso.crearIngreso(23000.00, LocalDate.of(2022, 12, 20), "", TipoIngreso.AHORROS,requestMock );
 
-		// Validación
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/ingreso"));
-		verify(sessionMock, times(1)).setAttribute("error", "Por favor, completa la información del ingreso.");
-	}
-	
-	@Test
-	public void ingresoConMontoYDescripcionCorrectosDeberiaLLevarAEsquema(){
-		// preparacion
-		Ingreso ingresoEncontradoMock = mock(Ingreso.class);
-		when(ingresoEncontradoMock.getDescripcion()).thenReturn("Ingreso proveniente de mi sueldo");
+		// Verificar que no se llame al servicio de crear egreso
+		verify(ServicioIngresoMock, never()).crearIngreso(any());
 
-		when(requestMock.getSession()).thenReturn(sessionMock);
-		when(ServicioIngresoMock.consultarIngreso(450000.0, 1102024)).thenReturn(ingresoEncontradoMock);
-		
-		// ejecucion
-		ModelAndView modelAndView = controladorIngreso.validarIngreso(datosIngresoMock, requestMock);
-		
-		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/esquema"));
-		verify(sessionMock, times(1)).setAttribute("Ingreso proveniente de mi sueldo", ingresoEncontradoMock.getDescripcion());
+		// Verificar que el modelo contenga un mensaje de error
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("La descripción no puede estar vacía"));
 	}
+
+
 }

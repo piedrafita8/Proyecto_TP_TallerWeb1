@@ -33,7 +33,7 @@ public class ControladorEgreso {
         this.egresoService = egresoService;
     }
 
-    // Mostrar la vista de ingreso
+    // Mostrar la vista de egreso
     @GetMapping("/gastos")
     public String mostrarEgreso(Model model) {
         model.addAttribute("datosEgreso", new DatosIngreso());
