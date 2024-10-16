@@ -96,25 +96,26 @@ public class RepositorioIngresoImplTest{
     @Transactional
     @Rollback
     public void dadoQueExisteUnRepositorioIngresoCuandoActualizoUnIngresoEntoncesLoEncuentroEnLaBaseDeDatos(){
+        LocalDate fechaIngreso = LocalDate.of(2022, 12, 20);
         Ingreso ingreso = new Ingreso();
         ingreso.setMonto(30000.0);
-        ingreso.setFecha(LocalDate.of(2022, 12, 20));
-
+        ingreso.setFecha(fechaIngreso);
         ingreso.setDescripcion("Ingreso de inversiones");
         this.sessionFactory.getCurrentSession().save(ingreso);
+
         Double nuevoMonto = 37500.0;
         ingreso.setMonto(nuevoMonto);
 
         this.RepositorioIngreso.actualizar(ingreso);
-        this.sessionFactory.getCurrentSession().save(ingreso);
 
-       Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Ingreso i WHERE i.monto = :monto AND i.fecha = :fecha AND i.descripcion = :descripcion");
-       query.setParameter("monto", 37500.0);
-       query.setParameter("fecha", 28092024);
-       query.setParameter("descripcion", "Ingreso de inversiones");
+        Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Ingreso i WHERE i.monto = :monto AND i.fecha = :fecha AND i.descripcion = :descripcion");
+        query.setParameter("monto", 37500.0);
+        query.setParameter("fecha", fechaIngreso);
+        query.setParameter("descripcion", "Ingreso de inversiones");
 
-       Ingreso ingresoObtenido = (Ingreso) query.getSingleResult();
+        Ingreso ingresoObtenido = (Ingreso) query.getSingleResult();
 
         assertThat(ingresoObtenido.getMonto(), equalTo(nuevoMonto));
+        assertThat(ingresoObtenido.getFecha(), equalTo(fechaIngreso));
     }
 }
