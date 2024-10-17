@@ -3,7 +3,7 @@ const monthNames = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
 
-const daysOfWeek = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+const daysOfWeek = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
 
 const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
 const firstDayOfMonth = (month, year) => new Date(year, month, 1).getDay();
