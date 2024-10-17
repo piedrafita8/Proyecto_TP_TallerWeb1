@@ -182,7 +182,8 @@ main {
 }
 
 .calendar-container {
-    padding: 10px;
+    max-width: 400px;
+    padding: 30px 10px;
     height: 100%;
     border: 1px solid #ddd;
     background-color: rgb(15, 18, 63);
@@ -200,7 +201,7 @@ main {
 .days-of-week, .days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+    gap: 3px;
     color: #2C387E;
 }
 
@@ -252,7 +253,7 @@ button:disabled {
     justify-content: space-between;
 }
 
-.container-billetera, .container-grafico {
+.container-billetera, .container-grafico, .calendar-container {
     background-color: rgb(15, 18, 63);
     padding: 20px;
     border-radius: 10px;
@@ -266,6 +267,10 @@ button:disabled {
 }
 
 .container-grafico {
+    padding-top: 10px;
+}
+
+.calendar-container {
     padding-top: 10px;
 }
 
