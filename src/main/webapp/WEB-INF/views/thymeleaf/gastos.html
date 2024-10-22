@@ -69,7 +69,7 @@
         <!-- Formulario -->
         <div class="card bg-dark text-light p-4">
             <div class="card-body">
-                <form th:action="@{/gastos}" method="post">
+                <form th:action="@{/gastos}" method="post" onsubmit="guardarFechaGasto()">
                     <label for="monto">Ingresa el monto del Gasto</label>
                     <input type="number" name="monto" id="monto">
                     <div class="form-group mb-3">
@@ -112,7 +112,6 @@
     </div>
 </main>
 <script src="../../../resources/core/js/gastos.js"></script>
-
 
 </body>
 </html>

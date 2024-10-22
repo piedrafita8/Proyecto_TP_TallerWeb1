@@ -69,7 +69,7 @@
   <!-- Formulario -->
   <div class="card bg-dark text-light p-4">
     <div class="card-body">
-      <form th:action="@{/ingreso}" method="post">
+      <form th:action="@{/ingreso}" method="post" onsubmit="guardarFechaIngresos()">
         <label for="monto">Ingresa el monto del Ingreso</label>
         <input type="number" name="monto" id="monto">
         <div class="form-group mb-3">
@@ -113,6 +113,6 @@
 </main>
 
 </body>
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-<script src="../../../resources/core/js/gastos.js"></script>
+<!--<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>-->
+<script src="../../../resources/core/js/ingresos.js"></script>
 </html>

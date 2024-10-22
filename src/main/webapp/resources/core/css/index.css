@@ -220,6 +220,18 @@ main {
     margin-bottom: 7px;
 }
 
+.selected-day-gasto {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+}
+
+.selected-day-ingreso {
+    background-color: green;
+    color: white;
+    border-radius: 50%;
+}
+
 button {
     background-color: #4CAF50;
     color: white;
