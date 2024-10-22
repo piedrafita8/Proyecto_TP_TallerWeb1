@@ -3,10 +3,10 @@ const monthNames = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
 
-const daysOfWeek = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
+const daysOfWeek = ["Dom", "Lun", "Mar", "Mier", "Jue", "Vie", "Sab"];
 
 const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
-const firstDayOfMonth = (month, year) => new Date(year, month, 1).getDay();
+const firstDayOfMonth = (month, year) => new Date(year, month, 1).getDay(); // Corregido para obtener el primer día correctamente
 
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
@@ -25,6 +25,12 @@ daysOfWeek.forEach(day => {
     daysOfWeekEl.appendChild(dayOfWeekEl);
 });
 
+// Función para convertir la fecha correctamente sin problemas de zona horaria
+const parseFechaSinOffset = fecha => {
+    const [year, month, day] = fecha.split('-');
+    return new Date(Date.UTC(year, month - 1, day)); // Usamos UTC para evitar desfases
+};
+
 const renderCalendar = () => {
     monthNameEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
     daysContainer.innerHTML = "";
@@ -32,9 +38,18 @@ const renderCalendar = () => {
     const days = daysInMonth(currentMonth, currentYear);
     const firstDay = firstDayOfMonth(currentMonth, currentYear);
 
-    // Añadir espacios en blanco para los días anteriores al primer día del mes
+    // Obtener las fechas desde sessionStorage
+    const fechasGastos = JSON.parse(sessionStorage.getItem('fechasGastos')) || [];
+    const diasGastos = fechasGastos.map(fecha => new Date(fecha)); // Convertir a objetos Date
+
+    const fechasIngresos = JSON.parse(sessionStorage.getItem('fechasIngresos')) || [];
+    const diasIngresos = fechasIngresos.map(fecha => new Date(fecha)); // Convertir a objetos Date
+
+
+    // Añadir espacios en blanco antes del primer día del mes
     for (let i = 0; i < firstDay; i++) {
         const emptyDay = document.createElement("div");
+        emptyDay.classList.add("empty-day");
         daysContainer.appendChild(emptyDay);
     }
 
@@ -43,15 +58,35 @@ const renderCalendar = () => {
         const dayEl = document.createElement("div");
         dayEl.textContent = i;
         dayEl.classList.add("day");
+
+        // Verificar si el día actual está en la lista de gastos
+        const isGastoDay = diasGastos.some(date =>
+            date.getUTCDate() === i &&
+            date.getUTCMonth() === currentMonth &&
+            date.getUTCFullYear() === currentYear
+        );
+
+        if (isGastoDay) {
+            dayEl.classList.add("selected-day-gasto");
+        }
+
+        // Verificar si el día actual está en la lista de gastos
+        const isIngresoDay = diasIngresos.some(date =>
+            date.getUTCDate() === i &&
+            date.getUTCMonth() === currentMonth &&
+            date.getUTCFullYear() === currentYear
+        );
+
+        if (isIngresoDay) {
+            dayEl.classList.add("selected-day-ingreso");
+        }
+
         daysContainer.appendChild(dayEl);
     }
-
-    // Deshabilitar botones si se llega al límite de meses
-    prevButton.disabled = currentMonth === 0 && currentYear === new Date().getFullYear() - 10;
-    nextButton.disabled = currentMonth === 11 && currentYear === new Date().getFullYear() + 10;
 };
 
-// Manejador para el botón "Anterior"
+
+// Manejadores de los botones
 prevButton.addEventListener("click", () => {
     if (currentMonth === 0) {
         currentMonth = 11;
@@ -62,7 +97,6 @@ prevButton.addEventListener("click", () => {
     renderCalendar();
 });
 
-// Manejador para el botón "Siguiente"
 nextButton.addEventListener("click", () => {
     if (currentMonth === 11) {
         currentMonth = 0;
@@ -73,5 +107,6 @@ nextButton.addEventListener("click", () => {
     renderCalendar();
 });
 
-// Renderizar el calendario inicial
+// Renderizar calendario inicial
 renderCalendar();
+
