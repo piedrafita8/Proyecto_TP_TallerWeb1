@@ -59,7 +59,17 @@ nav {
     text-decoration: none;
 }
 
-.menu li:hover a, #active a {
+i{
+    margin-left: 30px;
+    color: #ffffff;
+    font-size: 30px;
+}
+
+a{
+    margin-left: -20px;
+}
+
+.menu li:hover a, #active a, .menu li:hover i, #active i{
     color: rgb(254, 152, 30);
 }
 

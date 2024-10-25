@@ -59,7 +59,17 @@ nav {
     text-decoration: none;
 }
 
-.menu li:hover a, #active a {
+i{
+    margin-left: 30px;
+    color: #ffffff;
+    font-size: 30px;
+}
+
+a{
+    margin-left: -20px;
+}
+
+.menu li:hover a, #active a, .menu li:hover i, #active i{
     color: rgb(254, 152, 30);
 }
 
@@ -115,12 +125,7 @@ h3 {
     align-items: flex-end;
     text-align: center;
     padding-bottom: 0.5em;
-    color: #5A5EDD;
     font-size: 1.9em;
-}
-
-i{
-    color: #5A5EDD;
 }
 
 #horario-atencion{
