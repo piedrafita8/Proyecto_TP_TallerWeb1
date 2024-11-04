@@ -41,19 +41,24 @@ public class ControladorIngresoPresTest {
 	@Test
 	public void egresoSinDescripcionAgregadoDebeMarcarComoError() {
 
-
-		// Simular la obtención de la sesión a partir de la request
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
-		// Llamar al metodo del controlador con el ingreso sin descripción
-		ModelAndView modelAndView = controladorIngreso.crearIngreso(23000.00, LocalDate.of(2022, 12, 20), "", TipoIngreso.AHORROS,requestMock );
+		Long userId = 1L;
+		when(sessionMock.getAttribute("userId")).thenReturn(userId);
 
-		// Verificar que no se llame al servicio de crear egreso
-		verify(ServicioIngresoMock, never()).crearIngreso(any());
+		ModelAndView modelAndView = controladorIngreso.crearIngreso(
+				23000.00,
+				LocalDate.of(2022, 12, 20),
+				"",
+				TipoIngreso.AHORROS,
+				requestMock
+		);
 
-		// Verificar que el modelo contenga un mensaje de error
+		verify(ServicioIngresoMock, never()).crearIngreso(any(), any());
+
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("La descripción no puede estar vacía"));
 	}
+
 
 
 }

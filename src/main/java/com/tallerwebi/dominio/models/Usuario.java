@@ -16,6 +16,7 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    private Double saldo = 0.0;
 
     public Usuario(String username, String email, String password, String rol) {
         this.username = username;
@@ -61,6 +62,14 @@ public class Usuario {
     }
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+    public Double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
     }
 
     public boolean activo() {
