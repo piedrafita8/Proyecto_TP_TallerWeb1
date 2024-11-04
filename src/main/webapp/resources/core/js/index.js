@@ -25,12 +25,6 @@ daysOfWeek.forEach(day => {
     daysOfWeekEl.appendChild(dayOfWeekEl);
 });
 
-// Función para convertir la fecha correctamente sin problemas de zona horaria
-const parseFechaSinOffset = fecha => {
-    const [year, month, day] = fecha.split('-');
-    return new Date(Date.UTC(year, month - 1, day)); // Usamos UTC para evitar desfases
-};
-
 const renderCalendar = () => {
     monthNameEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
     daysContainer.innerHTML = "";
@@ -109,6 +103,27 @@ nextButton.addEventListener("click", () => {
 
 // Renderizar calendario inicial
 renderCalendar();
+
+function actualizarGrafico() {
+    // Simula valores de ingresos y egresos si no existen en sessionStorage
+    const ingresos = parseFloat(sessionStorage.getItem('totalIngresos')) || 1000; // Valor base
+    const egresos = parseFloat(sessionStorage.getItem('totalEgresos')) || 300;    // Valor base
+
+    // Calcular el porcentaje de ingresos y egresos
+    const total = ingresos + egresos;
+    const porcentajeIngresos = (ingresos / total) * 100;
+    const porcentajeEgresos = 100 - porcentajeIngresos;
+
+    // Actualizar las variables CSS del gráfico
+    const chartContainer = document.querySelector('.chart-container');
+    chartContainer.style.setProperty('--ingresos', porcentajeIngresos.toFixed(2));
+    chartContainer.style.setProperty('--egresos', porcentajeEgresos.toFixed(2));
+}
+
+// Ejecutar la función al cargar la página
+window.onload = actualizarGrafico;
+
+
 
 
 

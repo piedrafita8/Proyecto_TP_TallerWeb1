@@ -3,7 +3,6 @@ function seleccionarCategoria(categoria) {
     document.getElementById("categoriaSeleccionada").value = categoria;
 }
 
-var categorias = document.getElementById("categorias");
 var botones = document.getElementsByClassName("btn");
 for (var i = 0; i < botones.length; i++) {
     botones[i].addEventListener("click", function (){
@@ -15,20 +14,23 @@ for (var i = 0; i < botones.length; i++) {
 
 function guardarFechaIngresos() {
     const fechaSeleccionadaIngreso = document.getElementById('fecha').value;
+    const monto = parseFloat(document.getElementById('monto').value) || 0;
 
-    if (fechaSeleccionadaIngreso) {
-        // Obtener las fechas existentes del sessionStorage
+    if (fechaSeleccionadaIngreso && monto > 0) {
+        // Guardar fecha en sessionStorage
         let fechasIngresos = JSON.parse(sessionStorage.getItem('fechasIngresos')) || [];
-
-        console.log("Fecha seleccionada:", fechaSeleccionadaIngreso); // Debugging
-
-        // Agregar la nueva fecha
         fechasIngresos.push(fechaSeleccionadaIngreso);
-
-        console.log("Fechas actuales:", fechasIngresos); // Debugging
-
-        // Guardar nuevamente el array en sessionStorage
         sessionStorage.setItem('fechasIngresos', JSON.stringify(fechasIngresos));
+
+        // Actualizar total de egresos
+        let totalIngresos = parseFloat(sessionStorage.getItem('totalIngresos')) || 0;
+        totalIngresos += monto;
+        sessionStorage.setItem('totalIngresos', totalIngresos);
+
+        // Llamar a actualizarGrafico para reflejar el cambio inmediato
+        if (typeof actualizarGrafico === "function") {
+            actualizarGrafico();
+        }
     }
 }
 
