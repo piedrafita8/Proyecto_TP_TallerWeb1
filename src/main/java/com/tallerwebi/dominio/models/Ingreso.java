@@ -16,7 +16,6 @@ public class Ingreso {
 
     private Double monto;
     private String descripcion;
-    @Enumerated(EnumType.STRING)
     private TipoIngreso tipoIngreso;
     private LocalDate fecha;
 

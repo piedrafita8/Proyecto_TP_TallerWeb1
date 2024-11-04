@@ -4,22 +4,15 @@ import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
-import com.tallerwebi.dominio.servicios.ServicioEgresoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -60,7 +53,6 @@ public class ControladorEgreso {
         return modelAndView;
     }
 
-    // Metodo para crear un nuevo egreso
     @PostMapping("/gastos")
     public ModelAndView crearEgreso(
             @RequestParam("monto") Double monto,
@@ -81,9 +73,9 @@ public class ControladorEgreso {
             return modelAndView;
         }
 
-        // Crear el objeto Egreso
+        // Crear el objeto Egreso y asignar tipoEgreso
         Egreso egreso = new Egreso(monto, descripcion, fecha);
-
+        egreso.setTipoEgreso(tipoEgreso);  // Asignar el enum tipoEgreso al objeto
 
         // Guardar el egreso
         egresoService.crearEgreso(egreso);
@@ -92,6 +84,7 @@ public class ControladorEgreso {
         modelAndView.setViewName("redirect:/gastos");
         return modelAndView;
     }
+
 
     // Metodo para ver los detalles de un egreso específico
     @GetMapping("/gasto/detalle")

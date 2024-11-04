@@ -16,7 +16,6 @@ public class Egreso {
     private Double monto;
     private String descripcion;
     private LocalDate fecha;
-    @Enumerated(EnumType.STRING)
     private TipoEgreso tipoEgreso;
 
     // Constructor
