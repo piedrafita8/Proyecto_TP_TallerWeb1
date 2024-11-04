@@ -132,8 +132,8 @@ main {
     height: 150px;
     border-radius: 50%;
     background: conic-gradient(
-        #4caf50 0% calc(var(--ingresos) * 1%), 
-        #f44336 calc(var(--ingresos) * 1%) 100%
+            #4caf50 calc(var(--ingresos) * 1%),
+            #f44336 calc(var(--ingresos) * 1%) 100%
     );
     display: flex;
     justify-content: center;
