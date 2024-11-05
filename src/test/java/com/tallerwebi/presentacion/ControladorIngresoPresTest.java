@@ -44,7 +44,7 @@ public class ControladorIngresoPresTest {
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
 		Long userId = 1L;
-		when(sessionMock.getAttribute("userId")).thenReturn(userId);
+		when(sessionMock.getAttribute("id")).thenReturn(userId);
 
 		ModelAndView modelAndView = controladorIngreso.crearIngreso(
 				23000.00,

@@ -76,7 +76,7 @@ public class ControladorIngreso {
             return modelAndView;
         }
 
-        Long userId = (Long) request.getSession().getAttribute("userId");
+        Long userId = (Long) request.getSession().getAttribute("id");
         if (userId == null) {
             modelAndView.addObject("error", "No se pudo identificar al usuario.");
             return modelAndView;
