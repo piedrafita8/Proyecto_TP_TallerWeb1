@@ -3,10 +3,10 @@ const monthNames = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
 
-const daysOfWeek = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
+const daysOfWeek = ["Dom", "Lun", "Mar", "Mier", "Jue", "Vie", "Sab"];
 
 const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
-const firstDayOfMonth = (month, year) => new Date(year, month, 1).getDay();
+const firstDayOfMonth = (month, year) => new Date(year, month, 1).getDay(); // Corregido para obtener el primer día correctamente
 
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
@@ -32,9 +32,18 @@ const renderCalendar = () => {
     const days = daysInMonth(currentMonth, currentYear);
     const firstDay = firstDayOfMonth(currentMonth, currentYear);
 
-    // Añadir espacios en blanco para los días anteriores al primer día del mes
+    // Obtener las fechas desde sessionStorage
+    const fechasGastos = JSON.parse(sessionStorage.getItem('fechasGastos')) || [];
+    const diasGastos = fechasGastos.map(fecha => new Date(fecha)); // Convertir a objetos Date
+
+    const fechasIngresos = JSON.parse(sessionStorage.getItem('fechasIngresos')) || [];
+    const diasIngresos = fechasIngresos.map(fecha => new Date(fecha)); // Convertir a objetos Date
+
+
+    // Añadir espacios en blanco antes del primer día del mes
     for (let i = 0; i < firstDay; i++) {
         const emptyDay = document.createElement("div");
+        emptyDay.classList.add("empty-day");
         daysContainer.appendChild(emptyDay);
     }
 
@@ -43,15 +52,35 @@ const renderCalendar = () => {
         const dayEl = document.createElement("div");
         dayEl.textContent = i;
         dayEl.classList.add("day");
+
+        // Verificar si el día actual está en la lista de gastos
+        const isGastoDay = diasGastos.some(date =>
+            date.getUTCDate() === i &&
+            date.getUTCMonth() === currentMonth &&
+            date.getUTCFullYear() === currentYear
+        );
+
+        if (isGastoDay) {
+            dayEl.classList.add("selected-day-gasto");
+        }
+
+        // Verificar si el día actual está en la lista de gastos
+        const isIngresoDay = diasIngresos.some(date =>
+            date.getUTCDate() === i &&
+            date.getUTCMonth() === currentMonth &&
+            date.getUTCFullYear() === currentYear
+        );
+
+        if (isIngresoDay) {
+            dayEl.classList.add("selected-day-ingreso");
+        }
+
         daysContainer.appendChild(dayEl);
     }
-
-    // Deshabilitar botones si se llega al límite de meses
-    prevButton.disabled = currentMonth === 0 && currentYear === new Date().getFullYear() - 10;
-    nextButton.disabled = currentMonth === 11 && currentYear === new Date().getFullYear() + 10;
 };
 
-// Manejador para el botón "Anterior"
+
+// Manejadores de los botones
 prevButton.addEventListener("click", () => {
     if (currentMonth === 0) {
         currentMonth = 11;
@@ -62,7 +91,6 @@ prevButton.addEventListener("click", () => {
     renderCalendar();
 });
 
-// Manejador para el botón "Siguiente"
 nextButton.addEventListener("click", () => {
     if (currentMonth === 11) {
         currentMonth = 0;
@@ -73,5 +101,29 @@ nextButton.addEventListener("click", () => {
     renderCalendar();
 });
 
-// Renderizar el calendario inicial
+// Renderizar calendario inicial
 renderCalendar();
+
+function actualizarGrafico() {
+    // Simula valores de ingresos y egresos si no existen en sessionStorage
+    const ingresos = parseFloat(sessionStorage.getItem('totalIngresos')) || 1000; // Valor base
+    const egresos = parseFloat(sessionStorage.getItem('totalEgresos')) || 300;    // Valor base
+
+    // Calcular el porcentaje de ingresos y egresos
+    const total = ingresos + egresos;
+    const porcentajeIngresos = (ingresos / total) * 100;
+    const porcentajeEgresos = 100 - porcentajeIngresos;
+
+    // Actualizar las variables CSS del gráfico
+    const chartContainer = document.querySelector('.chart-container');
+    chartContainer.style.setProperty('--ingresos', porcentajeIngresos.toFixed(2));
+    chartContainer.style.setProperty('--egresos', porcentajeEgresos.toFixed(2));
+}
+
+// Ejecutar la función al cargar la página
+window.onload = actualizarGrafico;
+
+
+
+
+

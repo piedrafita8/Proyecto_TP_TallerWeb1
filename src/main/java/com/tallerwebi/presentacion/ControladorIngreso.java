@@ -60,8 +60,7 @@ public class ControladorIngreso {
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("tipoIngreso") TipoIngreso tipoIngreso,
-            HttpServletRequest request) {
+            @RequestParam("tipoIngreso") TipoIngreso tipoIngreso, HttpServletRequest request) {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -82,10 +81,14 @@ public class ControladorIngreso {
             return modelAndView;
         }
 
+        // Crear el objeto Ingreso
         Ingreso ingreso = new Ingreso(monto, descripcion, fecha);
 
+
+        // Guardar el ingreso
         ingresoService.crearIngreso(ingreso, userId);
 
+        // Redirigir a la página de gastos
         modelAndView.setViewName("redirect:/ingreso");
         return modelAndView;
     }

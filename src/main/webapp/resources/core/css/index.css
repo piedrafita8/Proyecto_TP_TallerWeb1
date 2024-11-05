@@ -59,7 +59,17 @@ nav {
     text-decoration: none;
 }
 
-.menu li:hover a, #active a {
+i{
+    margin-left: 30px;
+    color: #ffffff;
+    font-size: 30px;
+}
+
+a{
+    margin-left: -20px;
+}
+
+.menu li:hover a, #active a, .menu li:hover i, #active i{
     color: rgb(254, 152, 30);
 }
 
@@ -122,8 +132,8 @@ main {
     height: 150px;
     border-radius: 50%;
     background: conic-gradient(
-        #4caf50 0% calc(var(--ingresos) * 1%), 
-        #f44336 calc(var(--ingresos) * 1%) 100%
+            #4caf50 calc(var(--ingresos) * 1%),
+            #f44336 calc(var(--ingresos) * 1%) 100%
     );
     display: flex;
     justify-content: center;
@@ -218,6 +228,18 @@ main {
 .day-of-week {
     font-weight: bold;
     margin-bottom: 7px;
+}
+
+.selected-day-gasto {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+}
+
+.selected-day-ingreso {
+    background-color: green;
+    color: white;
+    border-radius: 50%;
 }
 
 button {
