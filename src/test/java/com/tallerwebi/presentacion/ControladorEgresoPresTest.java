@@ -15,6 +15,7 @@ import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ControladorEgresoPresTest {
@@ -94,4 +95,29 @@ public class ControladorEgresoPresTest {
 		// Verificar que el modelo contenga un mensaje de error
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El monto no puede ser nulo o menor a cero"));
 	}
+
+	@Test
+	public void egresoConMontoNegativoDebeMarcarComoError() {
+		// Llamar al método del controlador con un monto negativo
+		ModelAndView modelAndView = controladorEgreso.crearEgreso(-100.00, LocalDate.of(2022, 12, 20), "Compra de insumos de oficina", TipoEgreso.SUPERMERCADO, requestMock);
+
+		// Verificar que no se llama al servicio de creación de egreso
+		verify(servicioEgresoMock, never()).crearEgreso(any());
+
+		// Verificar que el modelo contenga un mensaje de error adecuado para el monto negativo
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El monto no puede ser nulo o menor a cero"));
+	}	
+
+	@Test
+	public void egresoConDatosValidosDebeLlamarAlServicio() {
+		// Llamar al método del controlador con datos válidos para crear un egreso
+		ModelAndView modelAndView = controladorEgreso.crearEgreso(32000.00, LocalDate.of(2022, 12, 20), "Compra de insumos de oficina", TipoEgreso.SUPERMERCADO, requestMock);
+
+		// Verificar que el servicio de creación de egreso es llamado con un objeto Egreso
+		verify(servicioEgresoMock).crearEgreso(any(Egreso.class));
+
+		// Verificar que la vista redirige correctamente a la página de "gastos" después de la creación exitosa
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/gastos"));
+	}
+
 }
