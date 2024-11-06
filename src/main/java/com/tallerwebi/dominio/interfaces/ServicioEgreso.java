@@ -9,7 +9,7 @@ public interface ServicioEgreso {
 
     Egreso consultarEgreso(Double monto, Integer id) throws RecursoNoEncontrado;
     void registrar(Egreso egreso) throws RecursoNoEncontrado;
-    void crearEgreso(Egreso egreso);
+    void crearEgreso(Egreso egreso, Long userId);
     List<Egreso> getAllEgresos();
 
 }
