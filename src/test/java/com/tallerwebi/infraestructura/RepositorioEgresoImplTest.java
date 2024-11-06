@@ -67,19 +67,19 @@ public class RepositorioEgresoImplTest{
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentro3IngresosEnLaBaseDeDatos(){
+    public void dadoQueExisteUnRepositorioEgresoCuandoGuardo3EgresosEntoncesEncuentro3EgresosEnLaBaseDeDatos(){
         Egreso egreso1 = new Egreso();
         egreso1.setMonto(27900.0);
         egreso1.setFecha(LocalDate.of(2022, 12, 20));
-        egreso1.setDescripcion("Ingreso de un prestamo bancario");
+        egreso1.setDescripcion("Egreso de un prestamo bancario");
         Egreso egreso2 = new Egreso();
         egreso2.setMonto(88900.0);
         egreso2.setFecha(LocalDate.of(2022, 12, 20));
-        egreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
+        egreso2.setDescripcion("Egreso de dinero prestado de un familiar");
         Egreso egreso3 = new Egreso();
         egreso3.setMonto(95000.0);
         egreso3.setFecha(LocalDate.of(2022, 12, 20));
-        egreso3.setDescripcion("Ingreso proveniente de beca");
+        egreso3.setDescripcion("Egreso proveniente de beca");
         this.sessionFactory.getCurrentSession().save(egreso1);
         this.sessionFactory.getCurrentSession().save(egreso2);
         this.sessionFactory.getCurrentSession().save(egreso3);
