@@ -34,6 +34,8 @@ public class ControladorIngresoPresTest {
 		when(ingresoMock.getDescripcion()).thenReturn("Ingreso proveniente de mi sueldo");
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
+		when(sessionMock.getAttribute("id")).thenReturn(1L);
+		when(requestMock.getSession()).thenReturn(sessionMock);
 		ServicioIngresoMock = mock(ServicioIngreso.class);
 		controladorIngreso = new ControladorIngreso(ServicioIngresoMock);
 	}
