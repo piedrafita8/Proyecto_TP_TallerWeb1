@@ -60,7 +60,7 @@ public class ControladorIngreso {
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("tipoIngreso") TipoIngreso tipoIngreso, HttpServletRequest requestMock) {
+            @RequestParam("tipoIngreso") TipoIngreso tipoIngreso, HttpServletRequest request) {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -75,12 +75,18 @@ public class ControladorIngreso {
             return modelAndView;
         }
 
+        Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            modelAndView.addObject("error", "No se pudo identificar al usuario.");
+            return modelAndView;
+        }
+
         // Crear el objeto Ingreso
         Ingreso ingreso = new Ingreso(monto, descripcion, fecha);
-        ingreso.setTipoIngreso(tipoIngreso);
+
 
         // Guardar el ingreso
-        ingresoService.crearIngreso(ingreso);
+        ingresoService.crearIngreso(ingreso, userId);
 
         // Redirigir a la página de gastos
         modelAndView.setViewName("redirect:/ingreso");

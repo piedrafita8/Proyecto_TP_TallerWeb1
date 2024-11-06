@@ -1,9 +1,12 @@
 package com.tallerwebi.dominio.servicios;
 
+import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
+import com.tallerwebi.dominio.models.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +17,13 @@ import java.util.List;
 @Transactional
 public class ServicioEgresoImpl implements ServicioEgreso {
 
-    private final RepositorioEgreso repositorioEgreso;  // Eliminar el uso de static
+    private final RepositorioEgreso repositorioEgreso;
+    private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioEgresoImpl(RepositorioEgreso repositorioEgreso){
-        this.repositorioEgreso = repositorioEgreso;  // Usar 'this' para la inyección de dependencia
+    public ServicioEgresoImpl(RepositorioEgreso repositorioEgreso, RepositorioUsuario repositorioUsuario){
+        this.repositorioEgreso = repositorioEgreso;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
     @Override
@@ -41,9 +46,23 @@ public class ServicioEgresoImpl implements ServicioEgreso {
     }
 
     @Override
-    public void crearEgreso(Egreso egreso) {
+    public void crearEgreso(Egreso egreso, Long userId) {
         repositorioEgreso.guardar(egreso);
+
+        Usuario usuario = repositorioUsuario.buscarPorId(userId);
+        if (usuario != null) {
+            Double saldoActual = usuario.getSaldo();
+
+            if (saldoActual >= egreso.getMonto()) {
+                Double nuevoSaldo = saldoActual - egreso.getMonto();
+                usuario.setSaldo(nuevoSaldo);
+                repositorioUsuario.modificar(usuario);
+            } else {
+                throw new SaldoInsuficiente("Saldo insuficiente para realizar el egreso.");
+            }
+        }
     }
+
 
     @Override
     public List<Egreso> getAllEgresos() {

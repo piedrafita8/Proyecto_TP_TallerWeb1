@@ -9,6 +9,7 @@ public interface RepositorioUsuario {
     Usuario buscarUsuario(String username, String password);
     void guardar(Usuario usuario);
     Usuario buscar(String email);
+    public Usuario buscarPorId(Long id);
     void modificar(Usuario usuario);
 }
 

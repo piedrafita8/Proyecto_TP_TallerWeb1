@@ -58,11 +58,10 @@ public class ControladorEgreso {
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("tipoEgreso") TipoEgreso tipoEgreso, HttpServletRequest requestMock) {
+            @RequestParam("tipoEgreso") TipoEgreso tipoEgreso, HttpServletRequest request) {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        // Validación de los campos
         if (descripcion == null || descripcion.isEmpty()) {
             modelAndView.addObject("error", "La descripción no puede estar vacía");
             return modelAndView;
@@ -73,17 +72,22 @@ public class ControladorEgreso {
             return modelAndView;
         }
 
-        // Crear el objeto Egreso y asignar tipoEgreso
-        Egreso egreso = new Egreso(monto, descripcion, fecha);
-        egreso.setTipoEgreso(tipoEgreso);  // Asignar el enum tipoEgreso al objeto
+        Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            modelAndView.addObject("error", "No se pudo identificar al usuario.");
+            return modelAndView;
+        }
 
-        // Guardar el egreso
-        egresoService.crearEgreso(egreso);
+        Egreso egreso = new Egreso(monto, descripcion, fecha);
+        egreso.setTipoEgreso(tipoEgreso);
+
+        egresoService.crearEgreso(egreso, userId);
 
         // Redirigir a la página de gastos
         modelAndView.setViewName("redirect:/gastos");
         return modelAndView;
     }
+
 
 
     // Metodo para ver los detalles de un egreso específico

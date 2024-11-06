@@ -10,5 +10,5 @@ public interface ServicioIngreso {
     Ingreso consultarIngreso(Double monto, Integer fecha) throws RecursoNoEncontrado;
     void registrar(Ingreso ingreso)throws RecursoNoEncontrado;
     List<Ingreso> getAllIngresos();
-    void crearIngreso(Ingreso ingreso);
+    void crearIngreso(Ingreso ingreso, Long userId);
 }

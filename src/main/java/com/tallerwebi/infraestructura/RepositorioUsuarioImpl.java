@@ -62,6 +62,22 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
+    public Usuario buscarPorId(Long id) {
+        if (id == null) {
+            return null;
+        }
+
+        final Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Usuario> query = builder.createQuery(Usuario.class);
+        Root<Usuario> root = query.from(Usuario.class);
+
+        query.where(builder.equal(root.get("id"), id));
+
+        return session.createQuery(query).uniqueResult();
+    }
+
+    @Override
     public void modificar(Usuario usuario) {
         sessionFactory.getCurrentSession().update(usuario);
     }

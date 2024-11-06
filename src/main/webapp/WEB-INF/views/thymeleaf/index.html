@@ -61,7 +61,7 @@
     <main>
         <div class="container-billetera">
             <p>Billetera</p>
-            <p class="dinero">$467.900,34</p>
+            <p class="dinero" th:text="${#numbers.formatDecimal(saldo, 1, 2)}"></p>
             <p class="ingreso">$530.000,00</p>
             <p class="gasto">$62099,66</p>
             <p class="tipo-mov-ing">Ingreso</p>

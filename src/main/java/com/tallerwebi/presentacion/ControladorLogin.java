@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.interfaces.ServicioIngreso;
 import com.tallerwebi.dominio.interfaces.ServicioLogin;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Usuario;
@@ -21,15 +22,17 @@ import java.util.List;
 @Controller
 public class ControladorLogin {
 
-    private ServicioLogin ServicioLogin;
-    private ServicioEgreso ServicioEgreso;
-    private ServicioIngreso ServicioIngreso;
+    private ServicioLogin servicioLogin;
+    private ServicioEgreso servicioEgreso;
+    private ServicioIngreso servicioIngreso;
+    private ServicioUsuario servicioUsuario;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin, ServicioEgreso servicioEgreso, ServicioIngreso servicioIngreso){
-        this.ServicioLogin = servicioLogin;
-        this.ServicioEgreso = servicioEgreso;
-        this.ServicioIngreso = servicioIngreso;
+    public ControladorLogin(ServicioLogin servicioLogin, ServicioEgreso servicioEgreso, ServicioIngreso servicioIngreso, ServicioUsuario servicioUsuario){
+        this.servicioLogin = servicioLogin;
+        this.servicioEgreso = servicioEgreso;
+        this.servicioIngreso = servicioIngreso;
+        this.servicioUsuario = servicioUsuario;
     }
 
     @RequestMapping("/login")
@@ -43,11 +46,13 @@ public class ControladorLogin {
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
-        Usuario usuarioBuscado = ServicioLogin.consultarUsuario(datosLogin.getUsername(), datosLogin.getPassword());
+        Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getUsername(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+            request.getSession().setAttribute("id", usuarioBuscado.getId());
             return new ModelAndView("redirect:/index");
-        } else {
+        }
+        else {
             model.put("error", "Usuario o clave incorrecta");
         }
         return new ModelAndView("login", model);
@@ -57,7 +62,7 @@ public class ControladorLogin {
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
         ModelMap model = new ModelMap();
         try{
-            ServicioLogin.registrar(usuario);
+            servicioLogin.registrar(usuario);
         } catch (UsuarioExistente e){
             model.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", model);
@@ -76,14 +81,27 @@ public class ControladorLogin {
     }
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
-    public ModelAndView irAHome() {
+    public ModelAndView irAHome(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("index");
-        List<Egreso> egresos = ServicioEgreso.getAllEgresos();
-        List<Ingreso> ingreso = ServicioIngreso.getAllIngresos();
-        modelAndView.addObject("egresos", egresos);
-        modelAndView.addObject("ingresos", ingreso);
+
+        Long userId = (Long) request.getSession().getAttribute("id");
+
+        if (userId == null) {
+            modelAndView.setViewName("redirect:/login");
+            modelAndView.addObject("error", "Debe iniciar sesión para acceder a esta página.");
+            return modelAndView;
+        }
+
+        Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
+        Double saldo = (usuario != null) ? usuario.getSaldo() : 0.0;
+
+        modelAndView.addObject("saldo", saldo);
+        modelAndView.addObject("egresos", servicioEgreso.getAllEgresos());
+        modelAndView.addObject("ingresos", servicioIngreso.getAllIngresos());
+
         return modelAndView;
     }
+
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
