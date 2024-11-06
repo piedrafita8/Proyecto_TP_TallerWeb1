@@ -114,4 +114,60 @@ public class RepositorioEgresoImplTest{
 
         assertThat(egresosObtenido.getDescripcion(), equalTo(nuevaDescripcion));
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioEgresoCuandoCreoUnEgresoLuegoPuedoBorrarlo(){
+        // Crear un objeto Egreso con el monto deseado
+        Egreso egreso = new Egreso();
+        egreso.setMonto(15000.0);
+        egreso.setDescripcion("Gasto para pagar chocolates");
+        egreso.setFecha(LocalDate.of(2023, 11, 10));
+        egreso.setId(0);
+
+        // Guardarlo usando el repositorio 
+        this.RepositorioEgreso.guardar(egreso);
+
+        //Borrarlo
+        this.RepositorioEgreso.eliminar(egreso);
+
+        List<Egreso> egresosObtenidos = this.RepositorioEgreso.obtener();
+        Integer cantidadEsperada = 0;
+        
+
+        //Verificar que el objeto se elimino correctamente del repositorio
+        assertThat(egresosObtenidos.size(), equalTo(cantidadEsperada));
+    }
+/* 
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioEgresoCuandoCreoUnEgresoLuegoPuedoBuscarloYObtenerloCorrectamente(){
+        // Crear un objeto Egreso con el monto deseado
+        Egreso egreso = new Egreso();
+        egreso.setMonto(15000.0);
+        egreso.setDescripcion("Gasto para pagar chocolates");
+        egreso.setFecha(LocalDate.of(2023, 11, 10));
+        egreso.setId(10);
+
+        // Guardarlo usando el repositorio 
+        this.RepositorioEgreso.guardar(egreso);
+
+        Egreso egresoObtenido=this.RepositorioEgreso.buscar(15000.0,10);
+
+        // Hacer la consulta HQL para encontrar el egreso guardado
+        String hql = "SELECT e FROM Egreso e WHERE e.monto = :monto AND e.descripcion = :descripcion AND e.fecha = :fecha";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("monto", 15000.0);
+        query.setParameter("descripcion", "Gasto para pagar chocolates");
+        query.setParameter("fecha", (LocalDate.of(2023, 11, 10)));
+
+        // Obtener el resultado de la consulta
+        Egreso egresoComparado = (Egreso) query.getSingleResult();
+
+        // Verificar que el egreso guardado es el mismo que el obtenido
+        assertThat(egresoComparado, equalTo(egresoObtenido));
+    }*/
+
 }
