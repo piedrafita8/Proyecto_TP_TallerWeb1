@@ -22,6 +22,7 @@ import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
 import static java.time.LocalDate.parse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.isNotNull;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
@@ -161,4 +162,34 @@ public class RepositorioEgresoImplTest{
     
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoUnEgresoExistenteCuandoLoModificoEntoncesLosCambiosSeGuardanCorrectamente() {
+        // Crear y guardar un objeto Egreso inicial
+        Egreso egreso = new Egreso();
+        egreso.setMonto(10000.0);
+        egreso.setDescripcion("Gasto original");
+        egreso.setFecha(LocalDate.of(2023, 11, 1));
+        this.RepositorioEgreso.guardar(egreso);
+    
+        // Sincronizar para asegurar que el objeto esté persistido
+        sessionFactory.getCurrentSession().flush();
+
+        // Modificar el objeto
+        egreso.setMonto(12000.0);
+        egreso.setDescripcion("Gasto modificado");
+
+        // Llamar al método modificar
+        this.RepositorioEgreso.modificar(egreso);
+
+        // Sincronizar para asegurar que la modificación se guarde
+        sessionFactory.getCurrentSession().flush();
+
+        // Recuperar el objeto modificado y verificar los cambios
+        Egreso egresoModificado = this.RepositorioEgreso.buscar(12000.0, egreso.getId());
+
+        assertThat(egresoModificado.getMonto(),equalTo(12000.0));
+        assertThat(egresoModificado.getDescripcion(),equalTo("Gasto modificado"));
+    }
 }
