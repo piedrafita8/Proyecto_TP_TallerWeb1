@@ -70,18 +70,18 @@ public class RepositorioIngresoImplTest{
         Ingreso ingreso1 = new Ingreso();
         ingreso1.setMonto(245000.0);
         ingreso1.setFecha(LocalDate.of(2022, 12, 20));
-
         ingreso1.setDescripcion("Ingreso de un prestamo bancario");
+        
         Ingreso ingreso2 = new Ingreso();
         ingreso2.setMonto(80000.0);
         ingreso2.setFecha(LocalDate.of(2022, 12, 20));
-
         ingreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
+        
         Ingreso ingreso3 = new Ingreso();
         ingreso3.setMonto(199000.0);
         ingreso3.setFecha(LocalDate.of(2022, 12, 20));
-
         ingreso3.setDescripcion("Ingreso proveniente de beca");
+       
         this.sessionFactory.getCurrentSession().save(ingreso1);
         this.sessionFactory.getCurrentSession().save(ingreso2);
         this.sessionFactory.getCurrentSession().save(ingreso3);
@@ -91,6 +91,40 @@ public class RepositorioIngresoImplTest{
         Integer cantidadEsperada = 3;
         assertThat(ingresosObtenidos.size(), equalTo(cantidadEsperada));
     }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentroEsos3IngresosEnLaBaseDeDatos(){
+        Ingreso ingreso1 = new Ingreso();
+        ingreso1.setMonto(245000.0);
+        ingreso1.setFecha(LocalDate.of(2022, 12, 20));
+        ingreso1.setDescripcion("Ingreso de un prestamo bancario");
+        
+        Ingreso ingreso2 = new Ingreso();
+        ingreso2.setMonto(80000.0);
+        ingreso2.setFecha(LocalDate.of(2022, 12, 20));
+        ingreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
+        
+        Ingreso ingreso3 = new Ingreso();
+        ingreso3.setMonto(199000.0);
+        ingreso3.setFecha(LocalDate.of(2022, 12, 20));
+        ingreso3.setDescripcion("Ingreso proveniente de beca");
+        
+        this.sessionFactory.getCurrentSession().save(ingreso1);
+        this.sessionFactory.getCurrentSession().save(ingreso2);
+        this.sessionFactory.getCurrentSession().save(ingreso3);
+
+        List<Ingreso> ingresosObtenidos = this.RepositorioIngreso.obtener();
+
+        Integer cantidadEsperada = 3;
+        assertThat(ingresosObtenidos.size(), equalTo(cantidadEsperada));
+        assertThat(ingresosObtenidos.get(0),equalTo(ingreso1));
+        assertThat(ingresosObtenidos.get(1),equalTo(ingreso2));
+        assertThat(ingresosObtenidos.get(2),equalTo(ingreso3));
+    }
+
 
     @Test
     @Transactional
