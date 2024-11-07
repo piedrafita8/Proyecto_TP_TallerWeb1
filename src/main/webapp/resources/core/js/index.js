@@ -123,6 +123,15 @@ function actualizarGrafico() {
 // Ejecutar la función al cargar la página
 window.onload = actualizarGrafico;
 
+// Metodo para que la barra de navegacion sea mas efectiva
+document.querySelectorAll('.menu li').forEach(item => {
+    item.addEventListener('click', function() {
+        const link = this.querySelector('a');
+        if (link) {
+            window.location.href = link.href;
+        }
+    });
+});
 
 
 
