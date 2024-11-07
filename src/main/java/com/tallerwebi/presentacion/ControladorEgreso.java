@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
+import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +82,19 @@ public class ControladorEgreso {
         Egreso egreso = new Egreso(monto, descripcion, fecha);
         egreso.setTipoEgreso(tipoEgreso);
 
-        egresoService.crearEgreso(egreso, userId);
+        try {
 
-        // Redirigir a la página de gastos
-        modelAndView.setViewName("redirect:/gastos");
+            egresoService.crearEgreso(egreso, userId);
+
+            modelAndView.setViewName("redirect:/gastos");
+        } catch (SaldoInsuficiente e) {
+            modelAndView.setViewName("gastos");
+            modelAndView.addObject("error", "Saldo insuficiente para realizar el egreso.");
+        }
+
         return modelAndView;
     }
+
 
 
 
