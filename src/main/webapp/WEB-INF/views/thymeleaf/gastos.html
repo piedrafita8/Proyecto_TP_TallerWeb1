@@ -106,6 +106,10 @@
                     </div>
 
                     <button type="submit" class=" btn-primary w-100">Añadir</button>
+
+                    <div th:if="${error}" class="alert alert-danger">
+                        <p th:text="${error}" style="color: red;"></p>
+                    </div>
                 </form>
             </div>
         </div>
