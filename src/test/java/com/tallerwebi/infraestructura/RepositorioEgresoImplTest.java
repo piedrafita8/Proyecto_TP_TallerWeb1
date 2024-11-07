@@ -18,10 +18,11 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
-import static java.time.LocalDate.parse;
+//import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
+//import static java.time.LocalDate.parse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+//import static org.mockito.ArgumentMatchers.isNotNull;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
@@ -67,19 +68,19 @@ public class RepositorioEgresoImplTest{
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentro3IngresosEnLaBaseDeDatos(){
+    public void dadoQueExisteUnRepositorioEgresoCuandoGuardo3EgresosEntoncesEncuentro3EgresosEnLaBaseDeDatos(){
         Egreso egreso1 = new Egreso();
         egreso1.setMonto(27900.0);
         egreso1.setFecha(LocalDate.of(2022, 12, 20));
-        egreso1.setDescripcion("Ingreso de un prestamo bancario");
+        egreso1.setDescripcion("Egreso de un prestamo bancario");
         Egreso egreso2 = new Egreso();
         egreso2.setMonto(88900.0);
         egreso2.setFecha(LocalDate.of(2022, 12, 20));
-        egreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
+        egreso2.setDescripcion("Egreso de dinero prestado de un familiar");
         Egreso egreso3 = new Egreso();
         egreso3.setMonto(95000.0);
         egreso3.setFecha(LocalDate.of(2022, 12, 20));
-        egreso3.setDescripcion("Ingreso proveniente de beca");
+        egreso3.setDescripcion("Egreso proveniente de beca");
         this.sessionFactory.getCurrentSession().save(egreso1);
         this.sessionFactory.getCurrentSession().save(egreso2);
         this.sessionFactory.getCurrentSession().save(egreso3);
@@ -113,5 +114,82 @@ public class RepositorioEgresoImplTest{
         Egreso egresosObtenido = (Egreso) query.getSingleResult();
 
         assertThat(egresosObtenido.getDescripcion(), equalTo(nuevaDescripcion));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioEgresoCuandoCreoUnEgresoLuegoPuedoBorrarlo(){
+        // Crear un objeto Egreso con el monto deseado
+        Egreso egreso = new Egreso();
+        egreso.setMonto(15000.0);
+        egreso.setDescripcion("Gasto para pagar chocolates");
+        egreso.setFecha(LocalDate.of(2023, 11, 10));
+        egreso.setId(0);
+
+        // Guardarlo usando el repositorio 
+        this.RepositorioEgreso.guardar(egreso);
+
+        //Borrarlo
+        this.RepositorioEgreso.eliminar(egreso);
+
+        List<Egreso> egresosObtenidos = this.RepositorioEgreso.obtener();
+        Integer cantidadEsperada = 0;
+        
+
+        //Verificar que el objeto se elimino correctamente del repositorio
+        assertThat(egresosObtenidos.size(), equalTo(cantidadEsperada));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioEgresoCuandoCreoUnEgresoLuegoPuedoBuscarloYObtenerloCorrectamente(){
+        // Crear un objeto Egreso con el monto deseado
+        Egreso egreso = new Egreso();
+        egreso.setMonto(15000.0);
+        egreso.setDescripcion("Gasto para pagar chocolates");
+        egreso.setFecha(LocalDate.of(2023, 11, 10));
+
+        // Guardarlo usando el repositorio 
+        this.RepositorioEgreso.guardar(egreso);
+        sessionFactory.getCurrentSession().flush();
+        Integer idGuardado=egreso.getId();
+
+        //Buscar egreso y verificar
+        Egreso egresObtenido=this.RepositorioEgreso.buscar(15000.0, idGuardado);
+        assertThat(egresObtenido,equalTo(egreso));
+    
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoUnEgresoExistenteCuandoLoModificoEntoncesLosCambiosSeGuardanCorrectamente() {
+        // Crear y guardar un objeto Egreso inicial
+        Egreso egreso = new Egreso();
+        egreso.setMonto(10000.0);
+        egreso.setDescripcion("Gasto original");
+        egreso.setFecha(LocalDate.of(2023, 11, 1));
+        this.RepositorioEgreso.guardar(egreso);
+    
+        // Sincronizar para asegurar que el objeto esté persistido
+        sessionFactory.getCurrentSession().flush();
+
+        // Modificar el objeto
+        egreso.setMonto(12000.0);
+        egreso.setDescripcion("Gasto modificado");
+
+        // Llamar al método modificar
+        this.RepositorioEgreso.modificar(egreso);
+
+        // Sincronizar para asegurar que la modificación se guarde
+        sessionFactory.getCurrentSession().flush();
+
+        // Recuperar el objeto modificado y verificar los cambios
+        Egreso egresoModificado = this.RepositorioEgreso.buscar(12000.0, egreso.getId());
+
+        assertThat(egresoModificado.getMonto(),equalTo(12000.0));
+        assertThat(egresoModificado.getDescripcion(),equalTo("Gasto modificado"));
     }
 }
