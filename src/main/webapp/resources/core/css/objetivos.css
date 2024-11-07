@@ -46,17 +46,31 @@ nav {
 .menu {
   width: 100%;
   list-style-type: none;
+  display: flex; /* Hace que los li se alineen en línea */
+  justify-content: space-around; /* Espacia los li uniformemente */
+  flex-direction: column; /* Alinea verticalmente los li */
 }
 
 .menu li {
   padding: 17px 0;
   cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .menu li a {
   color: #ffffff;
   padding: 0 2em;
   text-decoration: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.menu li i{
+  margin-right: 8px;
 }
 
 i{
