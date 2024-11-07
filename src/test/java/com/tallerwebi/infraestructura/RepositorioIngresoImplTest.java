@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.interfaces.RepositorioIngreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
@@ -152,4 +153,83 @@ public class RepositorioIngresoImplTest{
         assertThat(ingresoObtenido.getMonto(), equalTo(nuevoMonto));
         assertThat(ingresoObtenido.getFecha(), equalTo(fechaIngreso));
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioIngresoCuandoCreoUnIngresoLuegoPuedoBorrarlo(){
+        // Crear un objeto Egreso con el monto deseado
+        Ingreso ingreso = new Ingreso();
+        ingreso.setMonto(15000.0);
+        ingreso.setDescripcion("Donaciones");
+        ingreso.setFecha(LocalDate.of(2023, 11, 10));
+        ingreso.setId(0);
+
+        // Guardarlo usando el repositorio 
+        this.RepositorioIngreso.guardar(ingreso);
+
+        //Borrarlo
+        this.RepositorioIngreso.eliminar(ingreso);
+
+        List<Ingreso> egresosObtenidos = this.RepositorioIngreso.obtener();
+        Integer cantidadEsperada = 0;
+        
+
+        //Verificar que el objeto se elimino correctamente del repositorio
+        assertThat(egresosObtenidos.size(), equalTo(cantidadEsperada));
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioIngresoCuandoCreoUnIngresoLuegoPuedoBuscarloYObtenerloCorrectamente(){
+        // Crear un objeto Egreso con el monto deseado
+        Ingreso ingreso = new Ingreso();
+        ingreso.setMonto(15000.0);
+        ingreso.setDescripcion("Ingreso de inversiones cobradas");
+        ingreso.setFecha(LocalDate.of(2023, 11, 10));
+
+        // Guardarlo usando el repositorio 
+        this.RepositorioIngreso.guardar(ingreso);
+        sessionFactory.getCurrentSession().flush();
+        Integer idGuardado=ingreso.getId();
+
+        //Buscar egreso y verificar
+        Ingreso egresObtenido=this.RepositorioIngreso.buscar(15000.0, idGuardado);
+        assertThat(egresObtenido,equalTo(ingreso));
+    
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoUnEgresoExistenteCuandoLoModificoEntoncesLosCambiosSeGuardanCorrectamente() {
+        // Crear y guardar un objeto Egreso inicial
+        Ingreso ingreso = new Ingreso();
+        ingreso.setMonto(10000.0);
+        ingreso.setDescripcion("Ingreso original");
+        ingreso.setFecha(LocalDate.of(2023, 11, 1));
+        this.RepositorioIngreso.guardar(ingreso);
+    
+        // Sincronizar para asegurar que el objeto esté persistido
+        sessionFactory.getCurrentSession().flush();
+
+        // Modificar el objeto
+        ingreso.setMonto(12000.0);
+        ingreso.setDescripcion("Ingreso modificado");
+
+        // Llamar al método modificar
+        this.RepositorioIngreso.modificar(ingreso);
+
+        // Sincronizar para asegurar que la modificación se guarde
+        sessionFactory.getCurrentSession().flush();
+
+        // Recuperar el objeto modificado y verificar los cambios
+        Ingreso ingresoModificado = this.RepositorioIngreso.buscar(12000.0, ingreso.getId());
+
+        assertThat(ingresoModificado.getMonto(),equalTo(12000.0));
+        assertThat(ingresoModificado.getDescripcion(),equalTo("Ingreso modificado"));
+    }
 }
+
