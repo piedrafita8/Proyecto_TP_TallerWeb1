@@ -18,11 +18,11 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
-import static java.time.LocalDate.parse;
+//import static com.tallerwebi.dominio.enums.TipoMovimiento.EGRESO;
+//import static java.time.LocalDate.parse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.isNotNull;
+//import static org.mockito.ArgumentMatchers.isNotNull;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
