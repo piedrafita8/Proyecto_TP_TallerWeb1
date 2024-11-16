@@ -64,7 +64,6 @@ public class ControladorIngreso {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        // Validación de los campos
         if (descripcion == null || descripcion.isEmpty()) {
             modelAndView.addObject("error", "La descripción no puede estar vacía");
             return modelAndView;
@@ -75,6 +74,16 @@ public class ControladorIngreso {
             return modelAndView;
         }
 
+        if(fecha == null){
+            modelAndView.addObject("error", "La fecga no puede ser nula");
+            return modelAndView;
+        }
+
+        if(tipoIngreso == null){
+            modelAndView.addObject("error", "El tipo de egreso no puede ser nulo");
+            return modelAndView;
+        }
+
         Long userId = (Long) request.getSession().getAttribute("id");
         if (userId == null) {
             modelAndView.addObject("error", "No se pudo identificar al usuario.");
@@ -82,7 +91,10 @@ public class ControladorIngreso {
         }
 
         // Crear el objeto Ingreso
-        Ingreso ingreso = new Ingreso(monto, descripcion, fecha);
+        Ingreso ingreso = new Ingreso();
+        ingreso.setMonto(monto);
+        ingreso.setFecha(fecha);
+        ingreso.setDescripcion(descripcion);
         ingreso.setTipoIngreso(tipoIngreso);
 
         // Guardar el ingreso
