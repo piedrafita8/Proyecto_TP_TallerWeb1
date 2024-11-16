@@ -83,7 +83,7 @@ public class ControladorIngreso {
 
         // Crear el objeto Ingreso
         Ingreso ingreso = new Ingreso(monto, descripcion, fecha);
-
+        ingreso.setTipoIngreso(tipoIngreso);
 
         // Guardar el ingreso
         ingresoService.crearIngreso(ingreso, userId);
