@@ -73,13 +73,26 @@ public class ControladorEgreso {
             return modelAndView;
         }
 
+        if(fecha == null){
+            modelAndView.addObject("error", "La fecga no puede ser nula");
+            return modelAndView;
+        }
+
+        if(tipoEgreso == null){
+            modelAndView.addObject("error", "El tipo de egreso no puede ser nulo");
+            return modelAndView;
+        }
+
         Long userId = (Long) request.getSession().getAttribute("id");
         if (userId == null) {
             modelAndView.addObject("error", "No se pudo identificar al usuario.");
             return modelAndView;
         }
 
-        Egreso egreso = new Egreso(monto, descripcion, fecha);
+        Egreso egreso = new Egreso();
+        egreso.setMonto(monto);
+        egreso.setFecha(fecha);
+        egreso.setDescripcion(descripcion);
         egreso.setTipoEgreso(tipoEgreso);
 
         try {
@@ -94,9 +107,6 @@ public class ControladorEgreso {
 
         return modelAndView;
     }
-
-
-
 
     // Metodo para ver los detalles de un egreso específico
     @GetMapping("/gasto/detalle")
