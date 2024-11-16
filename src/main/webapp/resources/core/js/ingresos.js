@@ -31,6 +31,9 @@ function guardarFechaIngresos() {
         if (typeof actualizarGrafico === "function") {
             actualizarGrafico();
         }
+    }else if(fechaSeleccionadaIngreso === null || monto === 0 && typeof actualizarGrafico === "function") {
+        // No hace nada si la fecha no se ingresa o si el monto es 0 (no cambia el grafico ni el calendario)
+        return;
     }
 }
 
