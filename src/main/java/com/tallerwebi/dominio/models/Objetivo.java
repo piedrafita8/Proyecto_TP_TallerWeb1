@@ -13,6 +13,7 @@ public class Objetivo {
     private Double montoObjetivo;
     private Double montoActual;
     private String nombre;
+    private Long userId;
 
     @Temporal(TemporalType.DATE)
     private Date fechaLimite;

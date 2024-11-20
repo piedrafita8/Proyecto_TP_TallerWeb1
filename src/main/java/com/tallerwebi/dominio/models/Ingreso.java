@@ -18,6 +18,7 @@ public class Ingreso {
     private String descripcion;
     private TipoIngreso tipoIngreso;
     private LocalDate fecha;
+    private Long userId;
 
     // Constructor, getters y setters
     public Ingreso(TipoIngreso tipoIngreso, Integer id, Double monto, String descripcion, LocalDate fecha) {
