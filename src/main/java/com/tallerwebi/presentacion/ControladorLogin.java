@@ -42,6 +42,7 @@ public class ControladorLogin {
         modelo.put("datosLogin", new DatosLogin());
         return new ModelAndView("login", modelo);
     }
+
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
@@ -96,8 +97,8 @@ public class ControladorLogin {
         Double saldo = (usuario != null) ? usuario.getSaldo() : 0.0;
 
         modelAndView.addObject("saldo", saldo);
-        modelAndView.addObject("egresos", servicioEgreso.getAllEgresos());
-        modelAndView.addObject("ingresos", servicioIngreso.getAllIngresos());
+        modelAndView.addObject("egresos", servicioEgreso.getEgresosPorUserId(usuario.getId()));
+        modelAndView.addObject("ingresos", servicioIngreso.getIngresosPorUserId(usuario.getId()));
 
         return modelAndView;
     }

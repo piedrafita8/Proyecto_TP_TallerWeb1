@@ -8,8 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -20,19 +22,35 @@ public class ControladorObjetivos {
     private ServicioObjetivo servicioObjetivo;
 
     @GetMapping
-    public String mostrarObjetivos(Model model) {
-        List<Objetivo> objetivos = servicioObjetivo.obtenerTodosLosObjetivos();
+    public String mostrarObjetivosPorUsuario(HttpServletRequest request, Model model) {
+        Long userId = (Long) request.getSession().getAttribute("id");
+
+        if (userId == null) {
+            model.addAttribute("error", "Debe iniciar sesión para acceder a sus objetivos.");
+            return "redirect:/login";
+        }
+
+        List<Objetivo> objetivos = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
         model.addAttribute("objetivos", objetivos);
+
         return "objetivos";
     }
 
+
     @PostMapping
-    public String crearObjetivo(@RequestParam String nombre,
+    public ModelAndView crearObjetivo(@RequestParam String nombre,
                                 @RequestParam Double montoObjetivo,
                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaLimite,
-                                RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            modelAndView.addObject("error", "No se pudo identificar al usuario.");
+            return modelAndView;
+        }
         try {
-            Objetivo nuevoObjetivo = new Objetivo(nombre, montoObjetivo, fechaLimite);
+            Objetivo nuevoObjetivo = new Objetivo(nombre, montoObjetivo, fechaLimite, userId);
             servicioObjetivo.crearObjetivo(nuevoObjetivo);
             redirectAttributes.addFlashAttribute("mensaje", "Objetivo creado exitosamente");
         } catch (ObjetivoExistente e) {
@@ -40,7 +58,9 @@ public class ControladorObjetivos {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al crear el objetivo: " + e.getMessage());
         }
-        return "redirect:/objetivos";
+
+        modelAndView.setViewName("redirect:/objetivos");
+        return modelAndView;
     }
 
     @PostMapping("/{id}/actualizarMonto")

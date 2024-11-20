@@ -79,5 +79,9 @@ public class Ingreso {
     public void setTipoIngreso(TipoIngreso tipoIngreso) {
         this.tipoIngreso = tipoIngreso;
     }
+
+    public Long getUserId(){ return userId; }
+
+    public void setUserId(Long userId){ this.userId = userId; }
 }
 

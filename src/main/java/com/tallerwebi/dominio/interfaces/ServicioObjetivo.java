@@ -13,4 +13,5 @@ public interface ServicioObjetivo {
     void eliminarObjetivo(Integer id);
 
     List<Objetivo> obtenerTodosLosObjetivos();
+    List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long Id);
 }

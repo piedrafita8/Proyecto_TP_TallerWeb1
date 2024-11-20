@@ -53,6 +53,18 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
                 .list();
     }
 
+    public List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long userId) {
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Objetivo> query = builder.createQuery(Objetivo.class);
+        Root<Objetivo> root = query.from(Objetivo.class);
+
+        Predicate userIdPredicate = builder.equal(root.get("userId"), userId);
+        query.where(userIdPredicate);
+
+        return sessionFactory.getCurrentSession().createQuery(query).list();
+    }
+
+
     public void eliminarObjetivo(Integer id) {
         Objetivo objetivo = sessionFactory.getCurrentSession().get(Objetivo.class, id);
         if(objetivo != null) {

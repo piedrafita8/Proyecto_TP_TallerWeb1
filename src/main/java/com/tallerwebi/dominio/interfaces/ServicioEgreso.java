@@ -11,6 +11,7 @@ public interface ServicioEgreso {
     void registrar(Egreso egreso) throws RecursoNoEncontrado;
     void crearEgreso(Egreso egreso, Long userId);
     List<Egreso> getAllEgresos();
+    List<Egreso> getEgresosPorUserId(Long userId);
 
 }
 

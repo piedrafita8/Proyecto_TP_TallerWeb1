@@ -36,23 +36,23 @@ public class ControladorIngreso {
 
     // Metodo para obtener todos los ingreso
     @GetMapping("api/ingreso")
-    public ModelAndView verIngresos(Integer id, HttpServletRequest request) {
+    public ModelAndView verIngresos(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
-            // Consultar el ingreso por ID para ver si existe (esto es opcional si quieres una consulta específica)
-            Ingreso ingreso = ingresoService.consultarIngreso(12345.00, id);
+        Long userId = (Long) request.getSession().getAttribute("id");
 
-            // Si se encuentra, mostrar la vista de ingreso
-            List<Ingreso> listaIngresos = ingresoService.getAllIngresos();
-            modelAndView.setViewName("ingreso");
-            modelAndView.addObject("datosIngreso", listaIngresos);
-        } catch (RecursoNoEncontrado e) {
-            // Si no se encuentra el egreso, mostrar vista de error con el mensaje
-            modelAndView.setViewName("ingreso");
-            modelAndView.addObject("error", e.getMessage());
+        if (userId == null) {
+            modelAndView.addObject("error", "No se pudo identificar al usuario.");
+            modelAndView.setViewName("index");
+            return modelAndView;
         }
+
+        List<Ingreso> listaIngresos = ingresoService.getIngresosPorUserId(userId);
+        modelAndView.setViewName("index"); // Asumiendo que "index" es la vista principal
+        modelAndView.addObject("datosIngreso", listaIngresos);
+
         return modelAndView;
     }
+
 
     // Metodo para crear un nuevo egreso
     @PostMapping("/ingreso")
@@ -74,13 +74,13 @@ public class ControladorIngreso {
             return modelAndView;
         }
 
-        if(fecha == null){
-            modelAndView.addObject("error", "La fecga no puede ser nula");
+        if (fecha == null) {
+            modelAndView.addObject("error", "La fecha no puede ser nula");
             return modelAndView;
         }
 
-        if(tipoIngreso == null){
-            modelAndView.addObject("error", "El tipo de egreso no puede ser nulo");
+        if (tipoIngreso == null) {
+            modelAndView.addObject("error", "El tipo de ingreso no puede ser nulo");
             return modelAndView;
         }
 
@@ -90,17 +90,15 @@ public class ControladorIngreso {
             return modelAndView;
         }
 
-        // Crear el objeto Ingreso
         Ingreso ingreso = new Ingreso();
         ingreso.setMonto(monto);
         ingreso.setFecha(fecha);
         ingreso.setDescripcion(descripcion);
         ingreso.setTipoIngreso(tipoIngreso);
+        ingreso.setUserId(userId);
 
-        // Guardar el ingreso
         ingresoService.crearIngreso(ingreso, userId);
 
-        // Redirigir a la página de gastos
         modelAndView.setViewName("redirect:/ingreso");
         return modelAndView;
     }

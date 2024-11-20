@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
+import com.tallerwebi.dominio.models.Ingreso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -36,21 +37,20 @@ public class ControladorEgreso {
 
     // Metodo para obtener todos los egresos
     @GetMapping("api/gastos")
-    public ModelAndView verEgresos(Integer id, HttpServletRequest request) {
+    public ModelAndView verEgresos(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
-            // Consultar el egreso por ID para ver si existe (esto es opcional si quieres una consulta específica)
-            Egreso egreso = egresoService.consultarEgreso(12345.00, id);
+        Long userId = (Long) request.getSession().getAttribute("id");
 
-            // Si se encuentra, mostrar la vista de egreso
-            List<Egreso> listaEgresos = egresoService.getAllEgresos();
-            modelAndView.setViewName("gastos");
-            modelAndView.addObject("datosEgreso", listaEgresos);
-        } catch (RecursoNoEncontrado e) {
-            // Si no se encuentra el egreso, mostrar vista de error con el mensaje
-            modelAndView.setViewName("gastos");
-            modelAndView.addObject("error", e.getMessage());
+        if (userId == null) {
+            modelAndView.addObject("error", "No se pudo identificar al usuario.");
+            modelAndView.setViewName("index");
+            return modelAndView;
         }
+
+        List<Egreso> listaEgresos = egresoService.getEgresosPorUserId(userId);
+        modelAndView.setViewName("index"); // Asumiendo que "index" es la vista principal
+        modelAndView.addObject("datosEgreso", listaEgresos);
+
         return modelAndView;
     }
 
@@ -94,6 +94,7 @@ public class ControladorEgreso {
         egreso.setFecha(fecha);
         egreso.setDescripcion(descripcion);
         egreso.setTipoEgreso(tipoEgreso);
+        egreso.setUserId(userId);
 
         try {
 
@@ -110,7 +111,7 @@ public class ControladorEgreso {
 
     // Metodo para ver los detalles de un egreso específico
     @GetMapping("/gasto/detalle")
-    public ModelAndView verDetalleEgreso(@RequestParam("monto") double monto, @RequestParam("id") int id) throws RecursoNoEncontrado {
+    public ModelAndView verDetalleEgreso(@RequestParam("monto") double monto, @RequestParam("id") Integer id) throws RecursoNoEncontrado {
         ModelAndView modelAndView = new ModelAndView();
         Egreso egreso = egresoService.consultarEgreso(monto, id);  // Usar la instancia egresoService
 

@@ -55,4 +55,10 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
     public List<Objetivo> obtenerTodosLosObjetivos() {
         return repositorioObjetivo.obtenerTodosLosObjetivos();
     }
+
+    @Override
+    public List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long id) {
+        return repositorioObjetivo.obtenerTodosLosObjetivosPorUsuario(id);
+    }
+
 }
