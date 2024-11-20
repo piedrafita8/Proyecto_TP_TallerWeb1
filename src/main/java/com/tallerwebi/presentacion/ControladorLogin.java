@@ -1,11 +1,9 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.interfaces.ServicioEgreso;
-import com.tallerwebi.dominio.interfaces.ServicioIngreso;
-import com.tallerwebi.dominio.interfaces.ServicioLogin;
-import com.tallerwebi.dominio.interfaces.ServicioUsuario;
+import com.tallerwebi.dominio.interfaces.*;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Ingreso;
+import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +24,15 @@ public class ControladorLogin {
     private ServicioEgreso servicioEgreso;
     private ServicioIngreso servicioIngreso;
     private ServicioUsuario servicioUsuario;
+    private ServicioObjetivo servicioObjetivo;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin, ServicioEgreso servicioEgreso, ServicioIngreso servicioIngreso, ServicioUsuario servicioUsuario){
+    public ControladorLogin(ServicioLogin servicioLogin, ServicioEgreso servicioEgreso, ServicioIngreso servicioIngreso, ServicioUsuario servicioUsuario, ServicioObjetivo servicioObjetivo){
         this.servicioLogin = servicioLogin;
         this.servicioEgreso = servicioEgreso;
         this.servicioIngreso = servicioIngreso;
         this.servicioUsuario = servicioUsuario;
+        this.servicioObjetivo = servicioObjetivo;
     }
 
     @RequestMapping("/login")
@@ -96,12 +96,16 @@ public class ControladorLogin {
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
         Double saldo = (usuario != null) ? usuario.getSaldo() : 0.0;
 
+        List<Objetivo> todosLosObjetivos = servicioObjetivo.obtenerTodosLosObjetivos();
+
         modelAndView.addObject("saldo", saldo);
         modelAndView.addObject("egresos", servicioEgreso.getEgresosPorUserId(usuario.getId()));
         modelAndView.addObject("ingresos", servicioIngreso.getIngresosPorUserId(usuario.getId()));
+        modelAndView.addObject("objetivos", todosLosObjetivos);
 
         return modelAndView;
     }
+
 
 
     @RequestMapping(path = "/", method = RequestMethod.GET)

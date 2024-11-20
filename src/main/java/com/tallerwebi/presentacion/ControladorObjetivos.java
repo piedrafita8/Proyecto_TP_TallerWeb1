@@ -1,7 +1,10 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
+import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Objetivo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +24,7 @@ import java.util.List;
 public class ControladorObjetivos {
     @Autowired
     private ServicioObjetivo servicioObjetivo;
+    private ServicioEgreso servicioEgreso;
 
     @GetMapping
     public String mostrarObjetivosPorUsuario(HttpServletRequest request, Model model) {
@@ -62,6 +67,38 @@ public class ControladorObjetivos {
         modelAndView.setViewName("redirect:/objetivos");
         return modelAndView;
     }
+
+    @PostMapping("/{id}/aportar")
+    public String aportarAObjetivo(
+            @PathVariable Integer id,
+            @RequestParam Double montoAportado,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+
+        Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión para realizar un aporte.");
+            return "redirect:/login";
+        }
+
+        Egreso egreso = new Egreso();
+        egreso.setMonto(montoAportado);
+        egreso.setFecha(LocalDate.now());
+        egreso.setDescripcion("Aporte a un objetivo externo");
+        egreso.setTipoEgreso(TipoEgreso.APORTE);
+        egreso.setUserId(userId);
+
+        try {
+            servicioObjetivo.aportarAObjetivo(id, userId, montoAportado);
+            servicioEgreso.crearEgreso(egreso, userId);
+            redirectAttributes.addFlashAttribute("mensaje", "Aporte realizado exitosamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al realizar el aporte: " + e.getMessage());
+        }
+
+        return "redirect:/index";
+    }
+
 
     @PostMapping("/{id}/actualizarMonto")
     public String actualizarMonto(@PathVariable Integer id, @RequestParam Double montoAAgregar, RedirectAttributes redirectAttributes) {

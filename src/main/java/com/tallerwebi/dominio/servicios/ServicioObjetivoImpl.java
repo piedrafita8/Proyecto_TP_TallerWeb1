@@ -1,13 +1,19 @@
 package com.tallerwebi.dominio.servicios;
 
+import com.tallerwebi.dominio.enums.TipoEgreso;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
+import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
 import com.tallerwebi.dominio.interfaces.RepositorioObjetivo;
+import com.tallerwebi.dominio.models.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service("servicioObjetivo")
@@ -15,10 +21,14 @@ import java.util.List;
 public class ServicioObjetivoImpl implements ServicioObjetivo {
 
     private final RepositorioObjetivo repositorioObjetivo;
+    private final RepositorioUsuario repositorioUsuario;
+    private final ServicioEgreso servicioEgreso;
 
     @Autowired
-    public ServicioObjetivoImpl(RepositorioObjetivo repositorioObjetivo) {
+    public ServicioObjetivoImpl(RepositorioObjetivo repositorioObjetivo, RepositorioUsuario repositorioUsuario, ServicioEgreso servicioEgreso) {
         this.repositorioObjetivo = repositorioObjetivo;
+        this.repositorioUsuario = repositorioUsuario;
+        this.servicioEgreso = servicioEgreso;
     }
 
     @Override
@@ -42,6 +52,46 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
             repositorioObjetivo.actualizarObjetivo(id, montoAAgregar);
         }
     }
+
+    @Override
+    @Transactional
+    public void aportarAObjetivo(Integer objetivoId, Long userIdAportante, Double montoAportado) {
+        Objetivo objetivo = repositorioObjetivo.buscarObjetivo(objetivoId);
+        Usuario usuarioAportante = repositorioUsuario.buscarPorId(userIdAportante);
+
+        if (objetivo == null) {
+            throw new IllegalArgumentException("El objetivo no existe.");
+        }
+
+        if (usuarioAportante.getSaldo() < montoAportado) {
+            throw new IllegalArgumentException("Saldo insuficiente para realizar el aporte.");
+        }
+
+        // Actualizar el monto del objetivo y restar del saldo del usuario
+        objetivo.setMontoActual(objetivo.getMontoActual() + montoAportado);
+        usuarioAportante.setSaldo(usuarioAportante.getSaldo() - montoAportado);
+
+        // Guardar los cambios
+        repositorioObjetivo.guardar(objetivo);
+        repositorioUsuario.modificar(usuarioAportante);
+    }
+
+    public void guardarObjetivoConAportacion(Objetivo objetivo, Long userId, Double montoAportado) {
+        // Guardar el objetivo o actualizarlo
+        repositorioObjetivo.guardar(objetivo);
+
+        // Crear el egreso correspondiente
+        Egreso egreso = new Egreso();
+        egreso.setMonto(montoAportado);
+        egreso.setDescripcion("Aportación al objetivo: " + objetivo.getNombre());
+        egreso.setFecha(LocalDate.now());
+        egreso.setTipoEgreso(TipoEgreso.APORTE); // Suponiendo que tienes un enum para los tipos de egresos
+        egreso.setUserId(userId);
+
+        // Guardar el egreso utilizando el servicio
+        servicioEgreso.crearEgreso(egreso, userId);
+    }
+
 
     @Override
     public void eliminarObjetivo(Integer id) {

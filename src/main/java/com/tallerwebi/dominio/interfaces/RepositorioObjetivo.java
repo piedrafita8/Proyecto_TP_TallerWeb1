@@ -12,4 +12,5 @@ public interface RepositorioObjetivo {
     List<Objetivo> obtenerTodosLosObjetivos();
     List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long Id);
     void eliminarObjetivo(Integer id);
+    public void guardar(Objetivo objetivo);
 }

@@ -70,5 +70,13 @@ public class Objetivo {
     public void setMontoActual(Double montoActual) {
         this.montoActual = montoActual;
     }
+
+    public Long getUserId(){
+        return userId;
+    }
+
+    public void setUserId(Long userId){
+        this.userId = userId;
+    }
 }
 

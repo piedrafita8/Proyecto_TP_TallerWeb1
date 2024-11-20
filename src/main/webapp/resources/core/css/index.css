@@ -181,6 +181,144 @@ main {
     align-items: end;
 }
 
+.flex {
+    display: flex;
+    gap: 2rem;
+}
+
+.column-left {
+    flex: 1;
+}
+
+.column-right {
+    flex: 1;
+}
+
+.egresos-section,
+.ingresos-section {
+    margin-bottom: 2rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.table thead {
+    background-color: #f8f9fa;
+}
+
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Estilos para la tabla de objetivos */
+.objetivos-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.objetivos-table th,
+.objetivos-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.objetivos-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.objetivos-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.objetivos-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.objetivos-table form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.objetivos-table input[type="number"] {
+    width: 80px;
+    padding: 6px 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.objetivos-table button {
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.objetivos-table button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .flex {
+        flex-direction: column;
+    }
+
+    .column-left,
+    .column-right {
+        flex: none;
+        width: 100%;
+    }
+
+    .table,
+    .objetivos-table {
+        font-size: 0.9rem;
+    }
+
+    .table th,
+    .table td,
+    .objetivos-table th,
+    .objetivos-table td {
+        padding: 8px 10px;
+    }
+}
+
 .detalle-item {
     display: flex;
     align-items: center;

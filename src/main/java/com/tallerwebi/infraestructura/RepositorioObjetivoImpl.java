@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.interfaces.RepositorioObjetivo;
 import com.tallerwebi.dominio.models.Objetivo;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -45,6 +46,12 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
             objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
             sessionFactory.getCurrentSession().update(objetivo);
         }
+    }
+
+    @Override
+    public void guardar(Objetivo objetivo) {
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(objetivo);
     }
 
     public List<Objetivo> obtenerTodosLosObjetivos() {

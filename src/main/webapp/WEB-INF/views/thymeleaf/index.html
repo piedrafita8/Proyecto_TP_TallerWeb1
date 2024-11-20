@@ -97,45 +97,79 @@
         <div class="container-index">
             <h2>Bienvenido a Finanzas SAT</h2>
 
-            <div class="egresos-section">
-                <h3>Egresos Recientes</h3>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Descripción</th>
-                        <th>Monto</th>
-                        <th>Tipo</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="egreso : ${egresos}">
-                        <td th:text="${egreso.descripcion}"></td>
-                        <td th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
-                        <td th:text="${egreso.tipoEgreso}"></td>
-                    </tr>
+            <div class="flex">
+                <div>
+                    <div class="egresos-section">
+                        <h3>Egresos Recientes</h3>
+                        <table class="table table-striped">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Monto</th>
+                                    <th>Tipo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="egreso : ${egresos}">
+                                    <td th:text="${egreso.descripcion}"></td>
+                                    <td th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
+                                    <td th:text="${egreso.tipoEgreso}"></td>
+                                </tr>
 
-                    </tbody>
-                </table>
-            </div>
+                                </tbody>
+                            </table>
+                        </table>
+                    </div>
+                    <div class="ingresos-section">
+                        <h3>Ingresos Recientes</h3>
+                        <table class="table table-striped">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Monto</th>
+                                    <th>Tipo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="ingreso : ${ingresos}">
+                                    <td data-label="Descripción" th:text="${ingreso.descripcion}"></td>
+                                    <td data-label="Monto" th:text="${#numbers.formatDecimal(ingreso.monto, 1, 2)}"></td>
+                                    <td data-label="Tipo" th:text="${ingreso.tipoIngreso}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </table>
+                    </div>
+                </div>
 
-            <div class="ingresos-section">
-                <h3>Ingresos Recientes</h3>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Descripción</th>
-                        <th>Monto</th>
-                        <th>Tipo</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="ingreso : ${ingresos}">
-                        <td data-label="Descripción" th:text="${ingreso.descripcion}"></td>
-                        <td data-label="Monto" th:text="${#numbers.formatDecimal(ingreso.monto, 1, 2)}"></td>
-                        <td data-label="Tipo" th:text="${ingreso.tipoIngreso}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div>
+                    <h3>Objetivos de Ahorro</h3>
+                    <table class="objetivos-table">
+                        <thead>
+                        <tr>
+                            <th>Nombre del objetivo</th>
+                            <th>Monto objetivo</th>
+                            <th>Monto actual</th>
+                            <th>Aportar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="objetivo : ${objetivos}">
+                            <td th:text="${objetivo.nombre}"></td>
+                            <td th:text="${objetivo.montoObjetivo}"></td>
+                            <td th:text="${objetivo.montoActual}"></td>
+                            <td>
+                                <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                    <input type="number" name="montoAportado" min="1" required>
+                                    <button type="submit">Aportar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>

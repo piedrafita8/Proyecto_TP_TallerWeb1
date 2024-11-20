@@ -14,4 +14,7 @@ public interface ServicioObjetivo {
 
     List<Objetivo> obtenerTodosLosObjetivos();
     List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long Id);
+
+    public void aportarAObjetivo(Integer objetivoId, Long userIdAportante, Double montoAportado);
+    public void guardarObjetivoConAportacion(Objetivo objetivo, Long userId, Double montoAportado);
 }
