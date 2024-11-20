@@ -17,6 +17,7 @@ public class Egreso {
     private String descripcion;
     private LocalDate fecha;
     private TipoEgreso tipoEgreso;
+    private Long userId;
 
     // Constructor
     public Egreso(Integer id, Double monto, String descripcion, LocalDate fecha, TipoEgreso tipoEgreso) {
