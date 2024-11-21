@@ -6,79 +6,63 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-@Repository("repositorioUsuario")
+@Repository
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public RepositorioUsuarioImpl(SessionFactory sessionFactory){
+    public RepositorioUsuarioImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    @Override
-    public Usuario buscarUsuario(String username, String password) {
-        final Session session = sessionFactory.getCurrentSession();
+@Override
+@Transactional
+public Usuario buscarUsuario(String email, String password) {
+    return sessionFactory.getCurrentSession()
+            .createQuery("from Usuario where email = :email and password = :password", Usuario.class)
+            .setParameter("email", email)
+            .setParameter("password", password)
+            .uniqueResult();
+}
 
-        // Usar CriteriaBuilder y CriteriaQuery para crear la consulta
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Usuario> query = builder.createQuery(Usuario.class);
-        Root<Usuario> root = query.from(Usuario.class);
 
-        // Crear las condiciones de búsqueda
-        Predicate conditionUsername = builder.equal(root.get("username"), username);
-        Predicate conditionPassword = builder.equal(root.get("password"), password);
-        query.where(builder.and(conditionUsername, conditionPassword));
+@Transactional
+@Override
+public void guardar(Usuario usuario) {
+    sessionFactory.getCurrentSession().save(usuario);
+}
 
-        // Ejecutar la consulta
-        return session.createQuery(query).uniqueResult();
-    }
 
-    @Override
-    public void guardar(Usuario usuario) {
-        sessionFactory.getCurrentSession().save(usuario);
-    }
 
     @Override
+    @Transactional
     public Usuario buscar(String email) {
-        final Session session = sessionFactory.getCurrentSession();
-
-        // Usar CriteriaBuilder y CriteriaQuery para crear la consulta
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Usuario> query = builder.createQuery(Usuario.class);
-        Root<Usuario> root = query.from(Usuario.class);
-
-        // Crear la condición de búsqueda
-        query.where(builder.equal(root.get("email"), email));
-
-        // Ejecutar la consulta
-        return session.createQuery(query).uniqueResult();
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Usuario where email = :email", Usuario.class)
+                .setParameter("email", email)
+                .uniqueResult();
     }
 
     @Override
+    @Transactional
     public Usuario buscarPorId(Long id) {
-        if (id == null) {
-            return null;
-        }
-
-        final Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Usuario> query = builder.createQuery(Usuario.class);
-        Root<Usuario> root = query.from(Usuario.class);
-
-        query.where(builder.equal(root.get("id"), id));
-
-        return session.createQuery(query).uniqueResult();
+        return sessionFactory.getCurrentSession().get(Usuario.class, id);
     }
 
     @Override
+    @Transactional
     public void modificar(Usuario usuario) {
         sessionFactory.getCurrentSession().update(usuario);
     }
+
+
+    
 }

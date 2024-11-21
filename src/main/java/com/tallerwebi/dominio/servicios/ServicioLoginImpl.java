@@ -1,38 +1,49 @@
-package com.tallerwebi.dominio.servicios;
+package com.tallerwebi.dominio.services;
 
+import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioLogin;
 import com.tallerwebi.dominio.models.Usuario;
-import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
-import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-
-@Service("servicioLogin")
+@Service
 @Transactional
 public class ServicioLoginImpl implements ServicioLogin {
 
-    private RepositorioUsuario RepositorioUsuario;
+    private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioLoginImpl(RepositorioUsuario RepositorioUsuario){
-        this.RepositorioUsuario = RepositorioUsuario;
+    public ServicioLoginImpl(RepositorioUsuario repositorioUsuario) {
+        this.repositorioUsuario = repositorioUsuario;
     }
 
-    @Override
-    public Usuario consultarUsuario (String username, String password) {
-        return RepositorioUsuario.buscarUsuario(username, password);
+ @Override
+public Usuario consultarUsuario(String email, String password) {
+    Usuario usuario = repositorioUsuario.buscarUsuario(email, password);
+
+    if (usuario == null) {
+        throw new IllegalArgumentException("Usuario o contraseña incorrectos.");
     }
 
-    @Override
-    public void registrar(Usuario usuario) throws UsuarioExistente {
-        Usuario usuarioEncontrado = RepositorioUsuario.buscarUsuario(usuario.getEmail(), usuario.getPassword());
-        if(usuarioEncontrado != null){
-            throw new UsuarioExistente("Usuario ya existe");
-        }
-        RepositorioUsuario.guardar(usuario);
-    }
-
+    return usuario;
 }
 
+   @Override
+public void registrar(Usuario usuario) throws UsuarioExistente {
+    System.out.println("Intentando registrar usuario: " + usuario);
+
+    if (repositorioUsuario.buscar(usuario.getEmail()) != null) {
+        throw new UsuarioExistente("El email ya está registrado.");
+    }
+
+    if (repositorioUsuario.buscarUsuario(usuario.getUsername(), usuario.getPassword()) != null) {
+        throw new UsuarioExistente("El nombre de usuario ya está en uso.");
+    }
+
+    repositorioUsuario.guardar(usuario);
+    System.out.println("Usuario registrado exitosamente: " + usuario);
+}
+
+}

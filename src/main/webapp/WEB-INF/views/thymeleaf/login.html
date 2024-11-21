@@ -1,47 +1,46 @@
 <!DOCTYPE HTML>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Taller Web I</title>
-    <!-- custom style -->
-    <link rel="stylesheet" th:href="@{/css/login.css}">
-    <link rel="stylesheet" href="../../../resources/core/css/login.css">
 
+    <!-- Custom styles -->
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
 </head>
 
 <body>
 
-    
-    <header>
-        <h1 class="title">
-            <a href="login.html">FINANZAS SAT</a></h1>
-    </header>
+<header>
+    <h1 class="title">
+        <a href="login.html">FINANZAS SAT</a>
+    </h1>
+</header>
 
-
-<main role="main" class="container">
-
-    <div class = "container">
-        <div id="loginbox" class="mainbox ">
-            <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
+<main>
+    <div class="container">
+        <div id="loginbox" class="mainbox">
+            <form th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
                 <h3 class="loginText">Iniciar Sesion</h3>
 
+                <!-- Campo de correo -->
+                <input th:field="*{email}" id="email" type="email" placeholder="Correo Electrónico" required/>
 
-                <label for="username">
-                    <input th:field="*{username}" placeholder="Nombre usuario" id="username" type="text" class="form-control" required/>
-                </label>
-                <label for="password">
-                    <input th:field="*{password}" placeholder="Contraseña" type="password" id="password" class="form-control" required/>
-                </label>
-               <button id="btn-login" class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                <!-- Campo de contraseña -->
+                <input th:field="*{password}" id="password" type="password" placeholder="Contraseña" required/>
 
-                <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}"></p>
+                <!-- Botón de inicio de sesión -->
+                <button id="btn-login" type="submit">Iniciar Sesion</button>
+
+                <!-- Mostrar mensaje de error si existe -->
+                <p th:if="${error != null}" class="alert alert-danger" th:text="'Error: ' + ${error}"></p>
             </form>
-            <a class="linkText" id="ir-a-registrarme" href="nuevo-usuario.html">Registrarme</a>
+
+            <!-- Enlace a registrarse -->
+            <a id="ir-a-registrarme" href="nuevo-usuario" class="linkText">No tienes una cuenta? Registrarme</a>
         </div>
     </div>
 </main>
-    <script src="../../../resources/core/js/iniciar-sesion.js"></script>
+
 </body>
 </html>

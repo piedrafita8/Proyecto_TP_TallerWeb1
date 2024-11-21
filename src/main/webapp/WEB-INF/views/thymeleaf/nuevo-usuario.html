@@ -1,53 +1,49 @@
 <!DOCTYPE HTML>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Taller Web I</title>
-  <!-- custom style -->
-  <link rel="stylesheet" th:href="@{/css/login.css}">
-  <link rel="stylesheet" href="../../../resources/core/css/login.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Usuario</title>
 
+    <!-- Custom styles -->
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
 </head>
 
 <body>
+
 <header>
-  <h1 class="title">
-    <a href="login.html">FINANZAS SAT</a></h1>
-
-
+    <h1 class="title">
+        <a href="login.html">FINANZAS SAT</a>
+    </h1>
 </header>
 
-<main role="main" class="container">
+<main>
+    <div class="container">
+        <div id="loginbox" class="mainbox">
+            <form th:action="@{/registrarme}" method="POST" th:object="${usuario}">
+                <h3 class="loginText">Nuevo Usuario</h3>
 
-  <div class = "container">
-    <div id="loginbox" class="mainbox">
-      <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
-        <h3 class="loginText">Nuevo Usuario</h3>
+                <!-- Campo de nombre de usuario -->
+                <input th:field="*{username}" id="username" type="text" placeholder="Nombre de Usuario" required/>
 
-        <label for="username">
-          <input th:field="*{username}" placeholder="Ingrese nombre de usuario" type="text" id="username" class="form-control" required/>
-        </label>
+                <!-- Campo de correo electrónico -->
+                <input th:field="*{email}" id="email" type="email" placeholder="Correo Electrónico" required/>
 
-        <label for="email">
-          <input th:field="*{email}" placeholder="Ingrese su E-Mail" type="email" id="email" class="form-control" required/>
-        </label>
+                <!-- Campo de contraseña -->
+                <input th:field="*{password}" id="password" type="password" placeholder="Contraseña" required/>
 
-        <label for="password">
-          <input th:field="*{password}" placeholder="Ingrese su contraseña" type="password" id="password" class="form-control" required/>
-        </label>
-        <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" Type="Submit">Registrarme</button>
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-        </p>
-      </form>
-      <a  class="linkText" id="ir-a-login" href="login.html">Iniciar Sesion</a>
+                <!-- Campo para confirmar contraseña -->
+                <input id="confirm_password" type="password" placeholder="Confirmar Contraseña" required/>
 
+                <!-- Botón de registrarse -->
+                <button id="btn-register" type="submit">Registrarme</button>
+            </form>
+
+            <!-- Enlace para iniciar sesión -->
+            <a id="ir-a-login" href="login.html" class="linkText">Iniciar Sesión</a>
+        </div>
     </div>
-  </div>
-
 </main>
-<!-- Boostrap core js -->
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-<script src="../../../resources/core/js/registrarse.js"></script>
+
 </body>
 </html>

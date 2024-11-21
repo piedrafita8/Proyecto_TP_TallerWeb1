@@ -14,7 +14,7 @@ public class Usuario {
     private String username;
     private String email;
     private String password;
-    private String rol;
+    private String rol ="ADMIN";
     private Boolean activo = false;
     private Double saldo = 0.0;
 

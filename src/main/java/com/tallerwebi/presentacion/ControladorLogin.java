@@ -42,37 +42,45 @@ public class ControladorLogin {
         modelo.put("datosLogin", new DatosLogin());
         return new ModelAndView("login", modelo);
     }
-    @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
-    public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
-        ModelMap model = new ModelMap();
+ @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
+    ModelMap model = new ModelMap();
 
-        Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getUsername(), datosLogin.getPassword());
+    // Log para ver los valores que estamos recibiendo
+    System.out.println("Datos recibidos en login - Email: " + datosLogin.getEmail());
+    System.out.println("Contraseña: " + datosLogin.getPassword());  // Aquí, si la contraseña está cifrada, esto solo debería ser para depuración
+
+    try {
+        // Usamos email en lugar de username
+        Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             request.getSession().setAttribute("id", usuarioBuscado.getId());
             return new ModelAndView("redirect:/index");
-        }
-        else {
+        } else {
             model.put("error", "Usuario o clave incorrecta");
         }
-        return new ModelAndView("login", model);
+    } catch (Exception e) {
+        e.printStackTrace();  // Imprime el stacktrace completo para ayudar a diagnosticar el problema
+        model.put("error", "Error al validar las credenciales");
     }
+
+    return new ModelAndView("login", model);  // Si hay error, regresa al login
+}
+
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
-        ModelMap model = new ModelMap();
-        try{
-            servicioLogin.registrar(usuario);
-        } catch (UsuarioExistente e){
-            model.put("error", "El usuario ya existe");
-            return new ModelAndView("nuevo-usuario", model);
-        } catch (Exception e){
-            model.put("error", "Error al registrar el nuevo usuario");
-            return new ModelAndView("nuevo-usuario", model);
+        try {
+            servicioLogin.registrar(usuario); // Guarda el usuario en la base de datos
+        } catch (UsuarioExistente e) {
+            return new ModelAndView("nuevo-usuario", "error", "El usuario ya existe");
+        } catch (Exception e) {
+            return new ModelAndView("nuevo-usuario", "error", "Ocurrió un error al registrar al usuario");
         }
         return new ModelAndView("redirect:/login");
     }
-
+    
     @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
     public ModelAndView nuevoUsuario() {
         ModelMap model = new ModelMap();

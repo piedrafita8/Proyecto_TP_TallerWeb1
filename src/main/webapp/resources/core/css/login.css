@@ -31,19 +31,22 @@ header {
     font-size: 4rem;
 }
 
+.container {
+    width: 90%; /* Para pantallas pequeñas */
+    max-width: 400px; /* Límite máximo para que no sea tan ancha */
+    padding: 20px;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: white; /* Fondo blanco para destacar */
+}
+
 main {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-.container {
-    width: 50%;
     padding: 20px;
-    box-shadow:8px 8px 8px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
 }
 
 .mainbox {

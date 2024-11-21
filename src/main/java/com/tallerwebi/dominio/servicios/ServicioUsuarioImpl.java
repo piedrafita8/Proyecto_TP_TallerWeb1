@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio.servicios;
+package com.tallerwebi.dominio.services;
 
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
@@ -20,20 +20,17 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
     @Override
     public Usuario obtenerUsuarioPorId(Long id) {
-        Usuario usuario = repositorioUsuario.buscarPorId(id);
-        if (usuario == null) {
-            System.out.println("Usuario no encontrado para id: " + id);
-        }
-        return usuario;
+        return repositorioUsuario.buscarPorId(id);
     }
-
 
     @Override
     public void actualizarSaldo(Long id, Double nuevoSaldo) {
-        Usuario usuario = obtenerUsuarioPorId(id);
+        Usuario usuario = repositorioUsuario.buscarPorId(id);
         if (usuario != null) {
             usuario.setSaldo(nuevoSaldo);
             repositorioUsuario.modificar(usuario);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + id);
         }
     }
 }
