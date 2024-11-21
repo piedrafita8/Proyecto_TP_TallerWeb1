@@ -163,30 +163,9 @@ progress {
   cursor: pointer;
 }
 
-.container-obj{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
-}
-
-.progress-bar {
-  border: solid 1px black;
-  width: 200px;
-  height: 25px;
-  position: relative;
-  background-color: #e0e0e0;
-  overflow: hidden;
-}
-
-.progress-bar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0%; 
-  background-color: #007bff; 
-  transition: width 0.5s ease; 
+.delete-goal-btn{
+  padding-top: 15px;
+  border: 0;
+  background-color: #f9f9f9;
+  text-decoration: underline;
 }

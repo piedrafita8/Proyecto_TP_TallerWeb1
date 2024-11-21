@@ -94,8 +94,6 @@
 
   <ul class="goals-list">
     <li th:each="objetivo : ${objetivos}">
-      <div class="container-obj" >
-        <div class="container-txt">
           <h3 th:text="${objetivo.nombre}">Nombre del Objetivo</h3>
           <p>Monto Objetivo: $<span th:text="${#numbers.formatDecimal(objetivo.montoObjetivo, 0, 'COMMA', 2, 'POINT')}">0.00</span></p>
           <p>Monto Actual: $<span th:text="${#numbers.formatDecimal(objetivo.montoActual, 0, 'COMMA', 2, 'POINT')}">0.00</span></p>
@@ -108,11 +106,6 @@
             <input type="hidden" name="_method" value="delete" />
             <button type="submit">Eliminar Objetivo</button>
           </form>
-        </div>
-        <!-- Barra de progreso -->
-        <div class="container-barra">
-          <div class="progress-bar">
-          </div>
         </div>
       </div>
     </li>

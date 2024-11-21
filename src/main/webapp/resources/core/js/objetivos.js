@@ -49,6 +49,7 @@ function mostrarObjetivos() {
                 <input type="number" placeholder="Nuevo Monto" required>
                 <button type="submit">Agregar dinero</button>
             </form>
+            <button class="delete-goal-btn" onclick="handlerEliminarObjetivo(${objetivo.id})">Eliminar Objetivo</button>
         `;
     listaObjetivos.appendChild(objetivoItem);
   });
@@ -94,3 +95,8 @@ function init() {
 // Correr la Init Function cuando se termine de cargar el DOM
 document.addEventListener("DOMContentLoaded", init);
 
+//Handler para eliminar objetivo
+function handlerEliminarObjetivo(idObjetivo) {
+  objetivos = objetivos.filter((objetivo) => objetivo.id !== idObjetivo);
+  mostrarObjetivos();
+}
