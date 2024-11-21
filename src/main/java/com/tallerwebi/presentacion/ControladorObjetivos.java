@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
+import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
 import com.tallerwebi.dominio.models.Egreso;
@@ -101,9 +102,24 @@ public class ControladorObjetivos {
 
 
     @PostMapping("/{id}/actualizarMonto")
-    public String actualizarMonto(@PathVariable Integer id, @RequestParam Double montoAAgregar, RedirectAttributes redirectAttributes) {
-        servicioObjetivo.actualizarObjetivo(id, montoAAgregar);
-        redirectAttributes.addFlashAttribute("mensaje", "Monto actualizado exitosamente");
+    public String actualizarMonto(@PathVariable Integer id,
+                                  @RequestParam Double montoAAgregar,
+                                  HttpServletRequest request,
+                                  RedirectAttributes redirectAttributes) {
+        Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión para actualizar un objetivo.");
+            return "redirect:/login";
+        }
+
+        try {
+            servicioObjetivo.actualizarObjetivo(id, montoAAgregar, userId);
+            redirectAttributes.addFlashAttribute("mensaje", "Monto actualizado exitosamente");
+        } catch (SaldoInsuficiente e) {
+            redirectAttributes.addFlashAttribute("error", "Saldo insuficiente para actualizar el objetivo.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el objetivo: " + e.getMessage());
+        }
         return "redirect:/objetivos";
     }
 

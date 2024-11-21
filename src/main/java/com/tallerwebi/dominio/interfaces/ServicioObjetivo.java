@@ -9,7 +9,7 @@ public interface ServicioObjetivo {
 
     Objetivo consultarObjetivo(Integer id);
     void crearObjetivo(Objetivo objetivo) throws ObjetivoExistente;
-    void actualizarObjetivo(Integer id, Double montoAAgregar);
+    public void actualizarObjetivo(Integer id, Double montoAAgregar, Long userId);
     void eliminarObjetivo(Integer id);
 
     List<Objetivo> obtenerTodosLosObjetivos();

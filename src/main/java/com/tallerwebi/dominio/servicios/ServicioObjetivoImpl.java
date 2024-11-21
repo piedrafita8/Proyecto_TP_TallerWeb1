@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.servicios;
 
 import com.tallerwebi.dominio.enums.TipoEgreso;
+import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
@@ -46,11 +47,38 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
     }
 
     @Override
-    public void actualizarObjetivo(Integer id, Double montoAAgregar) {
+    @Transactional
+    public void actualizarObjetivo(Integer id, Double montoAAgregar, Long userId) throws SaldoInsuficiente {
         Objetivo objetivo = repositorioObjetivo.buscarObjetivo(id);
-        if (objetivo != null) {
-            repositorioObjetivo.actualizarObjetivo(id, montoAAgregar);
+        Usuario usuario = repositorioUsuario.buscarPorId(userId);
+
+        if (objetivo == null) {
+            throw new IllegalArgumentException("El objetivo no existe.");
         }
+
+        if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no existe.");
+        }
+
+        if (usuario.getSaldo() < montoAAgregar) {
+            throw new SaldoInsuficiente("Saldo insuficiente para actualizar el objetivo.");
+        }
+
+        objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
+        usuario.setSaldo(usuario.getSaldo() - montoAAgregar);
+
+        repositorioObjetivo.guardar(objetivo);
+        repositorioUsuario.modificar(usuario);
+
+        // Crear un egreso para registrar la actualización del objetivo
+        Egreso egreso = new Egreso();
+        egreso.setMonto(montoAAgregar);
+        egreso.setDescripcion("Actualización del objetivo: " + objetivo.getNombre());
+        egreso.setFecha(LocalDate.now());
+        egreso.setTipoEgreso(TipoEgreso.APORTE);
+        egreso.setUserId(userId);
+
+        servicioEgreso.crearEgreso(egreso, userId);
     }
 
     @Override
