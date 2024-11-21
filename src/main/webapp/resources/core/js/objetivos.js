@@ -87,9 +87,6 @@ function init() {
   const agregarObjetivoForm = document.querySelector(".add-goal-form");
   agregarObjetivoForm.addEventListener("submit", handlerAgregarObjetivo);
 
-  // Mocks
-  crearObjetivo("Nuevo auto", 10000);
-  crearObjetivo("Vacaciones", 3000);
 }
 
 // Correr la Init Function cuando se termine de cargar el DOM
