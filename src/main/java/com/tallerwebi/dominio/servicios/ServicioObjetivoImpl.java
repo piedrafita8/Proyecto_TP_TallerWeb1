@@ -64,13 +64,15 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
             throw new SaldoInsuficiente("Saldo insuficiente para actualizar el objetivo.");
         }
 
+        // Actualizar el objetivo y el saldo del usuario
         objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
         usuario.setSaldo(usuario.getSaldo() - montoAAgregar);
 
+        // Guardar los cambios
         repositorioObjetivo.guardar(objetivo);
         repositorioUsuario.modificar(usuario);
 
-        // Crear un egreso para registrar la actualización del objetivo
+        // Registrar el egreso sin volver a modificar el saldo
         Egreso egreso = new Egreso();
         egreso.setMonto(montoAAgregar);
         egreso.setDescripcion("Actualización del objetivo: " + objetivo.getNombre());
@@ -78,7 +80,8 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         egreso.setTipoEgreso(TipoEgreso.APORTE);
         egreso.setUserId(userId);
 
-        servicioEgreso.crearEgreso(egreso, userId);
+        // Usar un método específico para solo registrar el egreso sin modificar el saldo
+        servicioEgreso.registrarEgresoSinActualizarSaldo(egreso);
     }
 
     @Override
@@ -102,6 +105,17 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         // Guardar los cambios
         repositorioObjetivo.guardar(objetivo);
         repositorioUsuario.modificar(usuarioAportante);
+
+        // Registrar el egreso sin volver a modificar el saldo
+        Egreso egreso = new Egreso();
+        egreso.setMonto(montoAportado);
+        egreso.setDescripcion("Actualización del objetivo: " + objetivo.getNombre());
+        egreso.setFecha(LocalDate.now());
+        egreso.setTipoEgreso(TipoEgreso.APORTE);
+        egreso.setUserId(usuarioAportante.getId());
+
+        // Usar un método específico para solo registrar el egreso sin modificar el saldo
+        servicioEgreso.registrarEgresoSinActualizarSaldo(egreso);
     }
 
     public void guardarObjetivoConAportacion(Objetivo objetivo, Long userId, Double montoAportado) {
