@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
+import com.tallerwebi.dominio.models.Ingreso;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -50,6 +51,19 @@ public class RepositorioEgresoImpl implements RepositorioEgreso {
     public void modificar(Egreso egreso) {
         sessionFactory.getCurrentSession().update(egreso);
     }
+
+    @Override
+    public List<Egreso> buscarEgresosPorUsuario(Long userId) {
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Egreso> query = builder.createQuery(Egreso.class);
+        Root<Egreso> root = query.from(Egreso.class);
+
+        Predicate userIdPredicate = builder.equal(root.get("userId"), userId);
+        query.where(userIdPredicate);
+
+        return sessionFactory.getCurrentSession().createQuery(query).list();
+    }
+
 
     @Override
     public List<Egreso> obtener() {

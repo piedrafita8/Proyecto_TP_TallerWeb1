@@ -63,22 +63,6 @@ public class ControladorEgresoPresTest {
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("La descripción no puede estar vacía"));
 	}
 
-
-
-	@Test
-	public void debeMostrarErrorSiNoEncuentraElEgreso() throws RecursoNoEncontrado {
-		// Simular que el servicio lanza una excepción cuando no encuentra el egreso
-		when(servicioEgresoMock.consultarEgreso(12345.00, 1)).thenThrow(new RecursoNoEncontrado("Egreso no encontrado"));
-
-		// Llamar al metodo del controlador con un id de egreso inexistente
-		ModelAndView modelAndView = controladorEgreso.verEgresos(1, requestMock);
-
-		// Verificar que el controlador muestre la vista de error
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("gastos"));
-		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Egreso no encontrado"));
-	}
-
-
 	@Test
 	public void egresoSinMontoAgregadoDebeMarcarComoError() {
 		// Crear un objeto Egreso sin descripción

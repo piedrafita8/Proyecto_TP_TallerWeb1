@@ -14,4 +14,5 @@ public interface RepositorioEgreso {
     void modificar(Egreso egreso);
     List<Egreso> obtener();
     void actualizar(Egreso egreso);
+    List<Egreso> buscarEgresosPorUsuario(Long userId);
 }

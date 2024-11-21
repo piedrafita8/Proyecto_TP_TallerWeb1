@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioEgreso;
+import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,18 @@ public class ServicioEgresoImpl implements ServicioEgreso {
                 throw new SaldoInsuficiente("Saldo insuficiente para realizar el egreso.");
             }
         }
+    }
+
+    @Override
+    public List<Egreso> getEgresosPorUserId(Long userId) {
+        return repositorioEgreso.buscarEgresosPorUsuario(userId);
+    }
+
+    @Override
+    @Transactional
+    public void registrarEgresoSinActualizarSaldo(Egreso egreso) {
+        // Solo guarda el registro del egreso sin modificar el saldo
+        repositorioEgreso.guardar(egreso);
     }
 
 

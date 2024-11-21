@@ -15,4 +15,5 @@ public interface RepositorioIngreso {
     void modificar(Ingreso egreso);
     List<Ingreso> obtener();
     void actualizar(Ingreso ingreso);
+    List<Ingreso> buscarIngresosPorUsuario(Long userId);
 }

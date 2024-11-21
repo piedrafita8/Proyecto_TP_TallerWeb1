@@ -23,11 +23,12 @@ public class Objetivo {
     }
 
     // Constructor con todos los campos excepto id
-    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite) {
+    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite, Long userId) {
         this.nombre = nombre;
         this.montoObjetivo = montoObjetivo;
         this.fechaLimite = fechaLimite;
-        this.montoActual = 0.0; // Inicializamos en 0
+        this.montoActual = 0.0;
+        this.userId = userId;
     }
 
     public Integer getId() {
@@ -68,6 +69,14 @@ public class Objetivo {
 
     public void setMontoActual(Double montoActual) {
         this.montoActual = montoActual;
+    }
+
+    public Long getUserId(){
+        return userId;
+    }
+
+    public void setUserId(Long userId){
+        this.userId = userId;
     }
 }
 

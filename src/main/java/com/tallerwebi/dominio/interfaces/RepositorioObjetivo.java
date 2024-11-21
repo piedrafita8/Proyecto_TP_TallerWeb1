@@ -10,5 +10,7 @@ public interface RepositorioObjetivo {
     void crearObjetivo(Objetivo objetivo);
     void actualizarObjetivo(Integer id, Double montoAAgregar);
     List<Objetivo> obtenerTodosLosObjetivos();
+    List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long Id);
     void eliminarObjetivo(Integer id);
+    public void guardar(Objetivo objetivo);
 }

@@ -26,6 +26,19 @@ public class RepositorioIngresoImpl implements RepositorioIngreso {
     }
 
     @Override
+    public List<Ingreso> buscarIngresosPorUsuario(Long userId) {
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Ingreso> query = builder.createQuery(Ingreso.class);
+        Root<Ingreso> root = query.from(Ingreso.class);
+
+        Predicate userIdPredicate = builder.equal(root.get("userId"), userId);
+        query.where(userIdPredicate);
+
+        return sessionFactory.getCurrentSession().createQuery(query).list();
+    }
+
+
+    @Override
     public void guardar(Ingreso ingreso) {
         sessionFactory.getCurrentSession().save(ingreso);
     }

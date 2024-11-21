@@ -49,6 +49,12 @@ public class ServicioIngresoImpl implements ServicioIngreso {
     }
 
     @Override
+    public List<Ingreso> getIngresosPorUserId(Long userId) {
+        return repositorioIngreso.buscarIngresosPorUsuario(userId);
+    }
+
+
+    @Override
     public void crearIngreso(Ingreso ingreso, Long userId) {
         // Guardar el ingreso
         repositorioIngreso.guardar(ingreso);

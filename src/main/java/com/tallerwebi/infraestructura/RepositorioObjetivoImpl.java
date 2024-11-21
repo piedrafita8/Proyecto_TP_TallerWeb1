@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.interfaces.RepositorioObjetivo;
 import com.tallerwebi.dominio.models.Objetivo;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -47,11 +48,29 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
         }
     }
 
+    @Override
+    public void guardar(Objetivo objetivo) {
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(objetivo);
+    }
+
     public List<Objetivo> obtenerTodosLosObjetivos() {
         return sessionFactory.getCurrentSession()
                 .createQuery("from Objetivo", Objetivo.class)
                 .list();
     }
+
+    public List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long userId) {
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Objetivo> query = builder.createQuery(Objetivo.class);
+        Root<Objetivo> root = query.from(Objetivo.class);
+
+        Predicate userIdPredicate = builder.equal(root.get("userId"), userId);
+        query.where(userIdPredicate);
+
+        return sessionFactory.getCurrentSession().createQuery(query).list();
+    }
+
 
     public void eliminarObjetivo(Integer id) {
         Objetivo objetivo = sessionFactory.getCurrentSession().get(Objetivo.class, id);

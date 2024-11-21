@@ -76,6 +76,9 @@ public class Egreso {
 
     public void setTipoEgreso(TipoEgreso tipoEgreso) {this.tipoEgreso = tipoEgreso;}
 
+    public Long getUserId(){ return userId; }
+
+    public void setUserId(Long userId){ this.userId = userId; }
 
 }
 
