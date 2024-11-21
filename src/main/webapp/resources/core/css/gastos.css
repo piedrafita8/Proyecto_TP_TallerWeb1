@@ -169,7 +169,7 @@ main {
 
 }
 /* Estilos para los inputs de fecha y comentario */
-input[type="date"], input[type="number"], textarea {
+input[type="date"], input[type="number"], textarea , #fecha{
     background-color: #2C387E;
     border: none;
     color: white;
@@ -202,4 +202,5 @@ input[type="date"]::placeholder, textarea::placeholder {
     background-color: #5A5EDD;
     transition: background-color 0.3s ease-in-out;
 }
+
 

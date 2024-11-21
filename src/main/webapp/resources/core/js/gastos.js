@@ -37,6 +37,14 @@ function guardarFechaGasto() {
     }
 }
 
+const fechaInput = document.getElementById("fecha");
+
+// Detectar cambios y mostrar el formato deseado
+fechaInput.addEventListener("change", () => {
+    const fecha = fechaInput.value; // Obtiene la fecha en formato AAAA-MM-DD
+    console.log(`Fecha seleccionada: ${fecha}`);
+});
+
 
 
 

@@ -1,4 +1,4 @@
 INSERT INTO Usuario
-    (id, email, password, rol, activo)
+    (id, username, email, password, rol, activo, saldo)
 VALUES
-    (null, 'test@unlam.edu.ar', 'test', 'ADMIN', true);
+    (null, 'pepe','test@unlam.edu.ar', 'test', 'ADMIN', true, 0.0);

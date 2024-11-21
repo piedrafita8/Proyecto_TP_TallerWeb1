@@ -86,10 +86,10 @@
   <h2>Objetivos de Ahorro</h2>
 
   <form class="add-goal-form" th:action="@{/objetivos}" method="post">
-    <input type="text" name="nombre" placeholder="Nombre del Objetivo" required />
-    <input type="number" name="montoObjetivo" placeholder="Monto del objetivo" required />
-    <input type="date" name="fechaLimite" placeholder="Fecha límite" required />
-    <button type="submit">Crear Objetivo</button>
+    <input type="text" name="nombre" id="nombreObjetivo" placeholder="Nombre del Objetivo" required />
+    <input type="number" name="montoObjetivo" id="montoObjetivo" placeholder="Monto del objetivo" required />
+    <input type="date" name="fechaLimite" id="fechaLimite" placeholder="Fecha límite" required />
+    <button type="submit" id="botonObjetivo">Crear Objetivo</button>
   </form>
 
   <ul class="goals-list">
@@ -103,8 +103,8 @@
         <button type="submit">Actualizar Monto</button>
       </form>
       <form th:action="@{/objetivos/{id}(id=${objetivo.id})}" method="post">
-        <input type="hidden" name="_method" value="delete" />
-        <button type="submit">Eliminar Objetivo</button>
+        <input type="hidden" name="_method" value="delete"/>
+        <button type="submit" id="eliminarObjetivo">Eliminar Objetivo</button>
       </form>
     </li>
   </ul>
