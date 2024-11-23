@@ -12,11 +12,11 @@ public class VistaEgreso extends VistaWeb{
     }
 
     public String obtenerTextoDeLaBarraDeNavegacionEsquema(){
-        return this.obtenerTextoDelElemento("nav-container nav1 h1.navbar");
+        return this.obtenerTextoDelElemento(".nav-container .nav1 .navbar h1");
     }
 
     public String obtenerMensajeDeError(){
-        return this.obtenerTextoDelElemento("p.alert.alert-danger");
+        return this.obtenerTextoDelElemento(".alert .alert-danger p");
     }
 
     public void darClickEnLaCategoria(){
