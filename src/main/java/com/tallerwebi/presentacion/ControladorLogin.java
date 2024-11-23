@@ -93,10 +93,15 @@ public class ControladorLogin {
             return modelAndView;
         }
 
+        // Hibernate me puede completar el usuario con su lista de objetivos
+        // Cuando hago un oneToMany con objetivo/usuario
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
         Double saldo = (usuario != null) ? usuario.getSaldo() : 0.0;
 
+        // Y puedo obviar esta consulta.
         List<Objetivo> todosLosObjetivos = servicioObjetivo.obtenerTodosLosObjetivos();
+
+        // Filtrado de objetivos (por interés)
 
         modelAndView.addObject("saldo", saldo);
         modelAndView.addObject("egresos", servicioEgreso.getEgresosPorUserId(usuario.getId()));

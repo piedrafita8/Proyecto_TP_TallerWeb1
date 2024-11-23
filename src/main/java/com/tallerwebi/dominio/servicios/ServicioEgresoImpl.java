@@ -72,7 +72,6 @@ public class ServicioEgresoImpl implements ServicioEgreso {
     @Override
     @Transactional
     public void registrarEgresoSinActualizarSaldo(Egreso egreso) {
-        // Solo guarda el registro del egreso sin modificar el saldo
         repositorioEgreso.guardar(egreso);
     }
 

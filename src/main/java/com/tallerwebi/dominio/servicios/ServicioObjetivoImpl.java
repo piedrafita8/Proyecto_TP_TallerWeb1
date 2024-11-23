@@ -46,6 +46,7 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         repositorioObjetivo.crearObjetivo(objetivo);
     }
 
+    // Refactorizar y usar un solo metodo que me sirva.
     @Override
     @Transactional
     public void actualizarObjetivo(Integer id, Double montoAAgregar, Long userId) throws SaldoInsuficiente {
@@ -98,15 +99,13 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
             throw new IllegalArgumentException("Saldo insuficiente para realizar el aporte.");
         }
 
-        // Actualizar el monto del objetivo y restar del saldo del usuario
         objetivo.setMontoActual(objetivo.getMontoActual() + montoAportado);
         usuarioAportante.setSaldo(usuarioAportante.getSaldo() - montoAportado);
 
-        // Guardar los cambios
         repositorioObjetivo.guardar(objetivo);
+        // Se puede refactorizar
         repositorioUsuario.modificar(usuarioAportante);
 
-        // Registrar el egreso sin volver a modificar el saldo
         Egreso egreso = new Egreso();
         egreso.setMonto(montoAportado);
         egreso.setDescripcion("Actualización del objetivo: " + objetivo.getNombre());
@@ -114,7 +113,6 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         egreso.setTipoEgreso(TipoEgreso.APORTE);
         egreso.setUserId(usuarioAportante.getId());
 
-        // Usar un método específico para solo registrar el egreso sin modificar el saldo
         servicioEgreso.registrarEgresoSinActualizarSaldo(egreso);
     }
 
