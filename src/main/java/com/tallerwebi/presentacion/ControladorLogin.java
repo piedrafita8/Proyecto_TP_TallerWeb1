@@ -1,8 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.interfaces.*;
-import com.tallerwebi.dominio.models.Egreso;
-import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -21,16 +19,14 @@ import java.util.List;
 public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
-    private ServicioEgreso servicioEgreso;
-    private ServicioIngreso servicioIngreso;
+    private ServicioTransaccion servicioTransaccion;
     private ServicioUsuario servicioUsuario;
     private ServicioObjetivo servicioObjetivo;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin, ServicioEgreso servicioEgreso, ServicioIngreso servicioIngreso, ServicioUsuario servicioUsuario, ServicioObjetivo servicioObjetivo){
+    public ControladorLogin(ServicioLogin servicioLogin, ServicioTransaccion servicioTransaccion, ServicioUsuario servicioUsuario, ServicioObjetivo servicioObjetivo){
         this.servicioLogin = servicioLogin;
-        this.servicioEgreso = servicioEgreso;
-        this.servicioIngreso = servicioIngreso;
+        this.servicioTransaccion = servicioTransaccion;
         this.servicioUsuario = servicioUsuario;
         this.servicioObjetivo = servicioObjetivo;
     }
@@ -104,8 +100,7 @@ public class ControladorLogin {
         // Filtrado de objetivos (por interés)
 
         modelAndView.addObject("saldo", saldo);
-        modelAndView.addObject("egresos", servicioEgreso.getEgresosPorUserId(usuario.getId()));
-        modelAndView.addObject("ingresos", servicioIngreso.getIngresosPorUserId(usuario.getId()));
+        modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
         modelAndView.addObject("objetivos", todosLosObjetivos);
 
         return modelAndView;

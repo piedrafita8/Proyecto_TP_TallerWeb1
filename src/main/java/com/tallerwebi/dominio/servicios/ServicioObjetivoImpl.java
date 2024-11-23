@@ -3,8 +3,8 @@ package com.tallerwebi.dominio.servicios;
 import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
-import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
+import com.tallerwebi.dominio.interfaces.ServicioTransaccion;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
@@ -23,13 +23,13 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
 
     private final RepositorioObjetivo repositorioObjetivo;
     private final RepositorioUsuario repositorioUsuario;
-    private final ServicioEgreso servicioEgreso;
+    private final ServicioTransaccion servicioTransaccion;
 
     @Autowired
-    public ServicioObjetivoImpl(RepositorioObjetivo repositorioObjetivo, RepositorioUsuario repositorioUsuario, ServicioEgreso servicioEgreso) {
+    public ServicioObjetivoImpl(RepositorioObjetivo repositorioObjetivo, RepositorioUsuario repositorioUsuario, ServicioTransaccion servicioTransaccion) {
         this.repositorioObjetivo = repositorioObjetivo;
         this.repositorioUsuario = repositorioUsuario;
-        this.servicioEgreso = servicioEgreso;
+        this.servicioTransaccion = servicioTransaccion;
     }
 
     @Override
@@ -81,8 +81,8 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         egreso.setTipoEgreso(TipoEgreso.APORTE);
         egreso.setUserId(userId);
 
-        // Usar un método específico para solo registrar el egreso sin modificar el saldo
-        servicioEgreso.registrarEgresoSinActualizarSaldo(egreso);
+        // Usar un metodo específico para solo registrar el egreso sin modificar el saldo
+        servicioTransaccion.registrarTransaccionSinActualizarSaldo(egreso);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         egreso.setTipoEgreso(TipoEgreso.APORTE);
         egreso.setUserId(usuarioAportante.getId());
 
-        servicioEgreso.registrarEgresoSinActualizarSaldo(egreso);
+        servicioTransaccion.registrarTransaccionSinActualizarSaldo(egreso);
     }
 
     public void guardarObjetivoConAportacion(Objetivo objetivo, Long userId, Double montoAportado) {
@@ -129,7 +129,7 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         egreso.setUserId(userId);
 
         // Guardar el egreso utilizando el servicio
-        servicioEgreso.crearEgreso(egreso, userId);
+        servicioTransaccion.crearTransaccion(egreso, userId);
     }
 
 
