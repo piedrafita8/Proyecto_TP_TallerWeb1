@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
+import com.tallerwebi.dominio.interfaces.ServicioTransaccion;
 import com.tallerwebi.dominio.models.Objetivo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,7 +22,7 @@ import java.util.List;
 public class ControladorObjetivos {
     @Autowired
     private ServicioObjetivo servicioObjetivo;
-    private ServicioEgreso servicioEgreso;
+    private ServicioTransaccion servicioTransaccion;
 
     @GetMapping
     public String mostrarObjetivosPorUsuario(HttpServletRequest request, Model model) {

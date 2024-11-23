@@ -29,6 +29,12 @@ public class Transaccion {
 
     }
 
+    public Transaccion(Double monto, String descripcion, LocalDate fecha) {
+        this.monto = monto;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+    }
+
     //Getters and Setters
     public Integer getId() {
         return id;

@@ -12,12 +12,16 @@ public class Egreso extends Transaccion{
     // Atributos
     private TipoEgreso tipoEgreso;
 
-    // Constructor por default
     public Egreso(Integer id, Double monto, String descripcion, LocalDate fecha, Long userId, TipoEgreso tipoEgreso) {
         super(id, monto, descripcion, fecha, userId);
         this.tipoEgreso = tipoEgreso;
     }
 
+    public Egreso(Double monto, String descripcion, LocalDate fecha) {
+        super(monto, descripcion,fecha);
+    }
+
+    // Constructor por default
     public Egreso() {}
 
     // Getters y Setters
