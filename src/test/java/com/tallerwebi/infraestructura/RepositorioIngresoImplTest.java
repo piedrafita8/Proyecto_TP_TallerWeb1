@@ -1,7 +1,6 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.models.Ingreso;
-import com.tallerwebi.dominio.interfaces.RepositorioIngreso;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;

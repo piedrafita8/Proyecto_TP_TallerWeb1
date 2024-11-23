@@ -1,9 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.enums.TipoIngreso;
-import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
-import com.tallerwebi.dominio.interfaces.ServicioIngreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

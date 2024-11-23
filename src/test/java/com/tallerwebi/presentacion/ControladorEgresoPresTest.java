@@ -1,8 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.enums.TipoEgreso;
-import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
-import com.tallerwebi.dominio.interfaces.ServicioEgreso;
 import com.tallerwebi.dominio.models.Egreso;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
