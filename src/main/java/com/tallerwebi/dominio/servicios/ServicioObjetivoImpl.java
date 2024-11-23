@@ -46,6 +46,7 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         repositorioObjetivo.crearObjetivo(objetivo);
     }
 
+    // Refactorizar y usar un solo metodo que me sirva.
     @Override
     @Transactional
     public void actualizarObjetivo(Integer id, Double montoAAgregar, Long userId) throws SaldoInsuficiente {
@@ -102,6 +103,7 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         usuarioAportante.setSaldo(usuarioAportante.getSaldo() - montoAportado);
 
         repositorioObjetivo.guardar(objetivo);
+        // Se puede refactorizar
         repositorioUsuario.modificar(usuarioAportante);
 
         Egreso egreso = new Egreso();
