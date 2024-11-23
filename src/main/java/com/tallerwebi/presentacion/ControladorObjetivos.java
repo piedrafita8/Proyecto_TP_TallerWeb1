@@ -82,16 +82,9 @@ public class ControladorObjetivos {
             return "redirect:/login";
         }
 
-        Egreso egreso = new Egreso();
-        egreso.setMonto(montoAportado);
-        egreso.setFecha(LocalDate.now());
-        egreso.setDescripcion("Aporte a un objetivo externo");
-        egreso.setTipoEgreso(TipoEgreso.APORTE);
-        egreso.setUserId(userId);
 
         try {
             servicioObjetivo.aportarAObjetivo(id, userId, montoAportado);
-            servicioEgreso.crearEgreso(egreso, userId);
             redirectAttributes.addFlashAttribute("mensaje", "Aporte realizado exitosamente.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al realizar el aporte: " + e.getMessage());
