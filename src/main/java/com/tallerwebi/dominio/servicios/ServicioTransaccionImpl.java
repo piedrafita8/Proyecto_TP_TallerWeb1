@@ -10,6 +10,13 @@ import com.tallerwebi.dominio.models.Usuario;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+@Service("servicioTransaccion")
+@Transactional
+
 public class ServicioTransaccionImpl implements ServicioTransaccion {
 
     private final RepositorioUsuario repositorioUsuario;
