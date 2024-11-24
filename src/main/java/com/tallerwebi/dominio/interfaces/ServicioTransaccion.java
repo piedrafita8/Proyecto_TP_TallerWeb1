@@ -6,6 +6,9 @@ import com.tallerwebi.dominio.models.Transaccion;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface ServicioTransaccion {
 
     Transaccion consultarTransaccion(Double monto, Integer id) throws RecursoNoEncontrado;

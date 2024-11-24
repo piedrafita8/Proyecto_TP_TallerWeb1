@@ -10,6 +10,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class RepositorioTransaccionImpl implements RepositorioTransaccion {
 
     private SessionFactory sessionFactory;
