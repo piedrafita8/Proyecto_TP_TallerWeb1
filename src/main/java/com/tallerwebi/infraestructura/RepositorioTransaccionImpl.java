@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.interfaces.RepositorioTransaccion;
 import com.tallerwebi.dominio.models.Transaccion;
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+@Repository("repositorioTransaccion")
 public class RepositorioTransaccionImpl implements RepositorioTransaccion {
 
     private SessionFactory sessionFactory;
