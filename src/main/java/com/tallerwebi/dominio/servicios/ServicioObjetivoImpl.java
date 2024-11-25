@@ -77,8 +77,9 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
 
     @Override
     @Transactional
-    public void aportarAObjetivo(Integer id, Double montoAportado, Long userIdAportante) throws SaldoInsuficiente {
+    public void aportarAObjetivo(Integer id, Double montoAportado, Long userIdAportante, String EmailDeusuarioAportado) throws SaldoInsuficiente {
         Objetivo objetivo = repositorioObjetivo.buscarObjetivo(id);
+        Usuario usuarioAportado = repositorioUsuario.buscar(EmailDeusuarioAportado);
         if (objetivo == null) {
             throw new IllegalArgumentException("El objetivo no existe.");
         }
@@ -87,7 +88,14 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         if (usuarioAportante == null) {
             throw new IllegalArgumentException("Usuario aportante no encontrado.");
         }
-
+        if (usuarioAportado == null) {
+            throw new IllegalArgumentException("Usuario aportado no encontrado.");
+        } else if (usuarioAportado.getObjetivos().isEmpty()) {
+            throw new IllegalArgumentException("El usuario al que quiere aportar no tiene objetivos.");
+        }
+        if (montoAportado <= 0) {
+            throw new IllegalArgumentException("No se puede aportar saldo negativo o igual a 0");
+        }
         if (usuarioAportante.getSaldo() < montoAportado) {
             throw new SaldoInsuficiente("Saldo insuficiente para realizar el aporte.");
         }

@@ -158,7 +158,15 @@
                             <td th:text="${objetivo.montoActual}"></td>
                             <td>
                                 <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
-                                    <input type="number" name="montoAportado" min="1" required>
+                                    <label>
+                                        BUSCAR USUARIO
+                                        <input type="text" name="EmailDeusuarioAportado" placeholder="Ingrese Email del Usuario" required>
+                                    </label>
+                                    <label>
+                                        MONTO:
+                                        <input type="number" name="montoAportado" min="1" required>
+                                    </label>
+
                                     <button type="submit">Aportar</button>
                                 </form>
                             </td>

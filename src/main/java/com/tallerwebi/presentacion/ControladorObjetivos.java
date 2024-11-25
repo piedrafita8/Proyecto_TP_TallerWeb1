@@ -66,10 +66,11 @@ public class ControladorObjetivos {
         return modelAndView;
     }
 
-    @PostMapping("/{id}/aportar")
+    @PostMapping ("/{id}/aportar")
     public String aportarAObjetivo(
             @PathVariable Integer id,
             @RequestParam Double montoAportado,
+            String EmailDeusuarioAportado,
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
@@ -80,7 +81,7 @@ public class ControladorObjetivos {
         }
 
         try {
-            servicioObjetivo.aportarAObjetivo(id, montoAportado, userId);
+            servicioObjetivo.aportarAObjetivo(id, montoAportado, userId, EmailDeusuarioAportado);
             redirectAttributes.addFlashAttribute("mensaje", "Aporte realizado exitosamente.");
         } catch (SaldoInsuficiente e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
