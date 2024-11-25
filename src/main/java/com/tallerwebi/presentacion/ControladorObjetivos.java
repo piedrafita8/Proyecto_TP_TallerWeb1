@@ -42,9 +42,10 @@ public class ControladorObjetivos {
 
     @PostMapping
     public ModelAndView crearObjetivo(@RequestParam String nombre,
-                                @RequestParam Double montoObjetivo,
-                                @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaLimite,
-                                RedirectAttributes redirectAttributes, HttpServletRequest request) {
+                                      @RequestParam Double montoObjetivo,
+                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaLimite,
+                                      RedirectAttributes redirectAttributes,
+                                      HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
 
         Long userId = (Long) request.getSession().getAttribute("id");
@@ -53,8 +54,7 @@ public class ControladorObjetivos {
             return modelAndView;
         }
         try {
-            Objetivo nuevoObjetivo = new Objetivo(nombre, montoObjetivo, fechaLimite, userId);
-            servicioObjetivo.crearObjetivo(nuevoObjetivo);
+            servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, userId);
             redirectAttributes.addFlashAttribute("mensaje", "Objetivo creado exitosamente");
         } catch (ObjetivoExistente e) {
             redirectAttributes.addFlashAttribute("error", "El objetivo ya existe");
@@ -79,10 +79,11 @@ public class ControladorObjetivos {
             return "redirect:/login";
         }
 
-
         try {
-            servicioObjetivo.aportarAObjetivo(id, userId, montoAportado);
+            servicioObjetivo.aportarAObjetivo(id, montoAportado, userId);
             redirectAttributes.addFlashAttribute("mensaje", "Aporte realizado exitosamente.");
+        } catch (SaldoInsuficiente e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al realizar el aporte: " + e.getMessage());
         }

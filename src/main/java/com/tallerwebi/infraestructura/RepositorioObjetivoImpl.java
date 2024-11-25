@@ -2,19 +2,16 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.interfaces.RepositorioObjetivo;
 import com.tallerwebi.dominio.models.Objetivo;
+import com.tallerwebi.dominio.models.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
 public class RepositorioObjetivoImpl implements RepositorioObjetivo {
-
     private SessionFactory sessionFactory;
 
     public RepositorioObjetivoImpl(SessionFactory sessionFactory) {
@@ -27,9 +24,7 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
         CriteriaQuery<Objetivo> query = builder.createQuery(Objetivo.class);
         Root<Objetivo> root = query.from(Objetivo.class);
 
-        Predicate idPredicate = builder.equal(root.get("id"), id);
-
-        query.where(builder.and(idPredicate));
+        query.where(builder.equal(root.get("id"), id));
 
         return sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
     }
@@ -40,43 +35,41 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
     }
 
     @Override
-    public void actualizarObjetivo(Integer id, Double montoAAgregar) {
-        Objetivo objetivo = sessionFactory.getCurrentSession().get(Objetivo.class, id);
-        if (objetivo != null) {
-            objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
-            sessionFactory.getCurrentSession().update(objetivo);
-        }
+    public void guardar(Objetivo objetivo) {
+        sessionFactory.getCurrentSession().saveOrUpdate(objetivo);
     }
 
     @Override
-    public void guardar(Objetivo objetivo) {
-        Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(objetivo);
-    }
-
-    public List<Objetivo> obtenerTodosLosObjetivos() {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Objetivo", Objetivo.class)
-                .list();
-    }
-
     public List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long userId) {
         CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<Objetivo> query = builder.createQuery(Objetivo.class);
         Root<Objetivo> root = query.from(Objetivo.class);
+        Join<Objetivo, Usuario> usuarioJoin = root.join("usuario");
 
-        Predicate userIdPredicate = builder.equal(root.get("userId"), userId);
-        query.where(userIdPredicate);
+        query.where(builder.equal(usuarioJoin.get("id"), userId));
 
         return sessionFactory.getCurrentSession().createQuery(query).list();
     }
 
+    @Override
+    public List<Objetivo> obtenerTodosLosObjetivos() {
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Objetivo> query = builder.createQuery(Objetivo.class);
+        Root<Objetivo> root = query.from(Objetivo.class);
 
+        root.fetch("usuario", JoinType.LEFT);
+
+        query.select(root);
+
+        return sessionFactory.getCurrentSession().createQuery(query).list();
+    }
+
+    @Override
     public void eliminarObjetivo(Integer id) {
         Objetivo objetivo = sessionFactory.getCurrentSession().get(Objetivo.class, id);
         if(objetivo != null) {
+            objetivo.getUsuario().removeObjetivo(objetivo);
             sessionFactory.getCurrentSession().delete(objetivo);
         }
     }
 }
-

@@ -15,6 +15,10 @@ public class Objetivo {
     private String nombre;
     private Long userId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     @Temporal(TemporalType.DATE)
     private Date fechaLimite;
 
@@ -23,12 +27,20 @@ public class Objetivo {
     }
 
     // Constructor con todos los campos excepto id
-    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite, Long userId) {
+    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite, Usuario usuario) {
         this.nombre = nombre;
         this.montoObjetivo = montoObjetivo;
         this.fechaLimite = fechaLimite;
         this.montoActual = 0.0;
-        this.userId = userId;
+        this.usuario = usuario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Integer getId() {

@@ -73,7 +73,8 @@ public class RepositorioObjetivoImplTest {
 
         // Actualizar el monto actual del objetivo
         Double montoAAgregar = 2000.0;
-        this.repositorioObjetivo.actualizarObjetivo(objetivo.getId(), montoAAgregar);
+        objetivo.setMontoActual(montoAAgregar);
+        this.repositorioObjetivo.guardar(objetivo);
 
         // Hacer la consulta HQL para encontrar el objetivo actualizado
         String hql = "SELECT o FROM Objetivo o WHERE o.id = :id";
