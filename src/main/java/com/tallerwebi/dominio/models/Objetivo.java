@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.models;
 
+import com.tallerwebi.dominio.enums.CategoriaObjetivo;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -18,6 +20,9 @@ public class Objetivo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @Enumerated(EnumType.STRING)
+    private CategoriaObjetivo categoria;
 
     @Temporal(TemporalType.DATE)
     private Date fechaLimite;
@@ -89,6 +94,14 @@ public class Objetivo {
 
     public void setUserId(Long userId){
         this.userId = userId;
+    }
+
+    public CategoriaObjetivo getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaObjetivo categoria) {
+        this.categoria = categoria;
     }
 }
 

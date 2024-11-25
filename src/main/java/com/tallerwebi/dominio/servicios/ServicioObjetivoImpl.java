@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.servicios;
 
+import com.tallerwebi.dominio.enums.CategoriaObjetivo;
 import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +47,19 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         Objetivo objetivo = new Objetivo(nombre, montoObjetivo, fechaLimite, usuario);
         usuario.addObjetivo(objetivo);
         repositorioObjetivo.crearObjetivo(objetivo);
+    }
+
+    @Override
+    public List<Objetivo> buscarObjetivosPorFiltros(String emailUsuario, CategoriaObjetivo categoria) {
+        Usuario usuario = null;
+        if (emailUsuario != null && !emailUsuario.isEmpty()) {
+            usuario = repositorioUsuario.buscar(emailUsuario);
+            if (usuario == null) {
+                return Collections.emptyList();
+            }
+        }
+
+        return repositorioObjetivo.buscarObjetivosPorFiltros(usuario, categoria);
     }
 
     @Override
@@ -104,6 +119,7 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         usuarioAportante.setSaldo(usuarioAportante.getSaldo() - montoAportado);
 
         repositorioObjetivo.guardar(objetivo);
+        repositorioUsuario.modificar(usuarioAportante);
 
         Egreso egreso = new Egreso();
         egreso.setMonto(montoAportado);

@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.enums.CategoriaObjetivo;
 import com.tallerwebi.dominio.interfaces.RepositorioObjetivo;
 import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.models.Usuario;
@@ -8,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -71,5 +73,28 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
             objetivo.getUsuario().removeObjetivo(objetivo);
             sessionFactory.getCurrentSession().delete(objetivo);
         }
+    }
+
+    @Override
+    public List<Objetivo> buscarObjetivosPorFiltros(Usuario usuario, CategoriaObjetivo categoria) {
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Objetivo> query = builder.createQuery(Objetivo.class);
+        Root<Objetivo> root = query.from(Objetivo.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        // Filtro por usuario si se proporciona
+        if (usuario != null) {
+            predicates.add(builder.equal(root.get("usuario"), usuario));
+        }
+
+        // Filtro por categoría si se proporciona
+        if (categoria != null) {
+            predicates.add(builder.equal(root.get("categoria"), categoria));
+        }
+
+        query.where(predicates.toArray(new Predicate[0]));
+
+        return sessionFactory.getCurrentSession().createQuery(query).getResultList();
     }
 }

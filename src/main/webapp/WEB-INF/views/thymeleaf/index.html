@@ -141,38 +141,55 @@
                 </div>
 
                 <div>
-                    <h3>Aportar a Objetivos (otros usuarios)</h3>
-                    <table class="objetivos-table">
-                        <thead>
-                        <tr>
-                            <th>Nombre del objetivo</th>
-                            <th>Monto objetivo</th>
-                            <th>Monto actual</th>
-                            <th>Aportar</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="objetivo : ${objetivos}">
-                            <td th:text="${objetivo.nombre}"></td>
-                            <td th:text="${objetivo.montoObjetivo}"></td>
-                            <td th:text="${objetivo.montoActual}"></td>
-                            <td>
-                                <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
-                                    <label>
-                                        BUSCAR USUARIO
-                                        <input type="text" name="EmailDeusuarioAportado" placeholder="Ingrese Email del Usuario" required>
-                                    </label>
-                                    <label>
-                                        MONTO:
-                                        <input type="number" name="montoAportado" min="1" required>
-                                    </label>
+                    <h3>Buscar Objetivos</h3>
+                    <form th:action="@{/buscar-objetivos}" method="post">
+                        <label>
+                            Email de Usuario:
+                            <input type="email" name="emailUsuario" placeholder="Ingrese Email del Usuario">
+                        </label>
 
-                                    <button type="submit">Aportar</button>
-                                </form>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                        <label>
+                            Categoría:
+                            <select name="categoria">
+                                <option value="">Todas las categorías</option>
+                                <option th:each="cat : ${categorias}"
+                                        th:value="${cat}"
+                                        th:text="${cat}">
+                                </option>
+                            </select>
+                        </label>
+
+                        <button type="submit">Buscar</button>
+                    </form>
+                    <div th:if="${not #lists.isEmpty(objetivos)}">
+                        <h3>Resultados</h3>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Monto Objetivo</th>
+                                <th>Monto Actual</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="objetivo : ${objetivos}">
+                                <td th:text="${objetivo.nombre}"></td>
+                                <td th:text="${objetivo.montoObjetivo}"></td>
+                                <td th:text="${objetivo.montoActual}"></td>
+                                <td>
+                                    <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                        <label>
+                                            Monto:
+                                            <input type="number" name="montoAportado" min="1" required>
+                                        </label>
+                                        <button type="submit">Aportar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
