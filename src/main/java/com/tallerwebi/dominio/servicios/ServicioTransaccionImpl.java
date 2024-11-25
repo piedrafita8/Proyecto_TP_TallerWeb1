@@ -1,10 +1,14 @@
 package com.tallerwebi.dominio.servicios;
 
+import com.tallerwebi.dominio.enums.TipoMovimiento;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
+import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioTransaccion;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioTransaccion;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Transaccion;
 import com.tallerwebi.dominio.models.Usuario;
 
@@ -34,21 +38,37 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
     }
 
     @Override
-    public void crearTransaccion(Transaccion transaccion, Long userId) {
+    public void crearTransaccion(Transaccion transaccion, Long userId) throws UsuarioNoEncontrado {
         Usuario usuario = repositorioUsuario.buscarPorId(userId);
-        if (usuario != null || transaccion.getId() != null || transaccion.getMonto() != null || userId != null) {
-            repositorioTransaccion.guardar(transaccion);
-            Double saldoActual = usuario.getSaldo();
 
+        // Verificaciones
+        if (usuario == null) {
+            throw new UsuarioNoEncontrado("Usuario no encontrado con ID: " + userId);
+        }
+        if (transaccion.getMonto() == null || transaccion.getMonto() <= 0) {
+            throw new IllegalArgumentException("El monto de la transacción debe ser mayor a 0.");
+        }
+
+        // Actualizar saldo según tipo de movimiento
+        Double saldoActual = usuario.getSaldo();
+
+        if (transaccion instanceof Ingreso) {
+            Double nuevoSaldo = saldoActual + transaccion.getMonto();
+            usuario.setSaldo(nuevoSaldo);
+
+        } else if (transaccion instanceof Egreso) {
             if (saldoActual >= transaccion.getMonto()) {
                 Double nuevoSaldo = saldoActual - transaccion.getMonto();
                 usuario.setSaldo(nuevoSaldo);
-                repositorioUsuario.modificar(usuario);
-                repositorioTransaccion.guardar(transaccion);
             } else {
-                throw new SaldoInsuficiente("Saldo insuficiente para realizar la transaccion.");
+                throw new SaldoInsuficiente("Saldo insuficiente para realizar la transacción.");
             }
+        } else {
+            throw new IllegalArgumentException("El tipo de transacción no es válido.");
         }
+
+        repositorioUsuario.modificar(usuario);
+        repositorioTransaccion.guardar(transaccion);
     }
 
     @Override
@@ -63,6 +83,6 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
 
     @Override
     public void registrarTransaccionSinActualizarSaldo(Transaccion transaccion) {
-        this.repositorioTransaccion.guardar(transaccion);
+        this.repositorioTransaccion.guardar(transaccion);//Para que?
     }
 }

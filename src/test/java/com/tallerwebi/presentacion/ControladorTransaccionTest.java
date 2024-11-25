@@ -8,10 +8,12 @@ import com.tallerwebi.dominio.models.Transaccion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
@@ -56,21 +58,23 @@ public class ControladorTransaccionTest {
     }
 
     @Test
+    @Rollback
+    @Transactional
     void testMostrarTransaccion() {
-        // Mock del Model
         Model model = mock(Model.class);
     
-        // Llamada al método
         String viewName = controladorTransaccion.mostrarTransaccion(model);
     
         // Verificar que se agregó el atributo correcto al modelo
         verify(model).addAttribute(eq("datosTransaccion"), any(DatosTransaccion.class));
     
-        // Verificar el nombre de la vista
+        // Verificar nombre de la vista
         assertThat(viewName, equalToIgnoringCase("transaccion"));
     }
 
     @Test
+    @Rollback
+    @Transactional
 void testVerTransaccionesUsuarioAutenticado() {
     when(request.getSession()).thenReturn(session);
     when(session.getAttribute("id")).thenReturn(1L);
@@ -83,6 +87,8 @@ void testVerTransaccionesUsuarioAutenticado() {
 }
 
 @Test
+@Rollback
+@Transactional
 void testVerTransaccionesUsuarioNoAutenticado() {
     HttpServletRequest request = mock(HttpServletRequest.class);
     HttpSession session = mock(HttpSession.class);
@@ -98,6 +104,8 @@ void testVerTransaccionesUsuarioNoAutenticado() {
 }
 
 @Test
+@Rollback
+@Transactional
 void testCrearEgresoValido() {
     when(request.getSession()).thenReturn(session);
     when(session.getAttribute("id")).thenReturn(1L);
@@ -110,6 +118,8 @@ void testCrearEgresoValido() {
 }
 
 @Test
+@Rollback
+@Transactional
 void testCrearEgresoMontoInvalido() {
       HttpServletRequest request = mock(HttpServletRequest.class);
       HttpSession session = mock(HttpSession.class);
@@ -130,6 +140,8 @@ void testCrearEgresoMontoInvalido() {
 }
 
 @Test
+@Rollback
+@Transactional
 void testCrearEgresoSaldoInsuficiente() {
     when(request.getSession()).thenReturn(session);
     when(session.getAttribute("id")).thenReturn(1L);
@@ -143,6 +155,8 @@ void testCrearEgresoSaldoInsuficiente() {
 }
 
 @Test
+@Rollback
+@Transactional
 void testCrearIngresoValido() {
     when(request.getSession()).thenReturn(session);
     when(session.getAttribute("id")).thenReturn(1L);
@@ -155,6 +169,8 @@ void testCrearIngresoValido() {
 }
 
 @Test
+@Rollback
+@Transactional
 void testVerDetalleTransaccionEncontrada() throws RecursoNoEncontrado {
     Transaccion transaccion = new Transaccion();
     when(servicioTransaccion.consultarTransaccion(100.0, 1)).thenReturn(transaccion);
@@ -166,6 +182,8 @@ void testVerDetalleTransaccionEncontrada() throws RecursoNoEncontrado {
 }
 
 @Test
+@Rollback
+@Transactional
 void testTransaccionNoEncontrada() throws RecursoNoEncontrado {
   
     when(servicioTransaccion.consultarTransaccion(anyDouble(), anyInt()))

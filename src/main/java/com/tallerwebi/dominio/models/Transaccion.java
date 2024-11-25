@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.models;
 
 import javax.persistence.*;
+
+
 import java.time.LocalDate;
 
 @Entity
@@ -22,17 +24,20 @@ public class Transaccion {
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.userId = userId;
+
     }
+
 
     // Contructor default
     public Transaccion() {
 
     }
 
-    public Transaccion(Double monto, String descripcion, LocalDate fecha) {
+    public Transaccion(Double monto, String descripcion, LocalDate fecha, Long userId) {
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.userId=userId;
     }
 
     //Getters and Setters
@@ -75,4 +80,5 @@ public class Transaccion {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+  
 }

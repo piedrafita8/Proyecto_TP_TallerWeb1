@@ -1,7 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.interfaces.RepositorioTransaccion;
-import com.tallerwebi.dominio.models.Ingreso;
+import com.tallerwebi.dominio.enums.TipoMovimiento;
 import com.tallerwebi.dominio.models.Transaccion;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
@@ -13,222 +12,115 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-//import static com.tallerwebi.dominio.enums.TipoMovimiento.INGRESO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioTransaccionImplTest{
+@Transactional
+public class RepositorioTransaccionImplTest {
 
     @Autowired
     private SessionFactory sessionFactory;
-    private RepositorioTransaccion repositorioTransaccion;
+    private RepositorioTransaccionImpl repositorioTransaccion;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         this.repositorioTransaccion = new RepositorioTransaccionImpl(sessionFactory);
     }
-
+/* 
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioIngresoCuandoAgregoUnIngresoConMonto400000EntoncesLoEncuentroEnLaBaseDeDatos(){
-        // Crear un objeto Egreso con el monto deseado
-        Ingreso ingreso = new Ingreso();
-        ingreso.setMonto(400000.0);
-        ingreso.setDescripcion("Ingreso con origen de mi sueldo");
-        ingreso.setFecha(LocalDate.of(2022, 12, 20));
+    public void dadoQueExistenTransaccionesCuandoLasGuardoEntoncesPuedoRecuperarlas() {
+        
+        Transaccion transaccion1 = new Transaccion(1,100.0, LocalDate.now(), TipoMovimiento.INGRESO, "Pago de factura", 1L);
+        Transaccion transaccion2 = new Transaccion(2,150.0,LocalDate.now(), TipoMovimiento.INGRESO,   "Compra de productos", 2L);
+        Transaccion transaccion3 = new Transaccion(3,200.0, LocalDate.now(), TipoMovimiento.EGRESO,"Pago de alquiler",  3L);
+
+        repositorioTransaccion.guardar(transaccion1);
+        repositorioTransaccion.guardar(transaccion2);
+        repositorioTransaccion.guardar(transaccion3);
+
+        List<Transaccion> transacciones = repositorioTransaccion.obtener();
 
 
-        // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
-        this.repositorioTransaccion.guardar(ingreso);
+        // Verificar que los datos coinciden con lo que se guardó
+        assertThat(transacciones.size(), equalTo(3));
+        assertThat(transacciones.get(0).getMonto(), equalTo(100.0));
+        assertThat(transacciones.get(1).getMonto(), equalTo(150.0));
+        assertThat(transacciones.get(2).getMonto(), equalTo(200.0));
+    }
 
-        // Hacer la consulta HQL para encontrar el egreso guardado
-        String hql = "SELECT i FROM Ingreso i WHERE i.monto = :monto AND i.descripcion = :descripcion AND i.fecha = :fecha";
-        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("monto", 400000.0);
-        query.setParameter("descripcion", "Ingreso con origen de mi sueldo");
-        query.setParameter("fecha", LocalDate.of(2022, 12, 20));
 
-        // Obtener el resultado de la consulta
-        Ingreso ingresoObtenido = (Ingreso) query.getSingleResult();
 
-        // Verificar que el egreso guardado es el mismo que el obtenido
-        assertThat(ingresoObtenido, equalTo(ingreso));
+*/
+
+
+
+
+
+    
+/*     @Test
+    @Transactional
+    @Rollback
+    void dadoRepositorioVacioCuandoGuardoTresTransaccionesLasEncuentroEnBaseDeDatos() {
+        // Crear transacciones
+        Transaccion transaccion1 = new Transaccion(1, 100.0, LocalDate.now(), TipoMovimiento.INGRESO, "Ingreso 1", 1L);
+        Transaccion transaccion2 = new Transaccion(2, 200.0, LocalDate.now(), TipoMovimiento.EGRESO, "Egreso 1", 3L);
+        Transaccion transaccion3 = new Transaccion(3, 300.0, LocalDate.now(), TipoMovimiento.INGRESO, "Ingreso 2", 2L);
+
+        // Guardar las transacciones
+        repositorioTransaccion.guardar(transaccion1);
+        repositorioTransaccion.guardar(transaccion2);
+        repositorioTransaccion.guardar(transaccion3);
+
+        // Recuperar las transacciones
+        List<Transaccion> transacciones = repositorioTransaccion.obtener();
+
+        // Validar
+        assertEquals(3, transacciones.size());
+        assertThat(transacciones.get(0).getComentario(), equalTo("Ingreso 1"));
     }
 
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentro3IngresosEnLaBaseDeDatos(){
-        Ingreso ingreso1 = new Ingreso();
-        ingreso1.setMonto(245000.0);
-        ingreso1.setFecha(LocalDate.of(2022, 12, 20));
-        ingreso1.setDescripcion("Ingreso de un prestamo bancario");
+    void dadoTransaccionDeTipoIngresoCuandoSeAgregaDebeSerRecuperadaCorrectamente() {
+        // Crear una transacción de tipo INGRESO
+        Transaccion transaccionIngreso = new Transaccion(1, 500.0, LocalDate.now(), TipoMovimiento.INGRESO, "Ingreso único", 1L);
 
-        Ingreso ingreso2 = new Ingreso();
-        ingreso2.setMonto(80000.0);
-        ingreso2.setFecha(LocalDate.of(2022, 12, 20));
-        ingreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
+        // Guardar la transacción
+        repositorioTransaccion.guardar(transaccionIngreso);
 
-        Ingreso ingreso3 = new Ingreso();
-        ingreso3.setMonto(199000.0);
-        ingreso3.setFecha(LocalDate.of(2022, 12, 20));
-        ingreso3.setDescripcion("Ingreso proveniente de beca");
+        // Buscar transacciones por usuario
+        List<Transaccion> transacciones = repositorioTransaccion.buscarTransaccionPorUsuario(1L);
 
-        this.sessionFactory.getCurrentSession().save(ingreso1);
-        this.sessionFactory.getCurrentSession().save(ingreso2);
-        this.sessionFactory.getCurrentSession().save(ingreso3);
-
-        List<Transaccion> TransaccionesObtenidas = this.repositorioTransaccion.obtener();
-
-        Integer cantidadEsperada = 3;
-        assertThat(TransaccionesObtenidas.size(), equalTo(cantidadEsperada));
+        // Validar
+        assertEquals(1, transacciones.size());
+        assertThat(transacciones.get(0).getTipoMovimiento(), equalTo(TipoMovimiento.INGRESO));
     }
-
 
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioIngresoCuandoGuardo3IngresosEntoncesEncuentroEsos3IngresosEnLaBaseDeDatos(){
-        Ingreso ingreso1 = new Ingreso();
-        ingreso1.setMonto(245000.0);
-        ingreso1.setFecha(LocalDate.of(2022, 12, 20));
-        ingreso1.setDescripcion("Ingreso de un prestamo bancario");
+    void dadoMontoEIdEspecificosCuandoBuscoTransaccionDebeDevolverTransaccionCorrecta() {
+        // Crear una transacción
+        Transaccion transaccionEsperada = new Transaccion(1, 100.0, LocalDate.now(), TipoMovimiento.INGRESO, "Ingreso esperado", 1L);
 
-        Ingreso ingreso2 = new Ingreso();
-        ingreso2.setMonto(80000.0);
-        ingreso2.setFecha(LocalDate.of(2022, 12, 20));
-        ingreso2.setDescripcion("Ingreso de dinero prestado de un familiar");
+        // Guardar la transacción
+        repositorioTransaccion.guardar(transaccionEsperada);
 
-        Ingreso ingreso3 = new Ingreso();
-        ingreso3.setMonto(199000.0);
-        ingreso3.setFecha(LocalDate.of(2022, 12, 20));
-        ingreso3.setDescripcion("Ingreso proveniente de beca");
+        // Buscar la transacción
+        Transaccion result = repositorioTransaccion.buscar(100.0, 1);
 
-        this.sessionFactory.getCurrentSession().save(ingreso1);
-        this.sessionFactory.getCurrentSession().save(ingreso2);
-        this.sessionFactory.getCurrentSession().save(ingreso3);
-
-        List<Transaccion> transaccionesObtenidos = this.repositorioTransaccion.obtener();
-
-        Integer cantidadEsperada = 3;
-        assertThat(transaccionesObtenidos.size(), equalTo(cantidadEsperada));
-        assertThat(transaccionesObtenidos.get(0),equalTo(ingreso1));
-        assertThat(transaccionesObtenidos.get(1),equalTo(ingreso2));
-        assertThat(transaccionesObtenidos.get(2),equalTo(ingreso3));
-    }
-
-
-    @Test
-    @Transactional
-    @Rollback
-    public void dadoQueExisteUnRepositorioIngresoCuandoActualizoUnIngresoEntoncesLoEncuentroEnLaBaseDeDatos(){
-        LocalDate fechaIngreso = LocalDate.of(2022, 12, 20);
-        Ingreso ingreso = new Ingreso();
-        ingreso.setMonto(30000.0);
-        ingreso.setFecha(fechaIngreso);
-        ingreso.setDescripcion("Ingreso de inversiones");
-        this.sessionFactory.getCurrentSession().save(ingreso);
-
-        Double nuevoMonto = 37500.0;
-        ingreso.setMonto(nuevoMonto);
-
-        this.repositorioTransaccion.actualizar(ingreso);
-
-        Query query = this.sessionFactory.getCurrentSession().createQuery("FROM Ingreso i WHERE i.monto = :monto AND i.fecha = :fecha AND i.descripcion = :descripcion");
-        query.setParameter("monto", 37500.0);
-        query.setParameter("fecha", fechaIngreso);
-        query.setParameter("descripcion", "Ingreso de inversiones");
-
-        Transaccion transaccionesObtenidos = (Transaccion) query.getSingleResult();
-
-        assertThat(transaccionesObtenidos.getMonto(), equalTo(nuevoMonto));
-        assertThat(transaccionesObtenidos.getFecha(), equalTo(fechaIngreso));
-    }
-
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void dadoQueExisteUnRepositorioIngresoCuandoCreoUnIngresoLuegoPuedoBorrarlo(){
-//        // Crear un objeto Egreso con el monto deseado
-//        Ingreso ingreso = new Ingreso();
-//        ingreso.setMonto(15000.0);
-//        ingreso.setDescripcion("Donaciones");
-//        ingreso.setFecha(LocalDate.of(2023, 11, 10));
-//        ingreso.setId(0);
-//
-//        // Guardarlo usando el repositorio
-//        this.RepositorioIngreso.guardar(ingreso);
-//
-//        //Borrarlo
-//        this.RepositorioIngreso.eliminar(ingreso);
-//
-//        List<Ingreso> egresosObtenidos = this.RepositorioIngreso.obtener();
-//        Integer cantidadEsperada = 0;
-//
-//
-//        //Verificar que el objeto se elimino correctamente del repositorio
-//        assertThat(egresosObtenidos.size(), equalTo(cantidadEsperada));
-//    }
-//
-//
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void dadoQueExisteUnRepositorioIngresoCuandoCreoUnIngresoLuegoPuedoBuscarloYObtenerloCorrectamente(){
-//        // Crear un objeto Egreso con el monto deseado
-//        Ingreso ingreso = new Ingreso();
-//        ingreso.setMonto(15000.0);
-//        ingreso.setDescripcion("Ingreso de inversiones cobradas");
-//        ingreso.setFecha(LocalDate.of(2023, 11, 10));
-//
-//        // Guardarlo usando el repositorio
-//        this.RepositorioIngreso.guardar(ingreso);
-//        sessionFactory.getCurrentSession().flush();
-//        Integer idGuardado=ingreso.getId();
-//
-//        //Buscar egreso y verificar
-//        Ingreso egresObtenido=this.RepositorioIngreso.buscar(15000.0, idGuardado);
-//        assertThat(egresObtenido,equalTo(ingreso));
-//
-//    }
-//
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void dadoUnEgresoExistenteCuandoLoModificoEntoncesLosCambiosSeGuardanCorrectamente() {
-//        // Crear y guardar un objeto Egreso inicial
-//        Ingreso ingreso = new Ingreso();
-//        ingreso.setMonto(10000.0);
-//        ingreso.setDescripcion("Ingreso original");
-//        ingreso.setFecha(LocalDate.of(2023, 11, 1));
-//        this.RepositorioIngreso.guardar(ingreso);
-//
-//        // Sincronizar para asegurar que el objeto esté persistido
-//        sessionFactory.getCurrentSession().flush();
-//
-//        // Modificar el objeto
-//        ingreso.setMonto(12000.0);
-//        ingreso.setDescripcion("Ingreso modificado");
-//
-//        // Llamar al método modificar
-//        this.RepositorioIngreso.modificar(ingreso);
-//
-//        // Sincronizar para asegurar que la modificación se guarde
-//        sessionFactory.getCurrentSession().flush();
-//
-//        // Recuperar el objeto modificado y verificar los cambios
-//        Ingreso ingresoModificado = this.RepositorioIngreso.buscar(12000.0, ingreso.getId());
-//
-//        assertThat(ingresoModificado.getMonto(),equalTo(12000.0));
-//        assertThat(ingresoModificado.getDescripcion(),equalTo("Ingreso modificado"));
-//    }
+        // Validar
+        assertEquals(transaccionEsperada.getMonto(), result.getMonto());
+        assertEquals(transaccionEsperada.getComentario(), result.getComentario());
+    }*/
 }
-

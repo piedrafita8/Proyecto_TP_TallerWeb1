@@ -9,22 +9,18 @@ import java.time.LocalDate;
 @Table(name = "egresos")
 public class Egreso extends Transaccion{
 
-    // Atributos
+    @Enumerated(EnumType.STRING)
     private TipoEgreso tipoEgreso;
 
     public Egreso(Integer id, Double monto, String descripcion, LocalDate fecha, Long userId, TipoEgreso tipoEgreso) {
-        super(id, monto, descripcion, fecha, userId);
-        this.tipoEgreso = tipoEgreso;
-    }
+    super(id, monto, descripcion, fecha, userId);
+    this.tipoEgreso = tipoEgreso;
+}
 
-    public Egreso(Double monto, String descripcion, LocalDate fecha) {
-        super(monto, descripcion,fecha);
-    }
 
     // Constructor por default
     public Egreso() {}
 
-    // Getters y Setters
     public TipoEgreso getTipoEgreso() {
         return tipoEgreso;
     }
