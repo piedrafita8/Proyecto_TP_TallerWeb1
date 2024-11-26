@@ -63,79 +63,24 @@ public class ControladorTransaccion {
         return modelAndView;
     }
 
-    // Metodo para crear un nuevo egreso
     @PostMapping("/gastos")
     public ModelAndView crearEgreso(
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("tipoEgreso") TipoEgreso tipoEgreso, HttpServletRequest request) {
+            @RequestParam("tipoEgreso") TipoEgreso tipoEgreso,
+            HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("gastos"); // Vista por defecto en caso de error
 
+        // Validaciones
         if (descripcion == null || descripcion.isEmpty()) {
             modelAndView.addObject("error", "La descripción no puede estar vacía");
             return modelAndView;
         }
 
         if (monto == null || monto <= 0) {
-            modelAndView.addObject("error", "El monto no puede ser nulo o menor a cero");
-            return modelAndView;
-        }
-
-        if(fecha == null){
-            modelAndView.addObject("error", "La fecga no puede ser nula");
-            return modelAndView;
-        }
-
-        if(tipoEgreso == null){
-            modelAndView.addObject("error", "El tipo de egreso no puede ser nulo");
-            return modelAndView;
-        }
-
-        Long userId = (Long) request.getSession().getAttribute("id");
-        if (userId == null) {
-            modelAndView.addObject("error", "No se pudo identificar al usuario.");
-            return modelAndView;
-        }
-
-        Egreso egreso = (Egreso) new Transaccion();
-        egreso.setMonto(monto);
-        egreso.setFecha(fecha);
-        egreso.setDescripcion(descripcion);
-        egreso.setTipoEgreso(tipoEgreso);
-        egreso.setUserId(userId);
-
-        try {
-
-            servicioTransaccion.crearTransaccion(egreso, userId);
-
-            modelAndView.setViewName("redirect:/gastos");
-        } catch (SaldoInsuficiente e) {
-            modelAndView.setViewName("gastos");
-            modelAndView.addObject("error", "Saldo insuficiente para realizar el egreso.");
-        }
-
-        return modelAndView;
-    }
-
-    // Metodo para crear un nuevo Ingreso
-    @PostMapping("/ingreso")
-    public ModelAndView crearIngreso(
-            @RequestParam("monto") Double monto,
-            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-            @RequestParam("descripcion") String descripcion,
-            @RequestParam("tipoIngreso") TipoIngreso tipoIngreso, HttpServletRequest request) {
-
-        ModelAndView modelAndView = new ModelAndView();
-
-        if (descripcion == null || descripcion.isEmpty()) {
-            modelAndView.addObject("error", "La descripción no puede estar vacía");
-            return modelAndView;
-        }
-
-        if (monto == null || monto <= 0) {
-            modelAndView.addObject("error", "El monto no puede ser nulo o menor a cero");
+            modelAndView.addObject("error", "El monto debe ser mayor a cero");
             return modelAndView;
         }
 
@@ -144,17 +89,79 @@ public class ControladorTransaccion {
             return modelAndView;
         }
 
-        if (tipoIngreso == null) {
-            modelAndView.addObject("error", "El tipo de ingreso no puede ser nulo");
+        if (tipoEgreso == null) {
+            modelAndView.addObject("error", "El tipo de egreso no puede ser nulo");
             return modelAndView;
         }
 
+        // Verificar sesión del usuario
         Long userId = (Long) request.getSession().getAttribute("id");
         if (userId == null) {
-            modelAndView.addObject("error", "No se pudo identificar al usuario.");
+            modelAndView.addObject("error", "No se pudo identificar al usuario");
             return modelAndView;
         }
 
+        // Crear el objeto Egreso
+        Egreso egreso = new Egreso();
+        egreso.setMonto(monto);
+        egreso.setFecha(fecha);
+        egreso.setDescripcion(descripcion);
+        egreso.setTipoEgreso(tipoEgreso);
+        egreso.setUserId(userId);
+
+        // Procesar la transacción
+        try {
+            servicioTransaccion.crearTransaccion(egreso, userId);
+            modelAndView.setViewName("redirect:/gastos"); // Redirigir si es exitoso
+        } catch (SaldoInsuficiente e) {
+            modelAndView.addObject("error", "Saldo insuficiente para realizar el egreso");
+        } catch (Exception e) {
+            modelAndView.addObject("error", "Ocurrió un error al procesar la transacción: " + e.getMessage());
+        }
+
+        return modelAndView;
+    }
+
+
+    @PostMapping("/ingreso")
+    public ModelAndView crearIngreso(
+            @RequestParam("monto") Double monto,
+            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("tipoIngreso") TipoIngreso tipoIngreso,
+            HttpServletRequest request) {
+
+        ModelAndView modelAndView = new ModelAndView("ingreso"); // Vista por defecto en caso de error
+
+        // Validaciones de los parámetros
+        if (descripcion == null || descripcion.isEmpty()) {
+            modelAndView.addObject("error", "La descripción no puede estar vacía");
+            return modelAndView;
+        }
+
+        if (monto == null || monto <= 0) {
+            modelAndView.addObject("error", "El monto debe ser mayor a cero");
+            return modelAndView;
+        }
+
+        if (fecha == null) {
+            modelAndView.addObject("error", "La fecha es requerida");
+            return modelAndView;
+        }
+
+        if (tipoIngreso == null) {
+            modelAndView.addObject("error", "El tipo de ingreso es requerido");
+            return modelAndView;
+        }
+
+        // Validar usuario
+        Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            modelAndView.addObject("error", "No se pudo identificar al usuario");
+            return modelAndView;
+        }
+
+        // Crear el ingreso y asociarlo al usuario
         Ingreso ingreso = new Ingreso();
         ingreso.setMonto(monto);
         ingreso.setFecha(fecha);
@@ -162,11 +169,16 @@ public class ControladorTransaccion {
         ingreso.setTipoIngreso(tipoIngreso);
         ingreso.setUserId(userId);
 
-        servicioTransaccion.crearTransaccion(ingreso, userId);
+        try {
+            servicioTransaccion.crearTransaccion(ingreso, userId);
+            modelAndView.setViewName("redirect:/ingreso"); // Redirigir si el ingreso fue exitoso
+        } catch (Exception e) {
+            modelAndView.addObject("error", e.getMessage());
+        }
 
-        modelAndView.setViewName("redirect:/ingreso");
         return modelAndView;
     }
+
 
     // Metodo para ver los detalles de una transaccion específico
     @GetMapping("/transaccion/detalle")
