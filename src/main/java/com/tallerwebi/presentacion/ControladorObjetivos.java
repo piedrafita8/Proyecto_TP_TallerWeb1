@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.enums.CategoriaObjetivo;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
@@ -42,9 +43,10 @@ public class ControladorObjetivos {
 
     @PostMapping
     public ModelAndView crearObjetivo(@RequestParam String nombre,
-                                @RequestParam Double montoObjetivo,
-                                @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaLimite,
-                                RedirectAttributes redirectAttributes, HttpServletRequest request) {
+                                      @RequestParam Double montoObjetivo,
+                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaLimite,
+                                      RedirectAttributes redirectAttributes,
+                                      HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
 
         Long userId = (Long) request.getSession().getAttribute("id");
@@ -53,8 +55,7 @@ public class ControladorObjetivos {
             return modelAndView;
         }
         try {
-            Objetivo nuevoObjetivo = new Objetivo(nombre, montoObjetivo, fechaLimite, userId);
-            servicioObjetivo.crearObjetivo(nuevoObjetivo);
+            servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, userId);
             redirectAttributes.addFlashAttribute("mensaje", "Objetivo creado exitosamente");
         } catch (ObjetivoExistente e) {
             redirectAttributes.addFlashAttribute("error", "El objetivo ya existe");
@@ -70,6 +71,7 @@ public class ControladorObjetivos {
     public String aportarAObjetivo(
             @PathVariable Integer id,
             @RequestParam Double montoAportado,
+            @RequestParam(required = false) String emailDeUsuarioAportado,
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
@@ -79,15 +81,52 @@ public class ControladorObjetivos {
             return "redirect:/login";
         }
 
-
         try {
-            servicioObjetivo.aportarAObjetivo(id, userId, montoAportado);
+            if (montoAportado <= 0) {
+                throw new IllegalArgumentException("El monto a aportar debe ser mayor a cero.");
+            }
+
+            servicioObjetivo.aportarAObjetivo(id, montoAportado, userId, emailDeUsuarioAportado);
+
             redirectAttributes.addFlashAttribute("mensaje", "Aporte realizado exitosamente.");
+        } catch (SaldoInsuficiente e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al realizar el aporte: " + e.getMessage());
         }
+        
+        String ultimoEmailBuscado = (String) request.getSession().getAttribute("ultimoEmailBuscado");
+        CategoriaObjetivo ultimaCategoriaBuscada = (CategoriaObjetivo) request.getSession().getAttribute("ultimaCategoriaBuscada");
 
         return "redirect:/index";
+    }
+
+    @GetMapping("/index")
+    public String mostrarIndex(Model model) {
+        model.addAttribute("categorias", CategoriaObjetivo.values());
+        return "index";
+    }
+
+    @PostMapping("/buscar-objetivos")
+    public String buscarObjetivos(
+            @RequestParam(required = false) String emailUsuario,
+            @RequestParam(required = false) CategoriaObjetivo categoria,
+            Model model) {
+
+        List<Objetivo> objetivos;
+
+        if ((emailUsuario == null || emailUsuario.isEmpty()) && categoria == null) {
+            objetivos = servicioObjetivo.obtenerTodosLosObjetivos();
+        } else {
+            objetivos = servicioObjetivo.buscarObjetivosPorFiltros(emailUsuario, categoria);
+        }
+
+        model.addAttribute("objetivos", objetivos);
+        model.addAttribute("categorias", CategoriaObjetivo.values());
+
+        return "index";
     }
 
 

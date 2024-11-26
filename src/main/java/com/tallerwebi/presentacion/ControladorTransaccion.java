@@ -4,10 +4,12 @@ import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.enums.TipoIngreso;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioTransaccion;
 import com.tallerwebi.dominio.models.Egreso;
 import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Transaccion;
+import com.tallerwebi.dominio.models.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ import java.util.List;
 public class ControladorTransaccion {
 
     private ServicioTransaccion servicioTransaccion;
+    private RepositorioUsuario repositorioUsuario;
 
     @GetMapping("/gastos")
     public String mostrarGastos(Model model) {
@@ -71,9 +74,9 @@ public class ControladorTransaccion {
             @RequestParam("tipoEgreso") TipoEgreso tipoEgreso,
             HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("gastos"); // Vista por defecto en caso de error
+        ModelAndView modelAndView = new ModelAndView("gastos");
 
-        // Validaciones
+        // Validaciones previas...
         if (descripcion == null || descripcion.isEmpty()) {
             modelAndView.addObject("error", "La descripción no puede estar vacía");
             return modelAndView;
@@ -101,18 +104,16 @@ public class ControladorTransaccion {
             return modelAndView;
         }
 
-        // Crear el objeto Egreso
         Egreso egreso = new Egreso();
         egreso.setMonto(monto);
         egreso.setFecha(fecha);
         egreso.setDescripcion(descripcion);
         egreso.setTipoEgreso(tipoEgreso);
-        egreso.setUserId(userId);
 
         // Procesar la transacción
         try {
             servicioTransaccion.crearTransaccion(egreso, userId);
-            modelAndView.setViewName("redirect:/gastos"); // Redirigir si es exitoso
+            modelAndView.setViewName("redirect:/gastos");
         } catch (SaldoInsuficiente e) {
             modelAndView.addObject("error", "Saldo insuficiente para realizar el egreso");
         } catch (Exception e) {
@@ -122,7 +123,6 @@ public class ControladorTransaccion {
         return modelAndView;
     }
 
-
     @PostMapping("/ingreso")
     public ModelAndView crearIngreso(
             @RequestParam("monto") Double monto,
@@ -131,7 +131,7 @@ public class ControladorTransaccion {
             @RequestParam("tipoIngreso") TipoIngreso tipoIngreso,
             HttpServletRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView("ingreso"); // Vista por defecto en caso de error
+        ModelAndView modelAndView = new ModelAndView("ingreso");
 
         // Validaciones de los parámetros
         if (descripcion == null || descripcion.isEmpty()) {
@@ -161,24 +161,22 @@ public class ControladorTransaccion {
             return modelAndView;
         }
 
-        // Crear el ingreso y asociarlo al usuario
+        // Crear el objeto Ingreso con el usuario asociado
         Ingreso ingreso = new Ingreso();
         ingreso.setMonto(monto);
         ingreso.setFecha(fecha);
         ingreso.setDescripcion(descripcion);
         ingreso.setTipoIngreso(tipoIngreso);
-        ingreso.setUserId(userId);
 
         try {
             servicioTransaccion.crearTransaccion(ingreso, userId);
-            modelAndView.setViewName("redirect:/ingreso"); // Redirigir si el ingreso fue exitoso
+            modelAndView.setViewName("redirect:/ingreso");
         } catch (Exception e) {
             modelAndView.addObject("error", e.getMessage());
         }
 
         return modelAndView;
     }
-
 
     // Metodo para ver los detalles de una transaccion específico
     @GetMapping("/transaccion/detalle")

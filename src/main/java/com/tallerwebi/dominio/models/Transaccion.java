@@ -5,7 +5,9 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "transaccion")
-public class Transaccion {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_transaccion")
+public abstract class Transaccion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,17 +18,17 @@ public class Transaccion {
     private LocalDate fecha;
     private Long userId;
 
-    public Transaccion(Integer id, Double monto, String descripcion, LocalDate fecha, Long userId) {
-        this.id = id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    public Transaccion() {}
+
+    public Transaccion(Double monto, String descripcion, LocalDate fecha, Usuario usuario) {
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
-        this.userId = userId;
-    }
-
-    // Contructor default
-    public Transaccion() {
-
+        this.usuario = usuario;
     }
 
     public Transaccion(Double monto, String descripcion, LocalDate fecha) {
@@ -74,5 +76,13 @@ public class Transaccion {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

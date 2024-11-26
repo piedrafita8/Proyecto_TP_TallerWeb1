@@ -1,16 +1,18 @@
 package com.tallerwebi.dominio.interfaces;
 
+import com.tallerwebi.dominio.enums.CategoriaObjetivo;
 import com.tallerwebi.dominio.models.Objetivo;
+import com.tallerwebi.dominio.models.Usuario;
 
 import java.util.List;
 
 public interface RepositorioObjetivo {
 
-    Objetivo buscarObjetivo(Integer id);
-    void crearObjetivo(Objetivo objetivo);
-    void actualizarObjetivo(Integer id, Double montoAAgregar);
-    List<Objetivo> obtenerTodosLosObjetivos();
-    List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long Id);
-    void eliminarObjetivo(Integer id);
-    void guardar(Objetivo objetivo);
+    public Objetivo buscarObjetivo(Integer id);
+    public void crearObjetivo(Objetivo objetivo);
+    public List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long userId);
+    public List<Objetivo> obtenerTodosLosObjetivos();
+    public void eliminarObjetivo(Integer id);
+    public void guardar(Objetivo objetivo);
+    public List<Objetivo> buscarObjetivosPorFiltros(Usuario usuario, CategoriaObjetivo categoria);
 }

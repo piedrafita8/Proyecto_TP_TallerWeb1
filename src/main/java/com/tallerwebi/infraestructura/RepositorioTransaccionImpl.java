@@ -1,7 +1,11 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.interfaces.RepositorioTransaccion;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.models.Ingreso;
+import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.models.Transaccion;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -74,4 +78,18 @@ public class RepositorioTransaccionImpl implements RepositorioTransaccion {
 
         return (Transaccion) sessionFactory.getCurrentSession().createQuery(query).uniqueResult();
     }
+
+    @Override
+    public List<Transaccion> obtenerTodasLasTransaccionesPorUserId(Long userId) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(
+                        "FROM Transaccion t WHERE t.usuario.id = :userId ORDER BY t.fecha DESC",
+                        Transaccion.class
+                )
+                .setParameter("userId", userId)
+                .setMaxResults(20) // Limita a las 20 transacciones más recientes
+                .getResultList();
+    }
+
+
 }

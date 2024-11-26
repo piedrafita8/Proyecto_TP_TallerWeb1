@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Transaccion;
 
 import java.util.List;
@@ -12,4 +14,5 @@ public interface ServicioTransaccion {
     List<Transaccion> getAllTransacciones();
     List<Transaccion> getTransaccionPorUserId(Long userId);
     void registrarTransaccionSinActualizarSaldo(Transaccion transaccion);
+    public List<Transaccion> obtenerTodasLasTransaccionesPorUserId(Long userId);
 }

@@ -1,15 +1,13 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.enums.CategoriaObjetivo;
 import com.tallerwebi.dominio.interfaces.*;
-import com.tallerwebi.dominio.models.Objetivo;
-import com.tallerwebi.dominio.models.Usuario;
+import com.tallerwebi.dominio.models.*;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -89,19 +87,46 @@ public class ControladorLogin {
             return modelAndView;
         }
 
-        // Hibernate me puede completar el usuario con su lista de objetivos
-        // Cuando hago un oneToMany con objetivo/usuario
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
         Double saldo = (usuario != null) ? usuario.getSaldo() : 0.0;
 
-        // Y puedo obviar esta consulta.
-        List<Objetivo> todosLosObjetivos = servicioObjetivo.obtenerTodosLosObjetivos();
+        // Obtener todas las transacciones del usuario
+        List<Transaccion> transacciones = servicioTransaccion.obtenerTodasLasTransaccionesPorUserId(userId);
 
-        // Filtrado de objetivos (por interés)
+        // Obtener los objetivos personales del usuario
+        List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
+
+        // Obtener los objetivos a los que ha aportado
+        List<Objetivo> objetivosAportados = servicioObjetivo.obtenerObjetivosAportados(userId);
 
         modelAndView.addObject("saldo", saldo);
+        modelAndView.addObject("transacciones", transacciones);
+
+        return modelAndView;
+    }
+
+    @PostMapping("/buscar-objetivos")
+    public ModelAndView buscarObjetivos(
+            @RequestParam(required = false) String emailUsuario,
+            @RequestParam(required = false) CategoriaObjetivo categoria, // Cambio a enum
+            HttpServletRequest request
+    ) {
+        ModelAndView modelAndView = new ModelAndView("index");
+
+        Long userId = (Long) request.getSession().getAttribute("id");
+        Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
+
+        // Obtener todas las categorías usando el enum
+        CategoriaObjetivo[] categorias = CategoriaObjetivo.values();
+        modelAndView.addObject("categorias", categorias);
+
+        // Filtrar objetivos
+        List<Objetivo> objetivosFiltrados = servicioObjetivo.buscarObjetivosPorFiltros(emailUsuario, categoria);
+        modelAndView.addObject("objetivos", objetivosFiltrados);
+
+        // Mantener otros datos del usuario
+        modelAndView.addObject("saldo", usuario.getSaldo());
         modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
-        modelAndView.addObject("objetivos", todosLosObjetivos);
 
         return modelAndView;
     }
