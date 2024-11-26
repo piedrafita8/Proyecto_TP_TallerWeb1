@@ -11,6 +11,7 @@ import com.tallerwebi.dominio.models.Transaccion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,13 +28,15 @@ public class ControladorTransaccion {
     private ServicioTransaccion servicioTransaccion;
 
     @GetMapping("/gastos")
-    public String egreso() {
-        return "gastos";  // Esto hace referencia a contacto.html dentro de /templates.
+    public String mostrarGastos(Model model) {
+        model.addAttribute("datosTransaccion", new DatosTransaccion()); // Agrega el atributo esperado
+        return "gastos"; // Nombre de la vista
     }
 
     @GetMapping("/ingreso")
-    public String ingreso() {
-        return "ingreso";  // Esto hace referencia a contacto.html dentro de /templates.
+    public String mostrarIngreso(Model model) {
+        model.addAttribute("datosTransaccion", new DatosTransaccion()); // Agrega el atributo esperado
+        return "ingreso"; // Nombre de la vista
     }
 
     @Autowired

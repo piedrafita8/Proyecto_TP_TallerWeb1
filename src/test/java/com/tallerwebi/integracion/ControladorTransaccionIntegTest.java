@@ -38,7 +38,7 @@ public class ControladorTransaccionIntegTest {
     }
 
     @Test
-    public void deberiaRetornarPaginaEgresoCuandoNavegaAIngreso() throws Exception {
+    public void deberiaRetornarPaginaEgresoCuandoNavegaAEgreso() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/gastos"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -46,7 +46,7 @@ public class ControladorTransaccionIntegTest {
         ModelAndView modelAndView = result.getModelAndView();
         assert modelAndView != null;
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("gastos"));
-        assertThat(modelAndView.getModel().containsKey("datosEgreso"), is(true)); // Verificar la clave directamente
+        assertThat(modelAndView.getModel().containsKey("datosTransaccion"), is(true)); // Verificar la clave directamente
     }
 
     @Test
@@ -58,7 +58,7 @@ public class ControladorTransaccionIntegTest {
         ModelAndView modelAndView = result.getModelAndView();
         assert modelAndView != null;
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("ingreso"));
-        assertThat(modelAndView.getModel().containsKey("datosIngreso"), is(true)); // Verificar la clave directamente
+        assertThat(modelAndView.getModel().containsKey("datosTransaccion"), is(true)); // Verificar la clave directamente
     }
 
     @Test
