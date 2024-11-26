@@ -75,7 +75,7 @@ public class ControladorTransaccionIntegTest {
         assert modelAndView != null;
 
         // Verificar que se muestra el mensaje de error adecuado
-        assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El monto no puede ser nulo o menor a cero"));
+        assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El monto debe ser mayor a cero"));
     }
 
     @Test
