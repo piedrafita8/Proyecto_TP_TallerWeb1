@@ -10,34 +10,39 @@ import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Transaccion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.dsig.TransformService;
 import java.time.LocalDate;
 import java.util.List;
 
+@Controller
 public class ControladorTransaccion {
 
     private ServicioTransaccion servicioTransaccion;
+
+    @GetMapping("/gastos")
+    public String egreso() {
+        return "gastos";  // Esto hace referencia a contacto.html dentro de /templates.
+    }
+
+    @GetMapping("/ingreso")
+    public String ingreso() {
+        return "ingreso";  // Esto hace referencia a contacto.html dentro de /templates.
+    }
 
     @Autowired
     public ControladorTransaccion(ServicioTransaccion servicioTransaccion) {
         this.servicioTransaccion = servicioTransaccion;
     }
 
-    // Mostrar la vista de transaccion
-    @GetMapping("/transaccion")
-    public String mostrarTransaccion(Model model) {
-        model.addAttribute("datosTransaccion", new DatosTransaccion());
-        return "transaccion";
-    }
-
     // Metodo para obtener todas las transacciones
-    @GetMapping("api/transacciones")
+    @GetMapping("/api/transacciones")
     public ModelAndView verTransacciones(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         Long userId = (Long) request.getSession().getAttribute("id");
@@ -56,7 +61,7 @@ public class ControladorTransaccion {
     }
 
     // Metodo para crear un nuevo egreso
-    @PostMapping("/transaccion/gastos")
+    @PostMapping("/gastos")
     public ModelAndView crearEgreso(
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
@@ -91,7 +96,7 @@ public class ControladorTransaccion {
             return modelAndView;
         }
 
-        Egreso egreso = new Egreso();
+        Egreso egreso = (Egreso) new Transaccion();
         egreso.setMonto(monto);
         egreso.setFecha(fecha);
         egreso.setDescripcion(descripcion);
@@ -102,7 +107,7 @@ public class ControladorTransaccion {
 
             servicioTransaccion.crearTransaccion(egreso, userId);
 
-            modelAndView.setViewName("redirect:/transaccion/gastos");
+            modelAndView.setViewName("redirect:/gastos");
         } catch (SaldoInsuficiente e) {
             modelAndView.setViewName("gastos");
             modelAndView.addObject("error", "Saldo insuficiente para realizar el egreso.");
@@ -112,7 +117,7 @@ public class ControladorTransaccion {
     }
 
     // Metodo para crear un nuevo Ingreso
-    @PostMapping("transaccion/ingreso")
+    @PostMapping("/ingreso")
     public ModelAndView crearIngreso(
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
@@ -156,7 +161,7 @@ public class ControladorTransaccion {
 
         servicioTransaccion.crearTransaccion(ingreso, userId);
 
-        modelAndView.setViewName("redirect:/transaccion/ingreso");
+        modelAndView.setViewName("redirect:/ingreso");
         return modelAndView;
     }
 
