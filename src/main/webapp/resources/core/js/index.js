@@ -132,7 +132,3 @@ document.querySelectorAll('.menu li').forEach(item => {
         }
     });
 });
-
-
-
-

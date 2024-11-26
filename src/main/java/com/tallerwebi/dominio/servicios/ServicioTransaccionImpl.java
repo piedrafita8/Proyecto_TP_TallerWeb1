@@ -5,6 +5,8 @@ import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.RepositorioTransaccion;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioTransaccion;
+import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Transaccion;
 import com.tallerwebi.dominio.models.Usuario;
 
@@ -38,22 +40,41 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
     }
 
     @Override
-    public void crearTransaccion(Transaccion transaccion, Long userId) {
+    public void crearTransaccion(Transaccion transaccion, Long userId) throws SaldoInsuficiente {
         Usuario usuario = repositorioUsuario.buscarPorId(userId);
-        if (usuario != null || transaccion.getId() != null || transaccion.getMonto() != null || userId != null) {
-            repositorioTransaccion.guardar(transaccion);
-            Double saldoActual = usuario.getSaldo();
 
+        // Validar que el usuario y la transacción sean válidos
+        if (usuario == null || transaccion == null || transaccion.getMonto() == null || transaccion.getMonto() <= 0) {
+            throw new IllegalArgumentException("Usuario o transacción inválidos");
+        }
+
+        // Procesar ingreso
+        if (transaccion instanceof Ingreso) {
+            Double nuevoSaldo = usuario.getSaldo() + transaccion.getMonto(); // Sumar al saldo
+            usuario.setSaldo(nuevoSaldo);
+
+            // Guardar el ingreso y actualizar el saldo del usuario
+            repositorioTransaccion.guardar(transaccion);
+            repositorioUsuario.modificar(usuario);
+        }
+        // Procesar egreso
+        else if (transaccion instanceof Egreso) {
+            Double saldoActual = usuario.getSaldo();
             if (saldoActual >= transaccion.getMonto()) {
-                Double nuevoSaldo = saldoActual - transaccion.getMonto();
+                Double nuevoSaldo = saldoActual - transaccion.getMonto(); // Restar del saldo
                 usuario.setSaldo(nuevoSaldo);
-                repositorioUsuario.modificar(usuario);
+
+                // Guardar el egreso y actualizar el saldo del usuario
                 repositorioTransaccion.guardar(transaccion);
+                repositorioUsuario.modificar(usuario);
             } else {
-                throw new SaldoInsuficiente("Saldo insuficiente para realizar la transaccion.");
+                throw new SaldoInsuficiente("Saldo insuficiente para realizar la transacción");
             }
+        } else {
+            throw new IllegalArgumentException("Tipo de transacción desconocido");
         }
     }
+
 
     @Override
     public List<Transaccion> getAllTransacciones() {

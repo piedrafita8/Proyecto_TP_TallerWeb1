@@ -10,4 +10,5 @@ public class ControladorContacto {
     public String contacto() {
         return "contacto";  // Esto hace referencia a contacto.html dentro de /templates.
     }
+
 }
