@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.dsig.TransformService;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,24 +26,19 @@ public class ControladorTransaccion {
 
     private ServicioTransaccion servicioTransaccion;
 
+    @GetMapping("/gastos")
+    public String egreso() {
+        return "gastos";  // Esto hace referencia a contacto.html dentro de /templates.
+    }
+
+    @GetMapping("/ingreso")
+    public String ingreso() {
+        return "ingreso";  // Esto hace referencia a contacto.html dentro de /templates.
+    }
+
     @Autowired
     public ControladorTransaccion(ServicioTransaccion servicioTransaccion) {
         this.servicioTransaccion = servicioTransaccion;
-    }
-
-    @GetMapping("/transaccion/gastos")
-    public String gastos() {
-        return "gastos";  // Esto hace referencia a gastos.html dentro de /templates.
-    }
-
-    @GetMapping("/transaccion/ingresos")
-    public String ingreso() {
-        return "ingreso";  // Esto hace referencia a ingreso.html dentro de /templates.
-    }
-
-    @GetMapping("/transaccion")
-    public String transaccion() {
-        return "transaccion";  // Esto hace referencia a transaccion.html dentro de /templates.
     }
 
     // Metodo para obtener todas las transacciones
@@ -65,7 +61,7 @@ public class ControladorTransaccion {
     }
 
     // Metodo para crear un nuevo egreso
-    @PostMapping("/transaccion/gastos")
+    @PostMapping("/gastos")
     public ModelAndView crearEgreso(
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
@@ -100,7 +96,7 @@ public class ControladorTransaccion {
             return modelAndView;
         }
 
-        Egreso egreso = new Egreso();
+        Egreso egreso = (Egreso) new Transaccion();
         egreso.setMonto(monto);
         egreso.setFecha(fecha);
         egreso.setDescripcion(descripcion);
@@ -111,7 +107,7 @@ public class ControladorTransaccion {
 
             servicioTransaccion.crearTransaccion(egreso, userId);
 
-            modelAndView.setViewName("redirect:/transaccion/gastos");
+            modelAndView.setViewName("redirect:/gastos");
         } catch (SaldoInsuficiente e) {
             modelAndView.setViewName("gastos");
             modelAndView.addObject("error", "Saldo insuficiente para realizar el egreso.");
@@ -121,7 +117,7 @@ public class ControladorTransaccion {
     }
 
     // Metodo para crear un nuevo Ingreso
-    @PostMapping("/transaccion/ingreso")
+    @PostMapping("/ingreso")
     public ModelAndView crearIngreso(
             @RequestParam("monto") Double monto,
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
@@ -165,7 +161,7 @@ public class ControladorTransaccion {
 
         servicioTransaccion.crearTransaccion(ingreso, userId);
 
-        modelAndView.setViewName("redirect:/transaccion/ingreso");
+        modelAndView.setViewName("redirect:/ingreso");
         return modelAndView;
     }
 

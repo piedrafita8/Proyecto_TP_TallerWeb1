@@ -132,19 +132,3 @@ document.querySelectorAll('.menu li').forEach(item => {
         }
     });
 });
-
-document.getElementById("opcionesForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevenir el envío del formulario por defecto
-    const opcionSeleccionada = document.querySelector('input[name="opcion"]:checked').value;
-
-    // Redirigir según la opción seleccionada
-    if (opcionSeleccionada === "ingreso") {
-        window.location.href = "/transaccion/ingreso";
-    } else if (opcionSeleccionada === "gastos") {
-        window.location.href = "/transaccion/gastos";
-    }
-});
-
-
-
-
