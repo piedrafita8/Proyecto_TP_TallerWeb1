@@ -94,10 +94,13 @@ public class ControladorLogin {
         // Obtener todas las categorías usando el enum
         CategoriaObjetivo[] categorias = CategoriaObjetivo.values();
 
+        // Obtener los objetivos personales del usuario
+        List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
+
         modelAndView.addObject("saldo", saldo);
         modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
         modelAndView.addObject("categorias", categorias);
-        // No agregues objetivos inicialmente
+        modelAndView.addObject("objetivosPersonales", objetivosPersonales);
 
         return modelAndView;
     }

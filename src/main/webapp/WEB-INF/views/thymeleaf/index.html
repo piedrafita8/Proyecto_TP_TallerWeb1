@@ -140,55 +140,107 @@
                     </div>
                 </div>
 
-                <div>
-                    <h3>Buscar Objetivos</h3>
-                    <form th:action="@{/buscar-objetivos}" method="post">
-                        <label>
-                            Email de Usuario:
-                            <input type="email" name="emailUsuario" placeholder="Ingrese Email del Usuario">
-                        </label>
+                <div class="container">
+                    <div class="busqueda-objetivos">
+                        <h3>Buscar Objetivos</h3>
+                        <form th:action="@{/buscar-objetivos}" method="post">
+                            <label>
+                                Email de Usuario:
+                                <input type="email" name="emailUsuario" placeholder="Ingrese Email del Usuario">
+                            </label>
 
-                        <label>
-                            Categoría:
-                            <select name="categoria">
-                                <option value="">Todas las categorías</option>
-                                <option th:each="cat : ${categorias}"
-                                        th:value="${cat}"
-                                        th:text="${cat}">
-                                </option>
-                            </select>
-                        </label>
+                            <label>
+                                Categoría:
+                                <select name="categoria">
+                                    <option value="">Todas las categorías</option>
+                                    <option th:each="cat : ${categorias}"
+                                            th:value="${cat}"
+                                            th:text="${cat}">
+                                    </option>
+                                </select>
+                            </label>
 
-                        <button type="submit">Buscar</button>
-                    </form>
-                    <div th:if="${not #lists.isEmpty(objetivos)}">
-                        <h3>Resultados</h3>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Monto Objetivo</th>
-                                <th>Monto Actual</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="objetivo : ${objetivos}">
-                                <td th:text="${objetivo.nombre}"></td>
-                                <td th:text="${objetivo.montoObjetivo}"></td>
-                                <td th:text="${objetivo.montoActual}"></td>
-                                <td>
-                                    <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
-                                        <label>
-                                            Monto:
-                                            <input type="number" name="montoAportado" min="1" required>
-                                        </label>
-                                        <button type="submit">Aportar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                            <button type="submit">Buscar</button>
+                        </form>
+
+                        <div th:if="${not #lists.isEmpty(objetivos)}">
+                            <h3>Resultados Búsqueda</h3>
+                            <table>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Monto Objetivo</th>
+                                        <th>Monto Actual</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="objetivo : ${objetivos}">
+                                        <td th:text="${objetivo.nombre}"></td>
+                                        <td th:text="${objetivo.montoObjetivo}"></td>
+                                        <td th:text="${objetivo.montoActual}"></td>
+                                        <td>
+                                            <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                                <label>
+                                                    Monto:
+                                                    <input type="number" name="montoAportado" min="1" required>
+                                                </label>
+                                                <button type="submit">Aportar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="objetivos-personales">
+                        <h3>Objetivos Personales</h3>
+                        <div th:if="${not #lists.isEmpty(objetivosPersonales)}">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Monto Objetivo</th>
+                                    <th>Monto Actual</th>
+                                    <th>Progreso</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="objetivo : ${objetivosPersonales}">
+                                    <td th:text="${objetivo.nombre}"></td>
+                                    <td th:text="${objetivo.categoria}"></td>
+                                    <td th:text="${objetivo.montoObjetivo}"></td>
+                                    <td th:text="${objetivo.montoActual}"></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar"
+                                                 th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
+                                                <span th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}"></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                            <label>
+                                                Monto:
+                                                <input type="number" name="montoAportado" min="1" required>
+                                            </label>
+                                            <button type="submit">Aportar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div th:if="${#lists.isEmpty(objetivosPersonales)}" class="sin-objetivos">
+                            <p>No tienes objetivos creados aún.</p>
+                            <a th:href="@{/crear-objetivo}" class="btn-crear-objetivo">Crear Nuevo Objetivo</a>
+                        </div>
                     </div>
                 </div>
             </div>
