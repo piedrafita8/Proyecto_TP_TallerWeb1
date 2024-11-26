@@ -21,4 +21,5 @@ public interface ServicioObjetivo {
     public void aportarAObjetivo(Integer id, Double montoAportado, Long userIdAportante, String EmailDeusuarioAportado);
 
     public List<Objetivo> buscarObjetivosPorFiltros(String emailUsuario, CategoriaObjetivo categoria);
+    public List<Objetivo> obtenerObjetivosAportados(Long userId);
 }

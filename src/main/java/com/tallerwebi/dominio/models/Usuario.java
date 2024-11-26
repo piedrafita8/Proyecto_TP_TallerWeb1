@@ -19,6 +19,14 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Objetivo> objetivos = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "usuario_objetivos_aportados",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "objetivo_id")
+    )
+    private List<Objetivo> objetivosAportados = new ArrayList<>();
+
 
     public Usuario(String username, String email, String password, String rol) {
         this.username = username;
@@ -91,6 +99,20 @@ public class Usuario {
 
     public void setObjetivos(List<Objetivo> objetivos) {
         this.objetivos = objetivos;
+    }
+
+    public List<Objetivo> getObjetivosAportados() {
+        return objetivosAportados;
+    }
+
+    public void setObjetivosAportados(List<Objetivo> objetivosAportados) {
+        this.objetivosAportados = objetivosAportados;
+    }
+    
+    public void agregarObjetivoAportado(Objetivo objetivo) {
+        if (!this.objetivosAportados.contains(objetivo)) {
+            this.objetivosAportados.add(objetivo);
+        }
     }
 
     public boolean activo() {

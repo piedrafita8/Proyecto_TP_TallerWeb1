@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -117,6 +118,7 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
 
         objetivo.setMontoActual(objetivo.getMontoActual() + montoAportado);
         usuarioAportante.setSaldo(usuarioAportante.getSaldo() - montoAportado);
+        usuarioAportante.agregarObjetivoAportado(objetivo);
 
         repositorioObjetivo.guardar(objetivo);
         repositorioUsuario.modificar(usuarioAportante);
@@ -129,6 +131,15 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         egreso.setUserId(userIdAportante);
 
         servicioTransaccion.registrarTransaccionSinActualizarSaldo(egreso);
+    }
+
+    public List<Objetivo> obtenerObjetivosAportados(Long userId) {
+        Usuario usuario = repositorioUsuario.buscarPorId(userId);
+        if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no existe.");
+        }
+
+        return new ArrayList<>(usuario.getObjetivosAportados());
     }
 
     @Override

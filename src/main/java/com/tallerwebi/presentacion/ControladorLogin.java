@@ -97,10 +97,14 @@ public class ControladorLogin {
         // Obtener los objetivos personales del usuario
         List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
 
+        // Obtener los objetivos a los que ha aportado
+        List<Objetivo> objetivosAportados = servicioObjetivo.obtenerObjetivosAportados(userId);
+
         modelAndView.addObject("saldo", saldo);
         modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
         modelAndView.addObject("categorias", categorias);
         modelAndView.addObject("objetivosPersonales", objetivosPersonales);
+        modelAndView.addObject("objetivosAportados", objetivosAportados);
 
         return modelAndView;
     }

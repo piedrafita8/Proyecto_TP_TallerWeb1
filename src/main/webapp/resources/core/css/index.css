@@ -597,6 +597,20 @@ table td {
     background-color: #218838;
 }
 
+.objetivos-aportados {
+    margin-top: 30px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.objetivos-aportados h3 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 10px;
+}
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
