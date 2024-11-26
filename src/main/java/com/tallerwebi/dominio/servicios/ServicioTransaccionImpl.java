@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 @Service("servicioTransaccion")
 @Transactional
-
 public class ServicioTransaccionImpl implements ServicioTransaccion {
 
     private final RepositorioUsuario repositorioUsuario;
@@ -40,6 +39,7 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
     }
 
     @Override
+    @Transactional
     public void crearTransaccion(Transaccion transaccion, Long userId) throws SaldoInsuficiente {
         Usuario usuario = repositorioUsuario.buscarPorId(userId);
 
@@ -50,7 +50,8 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
 
         // Procesar ingreso
         if (transaccion instanceof Ingreso) {
-            Double nuevoSaldo = usuario.getSaldo() + transaccion.getMonto(); // Sumar al saldo
+            Double nuevoSaldo = usuario.getSaldo() + transaccion.getMonto();
+            usuario.addTransaccion(transaccion);
             usuario.setSaldo(nuevoSaldo);
 
             // Guardar el ingreso y actualizar el saldo del usuario
@@ -62,6 +63,7 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
             Double saldoActual = usuario.getSaldo();
             if (saldoActual >= transaccion.getMonto()) {
                 Double nuevoSaldo = saldoActual - transaccion.getMonto(); // Restar del saldo
+                usuario.addTransaccion(transaccion);
                 usuario.setSaldo(nuevoSaldo);
 
                 // Guardar el egreso y actualizar el saldo del usuario
@@ -84,6 +86,11 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
     @Override
     public List<Transaccion> getTransaccionPorUserId(Long userId) {
         return repositorioTransaccion.buscarTransaccionPorUsuario(userId);
+    }
+
+    @Override
+    public List<Transaccion> obtenerTodasLasTransaccionesPorUserId(Long userId) {
+        return repositorioTransaccion.obtenerTodasLasTransaccionesPorUserId(userId);
     }
 
     @Override

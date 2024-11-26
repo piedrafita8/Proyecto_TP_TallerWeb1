@@ -89,47 +89,35 @@
 
             <div class="flex">
                 <div>
-                    <div class="egresos-section">
-                        <h3>Egresos Recientes</h3>
+                    <div class="transacciones-section">
+                        <h3>Transacciones Recientes</h3>
                         <table class="table table-striped">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Descripción</th>
-                                    <th>Monto</th>
-                                    <th>Tipo</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="egreso : ${egresos}">
-                                    <td th:text="${egreso.descripcion}"></td>
-                                    <td th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
-                                    <td th:text="${egreso.tipoEgreso}"></td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                        </table>
-                    </div>
-                    <div class="ingresos-section">
-                        <h3>Ingresos Recientes</h3>
-                        <table class="table table-striped">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Descripción</th>
-                                    <th>Monto</th>
-                                    <th>Tipo</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="ingreso : ${ingresos}">
-                                    <td data-label="Descripción" th:text="${ingreso.descripcion}"></td>
-                                    <td data-label="Monto" th:text="${#numbers.formatDecimal(ingreso.monto, 1, 2)}"></td>
-                                    <td data-label="Tipo" th:text="${ingreso.tipoIngreso}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Monto</th>
+                                <th>Tipo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${not #lists.isEmpty(transacciones)}" th:each="transaccion : ${transacciones}">
+                                <td th:text="${transaccion.fecha != null ? transaccion.fecha.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy')) : 'N/A'}"></td>
+                                <td th:text="${transaccion.descripcion}"></td>
+                                <td th:text="${transaccion.monto != null ? #numbers.formatDecimal(transaccion.monto, 1, 2) : 'N/A'}"></td>
+                                <td>
+                    <span th:if="${transaccion instanceof T(com.tallerwebi.dominio.models.Ingreso)}" class="text-success">
+                        Ingreso: [[${transaccion.tipoIngreso}]]
+                    </span>
+                                    <span th:if="${transaccion instanceof T(com.tallerwebi.dominio.models.Egreso)}" class="text-danger">
+                        Egreso: [[${transaccion.tipoEgreso}]]
+                    </span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(transacciones)}">
+                                <td colspan="4">No hay transacciones recientes</td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

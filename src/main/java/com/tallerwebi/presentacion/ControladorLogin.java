@@ -2,8 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.enums.CategoriaObjetivo;
 import com.tallerwebi.dominio.interfaces.*;
-import com.tallerwebi.dominio.models.Objetivo;
-import com.tallerwebi.dominio.models.Usuario;
+import com.tallerwebi.dominio.models.*;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -91,8 +90,8 @@ public class ControladorLogin {
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
         Double saldo = (usuario != null) ? usuario.getSaldo() : 0.0;
 
-        // Obtener todas las categorías usando el enum
-        CategoriaObjetivo[] categorias = CategoriaObjetivo.values();
+        // Obtener todas las transacciones del usuario
+        List<Transaccion> transacciones = servicioTransaccion.obtenerTodasLasTransaccionesPorUserId(userId);
 
         // Obtener los objetivos personales del usuario
         List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
@@ -101,10 +100,7 @@ public class ControladorLogin {
         List<Objetivo> objetivosAportados = servicioObjetivo.obtenerObjetivosAportados(userId);
 
         modelAndView.addObject("saldo", saldo);
-        modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
-        modelAndView.addObject("categorias", categorias);
-        modelAndView.addObject("objetivosPersonales", objetivosPersonales);
-        modelAndView.addObject("objetivosAportados", objetivosAportados);
+        modelAndView.addObject("transacciones", transacciones);
 
         return modelAndView;
     }

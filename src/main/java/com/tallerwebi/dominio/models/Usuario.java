@@ -19,6 +19,10 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Objetivo> objetivos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaccion> transacciones = new ArrayList<>();
+
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_objetivos_aportados",
@@ -26,6 +30,8 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "objetivo_id")
     )
     private List<Objetivo> objetivosAportados = new ArrayList<>();
+
+
 
 
     public Usuario(String username, String email, String password, String rol) {
@@ -113,6 +119,20 @@ public class Usuario {
         if (!this.objetivosAportados.contains(objetivo)) {
             this.objetivosAportados.add(objetivo);
         }
+    }
+
+    public void addTransaccion(Transaccion transaccion) {
+        transacciones.add(transaccion);
+        transaccion.setUsuario(this);
+    }
+
+    // Getters y setters para transacciones
+    public List<Transaccion> getTransacciones() {
+        return transacciones;
+    }
+
+    public void setTransacciones(List<Transaccion> transacciones) {
+        this.transacciones = transacciones;
     }
 
     public boolean activo() {

@@ -6,25 +6,20 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "egresos")
-public class Egreso extends Transaccion{
-
-    // Atributos
+@DiscriminatorValue("EGRESO")
+public class Egreso extends Transaccion {
+    @Enumerated(EnumType.STRING)
     private TipoEgreso tipoEgreso;
 
-    public Egreso(Integer id, Double monto, String descripcion, LocalDate fecha, Long userId, TipoEgreso tipoEgreso) {
-        super(id, monto, descripcion, fecha, userId);
+    // Constructores
+    public Egreso() {}
+
+    public Egreso(Double monto, String descripcion, LocalDate fecha, Usuario usuario, TipoEgreso tipoEgreso) {
+        super(monto, descripcion, fecha, usuario);
         this.tipoEgreso = tipoEgreso;
     }
 
-    public Egreso(Double monto, String descripcion, LocalDate fecha) {
-        super(monto, descripcion,fecha);
-    }
-
-    // Constructor por default
-    public Egreso() {}
-
-    // Getters y Setters
+    // Getters y setters
     public TipoEgreso getTipoEgreso() {
         return tipoEgreso;
     }
@@ -32,6 +27,5 @@ public class Egreso extends Transaccion{
     public void setTipoEgreso(TipoEgreso tipoEgreso) {
         this.tipoEgreso = tipoEgreso;
     }
-
 }
 
