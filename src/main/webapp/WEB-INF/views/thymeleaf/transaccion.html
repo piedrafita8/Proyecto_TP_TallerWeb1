@@ -19,11 +19,9 @@
                 <li>
                     <i class="fa-solid fa-chart-simple"></i><a href="index.html">Esquema</a>
                 </li>
-
                 <li id="active">
                     <i class="fa-solid fa-arrow-up-wide-short"></i><a href="transaccion.html">Transacciones</a>
                 </li>
-
                 <li>
                     <i class="fa-solid fa-medal"></i><a href="objetivos.html">Objetivos Personales</a>
                 </li>
@@ -37,7 +35,6 @@
                 <li>
                     <i class="fa-regular fa-address-card"></i><a href="contacto.html">Contacto</a>
                 </li>
-
                 <li>
                     <i class="fa-solid fa-share-from-square"></i><a href="login.html">Cerrar sesion</a>
                 </li>
@@ -75,8 +72,25 @@
     </div>
 </main>
 
+<script>
+  
+    document.getElementById("opcionesForm").addEventListener("submit", function (event) {
+        event.preventDefault(); 
 
-</body>
+     
+        const opcionSeleccionada = document.querySelector('input[name="opcion"]:checked');
+        if (opcionSeleccionada) {
+            if (opcionSeleccionada.value === "ingreso") {
+                window.location.href = "/spring/transaccion/ingresos"; 
+            } else if (opcionSeleccionada.value === "gastos") {
+                window.location.href = "/spring/transaccion/gastos"; 
+            }
+        } else {
+            alert("Por favor selecciona una opción antes de continuar.");
+        }
+    });
+</script>
+
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/index.js}"></script>
 <script type="text/javascript" src="../../../resources/core/js/index.js"></script>
@@ -84,4 +98,5 @@
 <script type="text/javascript" src="../../../resources/core/js/gastos.js"></script>
 <script type="text/javascript" th:src="@{/js/ingresos.js}"></script>
 <script type="text/javascript" src="../../../resources/core/js/ingresos.js"></script>
+</body>
 </html>
