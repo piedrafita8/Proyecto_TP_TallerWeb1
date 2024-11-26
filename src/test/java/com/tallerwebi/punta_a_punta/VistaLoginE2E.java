@@ -21,8 +21,8 @@ public class VistaLoginE2E {
     @BeforeAll
     static void abrirNavegador() {
         playwright = Playwright.create();
-        browser = playwright.chromium().launch();
-        //browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(50));
+        // browser = playwright.chromium().launch();
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(1000));
 
     }
 
@@ -44,15 +44,15 @@ public class VistaLoginE2E {
     }
 
     @Test
-    void deberiaDecirUNLAMEnElNavbar() {
-        String texto = vistaLogin.obtenerTextoDeLaBarraDeNavegacion();
-        assertThat("UNLAM", equalToIgnoringCase(texto));
+    void deberiaDecirFINANZASSATEnElNavbar() {
+        String texto = vistaLogin.obtenerTextoDeLaBarraDeNavegacionLogin();
+        assertThat("FINANZAS SAT", equalToIgnoringCase(texto));
     }
 
     @Test
-    void deberiaDarUnErrorAlNoCompletarElLoginYTocarElBoton() {
-        vistaLogin.escribirEMAIL("damian@unlam.edu.ar");
-        vistaLogin.escribirClave("unlam");
+    void deberiaDarUnErrorAlCompletarElLoginConDatosIncorrectosYTocarElBoton() {
+        vistaLogin.escribirUser("pepe");
+        vistaLogin.escribirClave("asd");
         vistaLogin.darClickEnIniciarSesion();
         String texto = vistaLogin.obtenerMensajeDeError();
         assertThat("Error Usuario o clave incorrecta", equalToIgnoringCase(texto));
@@ -60,10 +60,10 @@ public class VistaLoginE2E {
 
     @Test
     void deberiaNavegarAlHomeSiElUsuarioExiste() {
-        vistaLogin.escribirEMAIL("test@unlam.edu.ar");
+        vistaLogin.escribirUser("pepe");
         vistaLogin.escribirClave("test");
         vistaLogin.darClickEnIniciarSesion();
         String url = vistaLogin.obtenerURLActual();
-        assertThat(url, containsStringIgnoringCase("/spring/home"));
+        assertThat(url, containsStringIgnoringCase("/spring/index"));
     }
 }
