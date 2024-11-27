@@ -1,7 +1,9 @@
 package com.tallerwebi.dominio.servicios;
 
+import com.tallerwebi.dominio.enums.TipoMovimiento;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
+import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioTransaccion;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioTransaccion;
@@ -75,6 +77,9 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
         } else {
             throw new IllegalArgumentException("Tipo de transacción desconocido");
         }
+
+        repositorioUsuario.modificar(usuario);
+        repositorioTransaccion.guardar(transaccion);
     }
 
 
@@ -95,6 +100,6 @@ public class ServicioTransaccionImpl implements ServicioTransaccion {
 
     @Override
     public void registrarTransaccionSinActualizarSaldo(Transaccion transaccion) {
-        this.repositorioTransaccion.guardar(transaccion);
+        this.repositorioTransaccion.guardar(transaccion);//Para que?
     }
 }
