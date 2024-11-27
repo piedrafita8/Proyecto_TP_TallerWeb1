@@ -53,6 +53,7 @@ public class ServicioDeudaImpl implements ServicioDeuda {
     }
 
     @Override
+    @Transactional
     public List<Deuda> obtenerDeudasQueMeDeben(Long userId) {
         Usuario usuario = repositorioUsuario.buscarPorId(userId);
         if (usuario == null) {
@@ -62,6 +63,7 @@ public class ServicioDeudaImpl implements ServicioDeuda {
     }
 
     @Override
+    @Transactional
     public List<Deuda> obtenerDeudasQueDebo(Long userId) {
         Usuario usuario = repositorioUsuario.buscarPorId(userId);
         if (usuario == null) {
