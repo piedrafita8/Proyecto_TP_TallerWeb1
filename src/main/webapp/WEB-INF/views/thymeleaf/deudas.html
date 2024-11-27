@@ -63,7 +63,7 @@
     <main>
     <h2 class="gestion">Gestion de deudas</h2>
 <div class="container-agregar">
-    <h2>Agregar Deuda</h2>
+    <h3>Agregar Deuda</h3>
     <form th:action="@{/deudas}" method="post">
         <label for="descripcion">Descripcion:</label>
         <input type="text" id="descripcion" name="descripcion" required />
@@ -89,7 +89,7 @@
 <div class="container-mostrar"></div>
     <!-- Tabla de deudas que el usuario debe -->
      <div class="deudas-container">
-    <h2>Deudas que Debo</h2>
+    <h3>Deudas que Debo</h3>
     <table>
         <thead>
             <tr>
@@ -108,7 +108,7 @@
                 <td th:text="${deuda.monto}"></td>
                 <td th:text="${deuda.fecha}"></td>
                 <td th:text="${deuda.tipoDeuda}"></td>
-                <td th:text="${deuda.destinatario}"></td>
+                <td th:text="${deuda.otraPersona}"></td>
                 <td>
                     <input type="checkbox" th:checked="${deuda.pagado}" 
                            th:onclick="'marcarPagada(' + deuda.id + ')'" />
@@ -122,7 +122,7 @@
 </div>
     <!-- Tabla de deudas que le deben al usuario -->
     <div class="deudas-container">
-    <h2>Deudas que Me deben</h2>
+    <h3>Deudas que Me deben</h3>
     <table>
         <thead>
             <tr>
@@ -141,7 +141,7 @@
                 <td th:text="${deuda.monto}"></td>
                 <td th:text="${deuda.fecha}"></td>
                 <td th:text="${deuda.tipoDeuda}"></td>
-                <td th:text="${deuda.destinatario}"></td>
+                <td th:text="${deuda.otraPersona}"></td>
                 <td>
                     <input type="checkbox" th:checked="${deuda.pagado}" 
                            th:onclick="'marcarPagada(' + deuda.id + ')'" />

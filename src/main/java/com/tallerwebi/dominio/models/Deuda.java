@@ -2,6 +2,8 @@ package com.tallerwebi.dominio.models;
 
 import javax.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.tallerwebi.dominio.enums.TipoDeuda;
 
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ public class Deuda {
 
     private String descripcion; 
     private Double monto;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
     @Enumerated(EnumType.STRING)
@@ -30,13 +33,21 @@ public class Deuda {
     private Usuario usuario; 
     public Deuda() {}
 
-    public Deuda(String descripcion, Double monto, LocalDate fecha, TipoDeuda tipoDeuda, String nombrePersona, Usuario usuario) {
+    public Deuda(String descripcion, Double monto, LocalDate fecha, TipoDeuda tipoDeuda, String otraPersona, Usuario usuario) {
+        this.descripcion = descripcion;
+        this.monto = monto;
+        this.fecha = fecha;
+        this.tipoDeuda = tipoDeuda;
+        this.otraPersona = otraPersona;
+        this.usuario = usuario;
+    }
+    public Deuda(String descripcion, Double monto, LocalDate fecha, TipoDeuda tipoDeuda, String nombrePersona) {
         this.descripcion = descripcion;
         this.monto = monto;
         this.fecha = fecha;
         this.tipoDeuda = tipoDeuda;
         this.otraPersona = nombrePersona;
-        this.usuario = usuario;
+        
     }
 
 
