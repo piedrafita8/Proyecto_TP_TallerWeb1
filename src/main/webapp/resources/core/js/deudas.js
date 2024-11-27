@@ -7,5 +7,17 @@ function marcarPagada(deudaId) {
 function eliminarDeuda(deudaId) {
     fetch(`/deudas/${deudaId}`, {
         method: "DELETE",
-    }).then(() => window.location.reload());
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            console.error("Error al eliminar la deuda:", response.statusText);
+            alert("No se pudo eliminar la deuda.");
+        }
+    })
+    .catch(error => {
+        console.error("Error en la solicitud:", error);
+        alert("Ocurrió un error al eliminar la deuda.");
+    });
 }

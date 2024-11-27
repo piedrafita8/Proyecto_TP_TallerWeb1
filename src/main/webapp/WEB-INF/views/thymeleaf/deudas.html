@@ -76,8 +76,8 @@
 
         <label for="tipoDeuda">Tipo de Deuda:</label>
         <select id="tipoDeuda" name="tipoDeuda">
-            <option value="DEBO">Pendiente</option>
-            <option value="ME_DEBEN">Por Cobrar</option>
+            <option value="DEBO">Yo debo</option>
+            <option value="ME_DEBEN">Me deben</option>
         </select>
 
         <label for="otraPersona">Destinatario:</label>
@@ -114,7 +114,7 @@
                            th:onclick="'marcarPagada(' + deuda.id + ')'" />
                 </td>
                 <td>
-                    <button th:onclick="'eliminarDeuda(' + deuda.id + ')'">X</button>
+                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
                 </td>
             </tr>
         </tbody>
@@ -147,7 +147,7 @@
                            th:onclick="'marcarPagada(' + deuda.id + ')'" />
                 </td>
                 <td>
-                    <button th:onclick="'eliminarDeuda(' + deuda.id + ')'">X</button>
+                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
                 </td>
             </tr>
         </tbody>
@@ -163,7 +163,7 @@
     <script type="text/javascript" src="../../../resources/core/js/ingresos.js"></script>
     <script type="text/javascript" th:src="@{/js/gastos.js}"></script>
     <script type="text/javascript" src="../../../resources/core/js/deudas.js"></script>
-    <script type="text/javascript" th:src="@{/js/gastos.js}"></script>
+    <script type="text/javascript" th:src="@{/js/deudas.js}"></script>
     <script type="text/javascript" src="../../../resources/core/js/deudas.js"></script>
 </body>
 </html>

@@ -8,6 +8,8 @@ import com.tallerwebi.dominio.interfaces.ServicioDeuda;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -75,15 +77,15 @@ public class ControladorDeuda {
 
 
     @DeleteMapping("/{deudaId}")
-    public String eliminarDeuda(@PathVariable Long deudaId, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> eliminarDeuda(@PathVariable Long deudaId) {
         try {
             servicioDeuda.eliminarDeuda(deudaId);
-            redirectAttributes.addFlashAttribute("mensaje", "Deuda eliminada exitosamente.");
+            return ResponseEntity.ok("Deuda eliminada exitosamente.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al eliminar la deuda: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body("Error al eliminar la deuda: " + e.getMessage());
         }
-        return "redirect:/deudas";
-    }
+}
 
     @PutMapping("/pagar/{deudaId}")
     public String marcarComoPagada(@PathVariable Long deudaId, RedirectAttributes redirectAttributes) {
