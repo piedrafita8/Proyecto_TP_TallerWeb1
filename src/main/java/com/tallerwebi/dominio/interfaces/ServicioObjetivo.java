@@ -16,7 +16,7 @@ public interface ServicioObjetivo {
     public List<Objetivo> obtenerTodosLosObjetivos();
     public List<Objetivo> obtenerTodosLosObjetivosPorUsuario(Long userId);
 
-    public void crearObjetivo(String nombre, Double montoObjetivo, Date fechaLimite, Long userId) throws ObjetivoExistente;
+    public void crearObjetivo(String nombre, Double montoObjetivo, Date fechaLimite, CategoriaObjetivo categoria, Long userId) throws ObjetivoExistente;
     public void actualizarObjetivo(Integer id, Double montoAAgregar, Long userId) throws SaldoInsuficiente;
     public void aportarAObjetivo(Integer id, Double montoAportado, Long userIdAportante, String EmailDeusuarioAportado);
 

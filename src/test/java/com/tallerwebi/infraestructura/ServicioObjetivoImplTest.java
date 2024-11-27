@@ -49,6 +49,7 @@ class ServicioObjetivoImplTest {
         String nombre = "Casa Nueva";
         Double montoObjetivo = 75000.0;
         Date fechaLimite = new Date();
+        CategoriaObjetivo categoriaObjetivo = CategoriaObjetivo.VIAJE;
 
         Usuario usuario = new Usuario();
         usuario.setId(userId);
@@ -57,7 +58,7 @@ class ServicioObjetivoImplTest {
 
         // Ejecución
         assertDoesNotThrow(() ->
-                servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, userId)
+                servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, categoriaObjetivo, userId)
         );
 
         // Verificación
@@ -71,12 +72,13 @@ class ServicioObjetivoImplTest {
         String nombre = "Casa Nueva";
         Double montoObjetivo = 75000.0;
         Date fechaLimite = new Date();
+        CategoriaObjetivo categoriaObjetivo = CategoriaObjetivo.VIAJE;
 
         when(repositorioUsuario.buscarPorId(userId)).thenReturn(null);
 
         // Ejecución y Verificación
         assertThrows(IllegalArgumentException.class, () ->
-                servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, userId)
+                servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, categoriaObjetivo, userId)
         );
     }
 

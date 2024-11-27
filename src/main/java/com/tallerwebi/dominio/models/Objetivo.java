@@ -32,12 +32,18 @@ public class Objetivo {
     }
 
     // Constructor con todos los campos excepto id
-    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite, Usuario usuario) {
+    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite,
+                    Usuario usuario, CategoriaObjetivo categoria) {
         this.nombre = nombre;
         this.montoObjetivo = montoObjetivo;
         this.fechaLimite = fechaLimite;
         this.montoActual = 0.0;
         this.usuario = usuario;
+        this.categoria = categoria;
+    }
+
+    public Objetivo(String nombre, Double montoObjetivo, Date fechaLimite, Usuario usuario) {
+        this(nombre, montoObjetivo, fechaLimite, usuario, null);
     }
 
     public Usuario getUsuario() {

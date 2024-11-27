@@ -39,13 +39,15 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
     }
 
     @Override
-    public void crearObjetivo(String nombre, Double montoObjetivo, Date fechaLimite, Long userId) throws ObjetivoExistente {
+    public void crearObjetivo(String nombre, Double montoObjetivo, Date fechaLimite,
+                              CategoriaObjetivo categoria, Long userId) throws ObjetivoExistente {
         Usuario usuario = repositorioUsuario.buscarPorId(userId);
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
 
         Objetivo objetivo = new Objetivo(nombre, montoObjetivo, fechaLimite, usuario);
+        objetivo.setCategoria(categoria); // Establece la categoría
         usuario.addObjetivo(objetivo);
         repositorioObjetivo.crearObjetivo(objetivo);
     }
