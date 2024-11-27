@@ -57,14 +57,16 @@
             <p>Billetera</p>
             <p class="dinero" th:text="${#numbers.formatDecimal(saldo, 1, 2)}"></p>
 
-            <div class="ingreso">
-                <p>Monto total de Ingresos: </p>
-                <p th:text="${#numbers.formatDecimal(montoIngreso, 1, 2)}"></p>
-            </div>
+            <div class="montos">
+                <div class="ingreso">
+                    <p>Monto total de Ingresos: </p>
+                    <p th:text="${#numbers.formatDecimal(montoIngreso, 1, 2)}"></p>
+                </div>
 
-            <div class="gasto">
-                <p>Monto total de Egresos: </p>
-                <p th:text="${#numbers.formatDecimal(montoEgreso, 1, 2)}"></p>
+                <div class="gasto">
+                    <p>Monto total de Egresos: </p>
+                    <p th:text="${#numbers.formatDecimal(montoEgreso, 1, 2)}"></p>
+                </div>
             </div>
         </div>
 

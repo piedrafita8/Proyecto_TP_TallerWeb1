@@ -93,6 +93,18 @@ public class ControladorLogin {
         // Obtener todas las transacciones del usuario
         List<Transaccion> transacciones = servicioTransaccion.obtenerTodasLasTransaccionesPorUserId(userId);
 
+        // Filtrar ingresos y sumar montos
+        Double totalIngresos = transacciones.stream()
+                .filter(t -> t instanceof Ingreso)
+                .mapToDouble(Transaccion::getMonto)
+                .sum();
+
+        // Filtrar ingresos y sumar montos
+        Double totalEgresos = transacciones.stream()
+                .filter(t -> t instanceof Egreso)
+                .mapToDouble(Transaccion::getMonto)
+                .sum();
+
         // Obtener los objetivos personales del usuario
         List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
 
@@ -101,6 +113,8 @@ public class ControladorLogin {
 
         modelAndView.addObject("saldo", saldo);
         modelAndView.addObject("transacciones", transacciones);
+        modelAndView.addObject("montoIngreso", totalIngresos);
+        modelAndView.addObject("montoEgreso", totalEgresos);
 
         return modelAndView;
     }
