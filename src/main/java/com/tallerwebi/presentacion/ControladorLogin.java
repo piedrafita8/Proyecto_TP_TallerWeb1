@@ -133,6 +133,12 @@ public class ControladorLogin {
         modelAndView.addObject("saldo", usuario.getSaldo());
         modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
 
+        List<Objetivo> objetivosAportados = servicioObjetivo.obtenerObjetivosAportados(userId);
+        List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
+
+        modelAndView.addObject("objetivosPersonales", objetivosPersonales);
+        modelAndView.addObject("objetivosAportados", objetivosAportados);
+
         return modelAndView;
     }
 

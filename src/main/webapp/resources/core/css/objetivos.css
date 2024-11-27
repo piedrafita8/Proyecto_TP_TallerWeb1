@@ -125,42 +125,111 @@ h2 {
 .goals-list {
   list-style-type: none;
   padding: 0;
+  max-width: 800px;
+  margin: 0 auto;
 }
+
 .goal-item {
   background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.goal-item:hover {
+  transform: scale(1.02);
+}
+
+.goal-header {
+  background-color: #4a90e2;
+  color: white;
   padding: 15px;
-  margin-bottom: 10px;
+  text-align: center;
 }
-.goal-name {
-  font-weight: bold;
+
+.goal-header h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.goal-details {
+  padding: 20px;
+}
+
+.goal-info {
+  margin-bottom: 20px;
+}
+
+.goal-info p {
+  margin: 10px 0;
+  color: #333;
+}
+
+.progress-container {
+  margin-bottom: 20px;
+}
+
+.progress-percentage {
+  text-align: right;
+  color: #666;
   margin-bottom: 5px;
+  font-weight: bold;
 }
-.goal-progress {
-  margin-bottom: 10px;
-}
-progress {
-  width: 100%;
+
+.progress {
+  background-color: #e0e0e0;
   height: 20px;
+  border-radius: 10px;
+  overflow: hidden;
 }
-.add-money-form {
+
+.progress-bar {
+  background-color: #4CAF50;
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+}
+
+.goal-actions {
   display: flex;
+  justify-content: space-between;
   gap: 10px;
 }
-.add-money-form input {
-  flex: 1;
-  padding: 5px;
+
+.goal-actions form {
+  flex-grow: 1;
+}
+
+.goal-actions input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-.add-money-form button {
-  padding: 5px 10px;
-  background-color: #008cba;
+
+.goal-actions button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4a90e2;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.goal-actions button:hover {
+  background-color: #357abd;
+}
+
+.goal-actions form:last-child button {
+  background-color: #f44336;
+}
+
+.goal-actions form:last-child button:hover {
+  background-color: #d32f2f;
 }
 
 .delete-goal-btn{

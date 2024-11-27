@@ -70,7 +70,10 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
     public void eliminarObjetivo(Integer id) {
         Objetivo objetivo = sessionFactory.getCurrentSession().get(Objetivo.class, id);
         if(objetivo != null) {
-            objetivo.getUsuario().removeObjetivo(objetivo);
+            // Verificar si hay un usuario asociado antes de intentar remover el objetivo
+            if (objetivo.getUsuario() != null) {
+                objetivo.getUsuario().removeObjetivo(objetivo);
+            }
             sessionFactory.getCurrentSession().delete(objetivo);
         }
     }

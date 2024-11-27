@@ -93,18 +93,32 @@
   </form>
 
   <ul class="goals-list">
-    <li th:each="objetivo : ${objetivos}">
-          <h3 th:text="${objetivo.nombre}">Nombre del Objetivo</h3>
+    <li th:each="objetivo : ${objetivos}" class="goal-item">
+      <div class="goal-header">
+        <h3 th:text="${objetivo.nombre}">Nombre del Objetivo</h3>
+      </div>
+      <div class="goal-details">
+        <div class="goal-info">
           <p>Monto Objetivo: $<span th:text="${#numbers.formatDecimal(objetivo.montoObjetivo, 0, 'COMMA', 2, 'POINT')}">0.00</span></p>
           <p>Monto Actual: $<span th:text="${#numbers.formatDecimal(objetivo.montoActual, 0, 'COMMA', 2, 'POINT')}">0.00</span></p>
           <p>Fecha Límite: <span th:text="${#dates.format(objetivo.fechaLimite, 'dd-MM-yyyy')}">01-01-2023</span></p>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-percentage"
+               th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}">
+          </div>
+          <div class="progress">
+            <div class="progress-bar"
+                 th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
+            </div>
+          </div>
+        </div>
+
+        <div class="goal-actions">
           <form th:action="@{/objetivos/{id}/actualizarMonto(id=${objetivo.id})}" method="post">
             <input type="number" name="montoAAgregar" placeholder="Monto a agregar" required />
             <button type="submit">Actualizar Monto</button>
-          </form>
-          <form th:action="@{/objetivos/{id}(id=${objetivo.id})}" method="post">
-            <input type="hidden" name="_method" value="delete" />
-            <button type="submit">Eliminar Objetivo</button>
           </form>
         </div>
       </div>
