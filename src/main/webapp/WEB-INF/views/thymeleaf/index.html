@@ -200,10 +200,15 @@
                                     <td th:text="${objetivo.montoObjetivo}"></td>
                                     <td th:text="${objetivo.montoActual}"></td>
                                     <td>
-                                        <div class="progress">
-                                            <div class="progress-bar"
-                                                 th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
-                                                <span th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}"></span>
+                                        <div class="progress-container">
+                                            <div class="progress-percentage"
+                                                 th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}">
+                                            </div>
+
+                                            <div class="progress">
+                                                <div class="progress-bar"
+                                                     th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -246,12 +251,12 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                    <form th:action="@{/objetivos/{id}/actualizarMonto(id=${objetivo.id})}" method="post">
                                         <label>
                                             Monto:
-                                            <input type="number" name="montoAportado" min="1" required>
+                                            <input type="number" name="montoAAgregar" min="1" required>
                                         </label>
-                                        <button type="submit">Aportar</button>
+                                        <button type="submit">Actualizar Monto</button>
                                     </form>
                                 </td>
                             </tr>
@@ -260,7 +265,7 @@
                     </div>
                     <div th:if="${#lists.isEmpty(objetivosPersonales)}" class="sin-objetivos">
                         <p>No tienes objetivos creados aún.</p>
-                        <a th:href="@{/crear-objetivo}" class="btn-crear-objetivo">Crear Nuevo Objetivo</a>
+                        <a href="objetivos.html">Crear Nuevo Objetivo</a>
                     </div>
                 </div>
             </div>

@@ -90,6 +90,8 @@ public class ControladorLogin {
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
         Double saldo = (usuario != null) ? usuario.getSaldo() : 0.0;
 
+        CategoriaObjetivo[] categorias = CategoriaObjetivo.values();
+
         // Obtener todas las transacciones del usuario
         List<Transaccion> transacciones = servicioTransaccion.obtenerTodasLasTransaccionesPorUserId(userId);
 
@@ -101,6 +103,9 @@ public class ControladorLogin {
 
         modelAndView.addObject("saldo", saldo);
         modelAndView.addObject("transacciones", transacciones);
+        modelAndView.addObject("categorias", categorias);
+        modelAndView.addObject("objetivosPersonales", objetivosPersonales);
+        modelAndView.addObject("objetivosAportados", objetivosAportados);
 
         return modelAndView;
     }
@@ -127,6 +132,12 @@ public class ControladorLogin {
         // Mantener otros datos del usuario
         modelAndView.addObject("saldo", usuario.getSaldo());
         modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
+
+        List<Objetivo> objetivosAportados = servicioObjetivo.obtenerObjetivosAportados(userId);
+        List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
+
+        modelAndView.addObject("objetivosPersonales", objetivosPersonales);
+        modelAndView.addObject("objetivosAportados", objetivosAportados);
 
         return modelAndView;
     }
