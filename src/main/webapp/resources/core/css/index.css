@@ -110,19 +110,25 @@ main {
     font-size: 40px;
 }
 
-.container-billetera .gasto{
-    display: inline-block;
-    text-align: end;
-    width: 50%;
+.montos {
+    display: flex;
+    justify-content: space-between; /* Distribuye los elementos a los extremos */
+    align-items: center; /* Alinea verticalmente los elementos */
+    margin-top: 20px;
+}
+
+.container-billetera .gasto p{
+    display: flex;
+    text-align: start;
+    width: 100%;
     color: rgb(190, 89, 89);
 }
 
-.container-billetera .ingreso{
-    display: inline-block;
+.container-billetera .ingreso p{
+    display: flex;
     text-align: start;
-    width: 40%;
+    width: 100%;
     color: rgb(78, 160, 78);
-    margin-top: 1em;
 }
 
 .tipo-mov-ing{

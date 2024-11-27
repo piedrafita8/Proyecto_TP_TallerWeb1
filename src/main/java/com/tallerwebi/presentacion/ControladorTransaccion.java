@@ -118,6 +118,7 @@ public class ControladorTransaccion {
             modelAndView.addObject("error", "Saldo insuficiente para realizar el egreso");
         } catch (Exception e) {
             modelAndView.addObject("error", "Ocurrió un error al procesar la transacción: " + e.getMessage());
+            modelAndView.setViewName("gastos");
         }
 
         return modelAndView;
@@ -173,6 +174,7 @@ public class ControladorTransaccion {
             modelAndView.setViewName("redirect:/ingreso");
         } catch (Exception e) {
             modelAndView.addObject("error", e.getMessage());
+            modelAndView.setViewName("ingreso");
         }
 
         return modelAndView;
