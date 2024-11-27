@@ -76,17 +76,19 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
             throw new SaldoInsuficiente("Saldo insuficiente para actualizar el objetivo.");
         }
 
-        objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
-        usuario.setSaldo(usuario.getSaldo() - montoAAgregar);
-
-        repositorioObjetivo.guardar(objetivo);
-
         Egreso egreso = new Egreso();
         egreso.setMonto(montoAAgregar);
-        egreso.setDescripcion("Actualización del objetivo: " + objetivo.getNombre());
+        egreso.setDescripcion("Aporte al objetivo: " + objetivo.getNombre());
         egreso.setFecha(LocalDate.now());
         egreso.setTipoEgreso(TipoEgreso.APORTE);
         egreso.setUserId(userId);
+
+        objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
+        usuario.setSaldo(usuario.getSaldo() - montoAAgregar);
+        usuario.addTransaccion(egreso);
+
+        repositorioObjetivo.guardar(objetivo);
+        repositorioUsuario.modificar(usuario);
 
         servicioTransaccion.registrarTransaccionSinActualizarSaldo(egreso);
     }

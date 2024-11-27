@@ -200,10 +200,15 @@
                                     <td th:text="${objetivo.montoObjetivo}"></td>
                                     <td th:text="${objetivo.montoActual}"></td>
                                     <td>
-                                        <div class="progress">
-                                            <div class="progress-bar"
-                                                 th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
-                                                <span th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}"></span>
+                                        <div class="progress-container">
+                                            <div class="progress-percentage"
+                                                 th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}">
+                                            </div>
+
+                                            <div class="progress">
+                                                <div class="progress-bar"
+                                                     th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
