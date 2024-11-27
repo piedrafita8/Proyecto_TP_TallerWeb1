@@ -81,19 +81,20 @@ public class RepositorioObjetivoImpl implements RepositorioObjetivo {
         CriteriaQuery<Objetivo> query = builder.createQuery(Objetivo.class);
         Root<Objetivo> root = query.from(Objetivo.class);
 
+        root.fetch("usuario", JoinType.LEFT);
+
         List<Predicate> predicates = new ArrayList<>();
 
-        // Filtro por usuario si se proporciona
         if (usuario != null) {
             predicates.add(builder.equal(root.get("usuario"), usuario));
         }
 
-        // Filtro por categoría si se proporciona
         if (categoria != null) {
             predicates.add(builder.equal(root.get("categoria"), categoria));
         }
 
         query.where(predicates.toArray(new Predicate[0]));
+        query.distinct(true); // Importante para evitar duplicados con fetch join
 
         return sessionFactory.getCurrentSession().createQuery(query).getResultList();
     }
