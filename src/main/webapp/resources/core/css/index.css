@@ -110,19 +110,19 @@ main {
     font-size: 40px;
 }
 
-.container-billetera .gasto{
-    display: inline-block;
-    text-align: end;
+.container-billetera .gasto p{
+    display: flex;
+    text-align: start;
     width: 50%;
     color: rgb(190, 89, 89);
 }
 
-.container-billetera .ingreso{
-    display: inline-block;
+.container-billetera .ingreso p{
+    margin-top: 2em;
+    display: flex;
     text-align: start;
-    width: 40%;
+    width: 50%;
     color: rgb(78, 160, 78);
-    margin-top: 1em;
 }
 
 .tipo-mov-ing{
