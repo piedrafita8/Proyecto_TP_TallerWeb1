@@ -96,7 +96,6 @@
                 <th>Descripcion</th>
                 <th>Monto</th>
                 <th>Fecha</th>
-                <th>Tipo</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
                 <th>Borrar</th>
@@ -107,7 +106,6 @@
                 <td th:text="${deuda.descripcion}"></td>
                 <td th:text="${deuda.monto}"></td>
                 <td th:text="${deuda.fecha}"></td>
-                <td th:text="${deuda.tipoDeuda}"></td>
                 <td th:text="${deuda.otraPersona}"></td>
                 <td>
                     <input type="checkbox" th:checked="${deuda.pagado}" 
@@ -129,18 +127,16 @@
                 <th>Nombre</th>
                 <th>Monto</th>
                 <th>Fecha</th>
-                <th>Tipo</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
                 <th>Borrar</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="deuda : ${meDeben}">
+            <tr th:each="deuda : ${medeben}">
                 <td th:text="${deuda.descripcion}"></td>
                 <td th:text="${deuda.monto}"></td>
                 <td th:text="${deuda.fecha}"></td>
-                <td th:text="${deuda.tipoDeuda}"></td>
                 <td th:text="${deuda.otraPersona}"></td>
                 <td>
                     <input type="checkbox" th:checked="${deuda.pagado}" 
