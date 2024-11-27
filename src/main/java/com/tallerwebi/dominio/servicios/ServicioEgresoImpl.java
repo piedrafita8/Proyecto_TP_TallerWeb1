@@ -28,7 +28,7 @@ public class ServicioEgresoImpl implements ServicioEgreso {
 
     @Override
     public Egreso consultarEgreso(Double monto, Integer id) throws RecursoNoEncontrado {
-        // Aquí debes llamar al metodo correcto en la instancia inyectada
+        // Aquí debes llamar al método correcto en la instancia inyectada
         Egreso resultado = repositorioEgreso.buscar(monto, id);  // Usar repositorioEgreso en lugar de RepositorioEgresoImpl
         if (resultado == null) {
             throw new RecursoNoEncontrado("Egreso no encontrado con monto: " + monto + " e id: " + id);

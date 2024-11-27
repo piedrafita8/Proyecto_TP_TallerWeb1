@@ -29,12 +29,9 @@
                 </li>
 
                 <li>
-                    <i class="fa-solid fa-medal"></i><a href="objetivos.html">Objetivos</a>
+                    <i class="fa-solid fa-medal"></i><a href="objetivos.html">Objetivos Personales</a>
                 </li>
 
-                <!--        <li>-->
-                <!--          <a href="ajustes.html">Ajustes</a>-->
-                <!--        </li>-->
             </ul>
         </nav>
     </div>
@@ -42,9 +39,6 @@
     <div class="nav2">
         <nav>
             <ul class="menu">
-                <!--        <li>-->
-                <!--          <a href="ayuda.html">Centro de Ayuda</a>-->
-                <!--        </li>-->
 
                 <li>
                     <i class="fa-regular fa-address-card"></i><a href="contacto.html">Contacto</a>
@@ -62,10 +56,6 @@
         <div class="container-billetera">
             <p>Billetera</p>
             <p class="dinero" th:text="${#numbers.formatDecimal(saldo, 1, 2)}"></p>
-            <p class="ingreso">$530.000,00</p>
-            <p class="gasto">$62099,66</p>
-            <p class="tipo-mov-ing">Ingreso</p>
-            <p class="tipo-mov-egr">Egreso</p>
         </div>
 
         <div class="container-grafico">
@@ -97,44 +87,182 @@
         <div class="container-index">
             <h2>Bienvenido a Finanzas SAT</h2>
 
-            <div class="egresos-section">
-                <h3>Egresos Recientes</h3>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Descripción</th>
-                        <th>Monto</th>
-                        <th>Tipo</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="egreso : ${egresos}">
-                        <td data-label="Descripción" th:text="${egreso.descripcion}"></td>
-                        <td data-label="Monto" th:text="${#numbers.formatDecimal(egreso.monto, 1, 2)}"></td>
-                        <td data-label="Tipo" th:text="${egreso.tipoEgreso}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <div class="flex">
+                <div>
+                    <div class="transacciones-section">
+                        <h3>Transacciones Recientes</h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Monto</th>
+                                <th>Tipo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${not #lists.isEmpty(transacciones)}" th:each="transaccion : ${transacciones}">
+                                <td th:text="${transaccion.fecha != null ? transaccion.fecha.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy')) : 'N/A'}"></td>
+                                <td th:text="${transaccion.descripcion}"></td>
+                                <td th:text="${transaccion.monto != null ? #numbers.formatDecimal(transaccion.monto, 1, 2) : 'N/A'}"></td>
+                                <td>
+                    <span th:if="${transaccion instanceof T(com.tallerwebi.dominio.models.Ingreso)}" class="text-success">
+                        Ingreso: [[${transaccion.tipoIngreso}]]
+                    </span>
+                                    <span th:if="${transaccion instanceof T(com.tallerwebi.dominio.models.Egreso)}" class="text-danger">
+                        Egreso: [[${transaccion.tipoEgreso}]]
+                    </span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(transacciones)}">
+                                <td colspan="4">No hay transacciones recientes</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div class="ingresos-section">
-                <h3>Ingresos Recientes</h3>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Descripción</th>
-                        <th>Monto</th>
-                        <th>Tipo</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="ingreso : ${ingresos}">
-                        <td data-label="Descripción" th:text="${ingreso.descripcion}"></td>
-                        <td data-label="Monto" th:text="${#numbers.formatDecimal(ingreso.monto, 1, 2)}"></td>
-                        <td data-label="Tipo" th:text="${ingreso.tipoIngreso}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="container">
+                    <div class="busqueda-objetivos">
+                        <h3>Buscar Objetivos</h3>
+                        <form th:action="@{/buscar-objetivos}" method="post">
+                            <label>
+                                Email de Usuario:
+                                <input type="email" name="emailUsuario" placeholder="Ingrese Email del Usuario">
+                            </label>
+
+                            <label>
+                                Categoría:
+                                <select name="categoria">
+                                    <option value="">Todas las categorías</option>
+                                    <option th:each="cat : ${categorias}"
+                                            th:value="${cat}"
+                                            th:text="${cat}">
+                                    </option>
+                                </select>
+                            </label>
+
+                            <button type="submit">Buscar</button>
+                        </form>
+
+                        <div th:if="${not #lists.isEmpty(objetivos)}">
+                            <h3>Resultados Búsqueda</h3>
+                            <table>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Monto Objetivo</th>
+                                        <th>Monto Actual</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="objetivo : ${objetivos}">
+                                        <td th:text="${objetivo.nombre}"></td>
+                                        <td th:text="${objetivo.montoObjetivo}"></td>
+                                        <td th:text="${objetivo.montoActual}"></td>
+                                        <td>
+                                            <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                                <label>
+                                                    Monto:
+                                                    <input type="number" name="montoAportado" min="1" required>
+                                                </label>
+                                                <button type="submit">Aportar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="objetivos-aportados">
+                        <h3>Objetivos Aportados</h3>
+                        <div th:if="${not #lists.isEmpty(objetivosAportados)}">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Propietario</th>
+                                    <th>Monto Objetivo</th>
+                                    <th>Monto Actual</th>
+                                    <th>Progreso</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="objetivo : ${objetivosAportados}">
+                                    <td th:text="${objetivo.nombre}"></td>
+                                    <td th:text="${objetivo.categoria}"></td>
+                                    <td th:text="${objetivo.usuario.email}"></td>
+                                    <td th:text="${objetivo.montoObjetivo}"></td>
+                                    <td th:text="${objetivo.montoActual}"></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar"
+                                                 th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
+                                                <span th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}"></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div th:if="${#lists.isEmpty(objetivosAportados)}" class="sin-objetivos">
+                            <p>No has aportado a ningún objetivo aún.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="objetivos-personales">
+                    <h3>Objetivos Personales</h3>
+                    <div th:if="${not #lists.isEmpty(objetivosPersonales)}">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Monto Objetivo</th>
+                                <th>Monto Actual</th>
+                                <th>Progreso</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="objetivo : ${objetivosPersonales}">
+                                <td th:text="${objetivo.nombre}"></td>
+                                <td th:text="${objetivo.categoria}"></td>
+                                <td th:text="${objetivo.montoObjetivo}"></td>
+                                <td th:text="${objetivo.montoActual}"></td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar"
+                                             th:style="'width: ' + (${objetivo.montoActual} / ${objetivo.montoObjetivo} * 100) + '%'">
+                                            <span th:text="${#numbers.formatPercent(objetivo.montoActual / objetivo.montoObjetivo, 0, 2)}"></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                        <label>
+                                            Monto:
+                                            <input type="number" name="montoAportado" min="1" required>
+                                        </label>
+                                        <button type="submit">Aportar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if="${#lists.isEmpty(objetivosPersonales)}" class="sin-objetivos">
+                        <p>No tienes objetivos creados aún.</p>
+                        <a th:href="@{/crear-objetivo}" class="btn-crear-objetivo">Crear Nuevo Objetivo</a>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

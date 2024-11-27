@@ -74,7 +74,7 @@ public class ControladorEgreso {
         }
 
         if(fecha == null){
-            modelAndView.addObject("error", "La fecha no puede ser nula");
+            modelAndView.addObject("error", "La fecga no puede ser nula");
             return modelAndView;
         }
 

@@ -163,3 +163,9 @@ progress {
   cursor: pointer;
 }
 
+.delete-goal-btn{
+  padding-top: 15px;
+  border: 0;
+  background-color: #f9f9f9;
+  text-decoration: underline;
+}
