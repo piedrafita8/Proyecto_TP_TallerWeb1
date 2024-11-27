@@ -32,8 +32,9 @@ public class ControladorDeuda {
     }
 
     @PostMapping
-    public void agregarDeuda(@RequestBody Deuda deuda) {
+    public String agregarDeuda(@RequestBody Deuda deuda) {
         servicioDeuda.agregarDeuda(deuda);
+        return "redirect:/deudas";
     }
 
     @DeleteMapping("/{deudaId}")
@@ -44,5 +45,9 @@ public class ControladorDeuda {
     @PutMapping("/pagar/{deudaId}")
     public void marcarComoPagada(@PathVariable Long deudaId) {
         servicioDeuda.marcarDeudaComoPagada(deudaId);
+    }
+    @GetMapping("/form")
+    public String mostrarFormularioDeuda() {
+        return "deudaForm";
     }
 }
