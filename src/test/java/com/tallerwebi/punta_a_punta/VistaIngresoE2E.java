@@ -49,6 +49,12 @@ public class VistaIngresoE2E {
     }
 
     @Test
+    void deberiaDecirINGRESOSEnLaVistaIngreso() {
+        String texto = vistaIngreso.obtenerTextoDeLaVistaIngreso();
+        assertThat("INGRESOS", equalToIgnoringCase(texto));
+    }
+
+    @Test
     void deberiaNavegarAlGastoSiElUsuarioIngresaElMovimiento() {
         vistaIngreso.escribirElMonto(10000.0);
         vistaIngreso.darClickEnLaCategoria();

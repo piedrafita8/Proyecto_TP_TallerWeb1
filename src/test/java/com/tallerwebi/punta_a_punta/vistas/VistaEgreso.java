@@ -15,6 +15,10 @@ public class VistaEgreso extends VistaWeb{
         return this.obtenerTextoDelElemento(".nav-container .nav1 .navbar h1");
     }
 
+    public String obtenerTextoDeLaVistaGastos(){
+        return this.obtenerTextoDelElemento(".conteinerGastos .d-flex h2");
+    }
+
     public String obtenerMensajeDeError(){
         return this.obtenerTextoDelElemento(".alert .alert-danger p");
     }

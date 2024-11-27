@@ -15,6 +15,10 @@ public class VistaIngreso extends VistaWeb{
         return this.obtenerTextoDelElemento(".nav-container .nav1 .navbar h1");
     }
 
+    public String obtenerTextoDeLaVistaIngreso(){
+        return this.obtenerTextoDelElemento(".conteinerGastos .d-flex h2");
+    }
+
     public String obtenerMensajeDeError(){
         return this.obtenerTextoDelElemento("p.alert.alert-danger");
     }

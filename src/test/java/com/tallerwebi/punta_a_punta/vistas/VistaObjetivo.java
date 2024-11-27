@@ -15,6 +15,10 @@ public class VistaObjetivo extends VistaWeb{
         return this.obtenerTextoDelElemento(".nav-container .nav1 .navbar h1");
     }
 
+    public String obtenerTextoDeLaVistaObjetivos(){
+        return this.obtenerTextoDelElemento(".container h2");
+    }
+
     public void escribirNombreDelObjetivo(String objetivo){
         this.escribirEnElElemento("#nombreObjetivo", objetivo);
     }

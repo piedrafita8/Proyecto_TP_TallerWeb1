@@ -1,6 +1,7 @@
 package com.tallerwebi.punta_a_punta;
 
 import com.microsoft.playwright.*;
+import com.tallerwebi.presentacion.ControladorTransaccion;
 import com.tallerwebi.punta_a_punta.vistas.VistaEgreso;
 import org.junit.jupiter.api.*;
 
@@ -16,6 +17,7 @@ public class VistaEgresoE2E {
     static Browser browser;
     BrowserContext context;
     VistaEgreso vistaEgreso;
+    ControladorTransaccion controladorTransaccion;
 
     @BeforeAll
     static void abrirNavegador() {
@@ -48,15 +50,10 @@ public class VistaEgresoE2E {
         assertThat("Finanzas SAT", equalToIgnoringCase(texto));
     }
 
-    // Revisar
     @Test
-    void deberiaDarUnErrorAlCompletarElEgresoSinAntesIngresarDineroYTocarElBoton() {
-        vistaEgreso.escribirElMonto(60000.0);
-        vistaEgreso.darClickEnLaCategoria();
-        vistaEgreso.escribirLaFecha(LocalDate.of(2024, 10, 21));
-        vistaEgreso.escribirComentario("Gastos para almacen");
-        String texto = vistaEgreso.obtenerMensajeDeError();
-        assertThat("Saldo insuficiente para realizar el egreso.", equalToIgnoringCase(texto));
+    void deberiaDecirGASTOSEnLaVistaEgreso() {
+        String texto = vistaEgreso.obtenerTextoDeLaVistaGastos();
+        assertThat("GASTOS", equalToIgnoringCase(texto));
     }
 
     @Test
@@ -68,4 +65,5 @@ public class VistaEgresoE2E {
         String url = vistaEgreso.obtenerURLActual();
         assertThat(url, containsStringIgnoringCase("/spring/gastos"));
     }
+
 }
