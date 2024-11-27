@@ -4,86 +4,125 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.enums.TipoDeuda;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioDeuda;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.models.Deuda;
+import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.servicios.ServicioDeudaImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ServicioDeudaImplTest {
+import java.util.ArrayList;
 
-    @Mock
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class ServicioDeudaImplTest {
+
     private RepositorioDeuda repositorioDeuda;
-
-    @InjectMocks
+    private RepositorioUsuario repositorioUsuario;
     private ServicioDeudaImpl servicioDeuda;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void init() {
+        repositorioDeuda = mock(RepositorioDeuda.class);
+        repositorioUsuario = mock(RepositorioUsuario.class);
+        servicioDeuda = new ServicioDeudaImpl(repositorioDeuda, repositorioUsuario);
     }
 
     @Test
-    void dadoQueExistenDeudasCuandoObtengoDeudasQueDeboEntoncesDevuelveSoloLasQueDebo() {
+    public void dadoUnaDeudaCuandoSeAgregaEntoncesEsGuardadaEnElRepositorio() {
         
-        Deuda deuda1 = new Deuda("Juan", 200.0, LocalDate.of(2024, 11, 25), TipoDeuda.DEBO, 1L);
-        Deuda deuda2 = new Deuda("Carlos", 300.0, LocalDate.of(2024, 11, 26), TipoDeuda.ME_DEBEN, 1L);
-        
-        when(repositorioDeuda.obtenerDeudasPorUsuario(1L, true)).thenReturn(Arrays.asList(deuda1));
-        
-        List<Deuda> deudasDebo = servicioDeuda.obtenerDeudasQueDebo(1L);
-        
-        assertEquals(1, deudasDebo.size());
-        assertEquals("Juan", deudasDebo.get(0).getNombre());
-        verify(repositorioDeuda, times(1)).obtenerDeudasPorUsuario(1L, true);
+        Usuario usuario = new Usuario("usuarioTest", "test@mail.com", "password", "ROLE_USER");
+        Deuda deuda = new Deuda("Préstamo", 100.0, LocalDate.now(), TipoDeuda.DEBO, "Persona1", 1L);
+
+        servicioDeuda.agregarDeuda(deuda);
+
+        verify(repositorioDeuda, times(1)).guardar(deuda);
     }
 
     @Test
-    void dadoQueExistenDeudasCuandoObtengoDeudasQueMeDebenEntoncesDevuelveSoloLasQueMeDeben() {
-      
-        Deuda deuda1 = new Deuda("Juan", 200.0, LocalDate.of(2024, 11, 25), TipoDeuda.DEBO, 1L);
-        Deuda deuda2 = new Deuda("Carlos", 300.0, LocalDate.of(2024, 11, 26), TipoDeuda.ME_DEBEN, 1L);
+    public void dadoUnaDeudaCuandoSeEliminaEntoncesEsRemovidaDelRepositorio() {
+        
+        Long deudaId = 1L;
+        Deuda deuda = new Deuda();
+        when(repositorioDeuda.obtenerPorId(deudaId)).thenReturn(deuda);
 
-        when(repositorioDeuda.obtenerDeudasPorUsuario(1L, false)).thenReturn(Arrays.asList(deuda2));
+        servicioDeuda.eliminarDeuda(deudaId);
 
-        List<Deuda> deudasMeDeben = servicioDeuda.obtenerDeudasQueMeDeben(1L);
-
-        assertEquals(1, deudasMeDeben.size());
-        assertEquals("Carlos", deudasMeDeben.get(0).getNombre());
-        verify(repositorioDeuda, times(1)).obtenerDeudasPorUsuario(1L, false);
+        verify(repositorioDeuda, times(1)).eliminar(deudaId);
     }
 
     @Test
-    void dadoQueUnaDeudaNoExisteCuandoLaEliminoEntoncesLanzaExcepcion() {
+    public void dadoUnIdInexistenteCuandoSeEliminaEntoncesLanzaExcepcion() {
         
-        Deuda deuda = new Deuda("Juan", 200.0, LocalDate.of(2024, 11, 25), TipoDeuda.DEBO, 1L);
+        Long deudaId = 1L;
+        when(repositorioDeuda.obtenerPorId(deudaId)).thenReturn(null);
 
-        when(repositorioDeuda.obtenerDeudasPorUsuario(1L, true)).thenReturn(Arrays.asList(deuda));
-        doThrow(RecursoNoEncontrado.class).when(repositorioDeuda).eliminar(999L);
-
-        assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.eliminarDeuda(999L));
+        assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.eliminarDeuda(deudaId));
     }
 
     @Test
-    void dadoQueExistenDeudasCuandoMarcarComoPagadaEntoncesActualizaElEstadoCorrectamente() {
-
-        Deuda deuda = new Deuda("Juan", 200.0, LocalDate.of(2024, 11, 25), TipoDeuda.DEBO, 1L);
-        deuda.setId(1L);
+    public void dadoUnaDeudaCuandoSeMarcaComoPagadaEntoncesElEstadoSeActualiza() {
         
-        when(repositorioDeuda.obtenerDeudasPorUsuario(1L, true)).thenReturn(Arrays.asList(deuda));
+        Long deudaId = 1L;
+        Deuda deuda = new Deuda();
+        when(repositorioDeuda.obtenerPorId(deudaId)).thenReturn(deuda);
 
-        servicioDeuda.marcarDeudaComoPagada(1L);
+        servicioDeuda.marcarDeudaComoPagada(deudaId);
 
-        verify(repositorioDeuda, times(1)).marcarComoPagada(1L);
+        assertThat(deuda.isPagado(), is(true));
+        verify(repositorioDeuda, times(1)).guardar(deuda);
+    }
+
+    @Test
+    public void dadoUnUsuarioConDeudasCuandoObtengoDeudasQueDeboEntoncesDevuelveSoloPendientes() {
+       
+        Long userId = 1L;
+        Usuario usuario = new Usuario();
+        List<Deuda> deudasPendientes = new ArrayList<>();
+        deudasPendientes.add(new Deuda("Préstamo", 100.0, LocalDate.now(), TipoDeuda.DEBO, "Persona1", 1L));
+
+        when(repositorioUsuario.buscarPorId(userId)).thenReturn(usuario);
+        when(repositorioDeuda.obtenerDeudasPorUsuario(usuario, TipoDeuda.DEBO)).thenReturn(deudasPendientes);
+
+        List<Deuda> resultado = servicioDeuda.obtenerDeudasQueDebo(userId);
+
+        assertThat(resultado, hasSize(1));
+        assertThat(resultado.get(0).getTipoDeuda(), is(TipoDeuda.DEBO));
+    }
+
+    @Test
+    public void dadoUnUsuarioConDeudasCuandoObtengoDeudasQueMeDebenEntoncesDevuelveSoloPorCobrar() {
+        
+        Long userId = 1L;
+        Usuario usuario = new Usuario();
+        List<Deuda> deudasPorCobrar = new ArrayList<>();
+        deudasPorCobrar.add(new Deuda("Cobro", 200.0, LocalDate.now(), TipoDeuda.ME_DEBEN, "Persona2", 1L));
+
+        when(repositorioUsuario.buscarPorId(userId)).thenReturn(usuario);
+        when(repositorioDeuda.obtenerDeudasPorUsuario(usuario, TipoDeuda.ME_DEBEN)).thenReturn(deudasPorCobrar);
+
+        List<Deuda> resultado = servicioDeuda.obtenerDeudasQueMeDeben(userId);
+
+        assertThat(resultado, hasSize(1));
+        assertThat(resultado.get(0).getTipoDeuda(), is(TipoDeuda.ME_DEBEN));
+    }
+
+    @Test
+    public void dadoUnUsuarioInexistenteCuandoObtengoDeudasEntoncesLanzaExcepcion() {
+        
+        Long userId = 1L;
+        when(repositorioUsuario.buscarPorId(userId)).thenReturn(null);
+
+        assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.obtenerDeudasQueDebo(userId));
+        assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.obtenerDeudasQueMeDeben(userId));
     }
 }

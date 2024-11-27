@@ -14,40 +14,57 @@ public class Deuda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
+    private String descripcion; 
     private Double monto;
     private LocalDate fecha;
 
     @Enumerated(EnumType.STRING)
-    private TipoDeuda tipoDeuda; 
-    private Long userId; 
-    private boolean pagado; 
+    private TipoDeuda tipoDeuda; // DEBO - ME_DEBEN
+
+    private String otraPersona; // Nombre de la persona deudora o acreedora (manual)
+
+    private boolean pagado = false;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Long usuarioId;
 
     public Deuda() {}
 
-    public Deuda(String nombre, Double monto, LocalDate fecha, TipoDeuda tipoDeuda, Long userId) {
-        this.nombre = nombre;
+    public Deuda(String descripcion, Double monto, LocalDate fecha, TipoDeuda tipoDeuda, String nombrePersona, Long usuarioId) {
+        this.descripcion = descripcion;
         this.monto = monto;
         this.fecha = fecha;
         this.tipoDeuda = tipoDeuda;
-        this.userId = userId;
-        this.pagado = false; 
+        this.otraPersona = nombrePersona;
+        this.usuarioId = usuarioId;
     }
+
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
+    
 
-    public String getNombre() {
-        return nombre;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+   
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public Double getMonto() {
@@ -74,12 +91,12 @@ public class Deuda {
         this.tipoDeuda = tipoDeuda;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getOtraPersona() {
+        return otraPersona;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setOtraPersona(String otraPersona) {
+        this.otraPersona = otraPersona;
     }
 
     public boolean isPagado() {
@@ -90,6 +107,31 @@ public class Deuda {
         this.pagado = pagado;
     }
 
-    // Getters y Setters
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Deuda other = (Deuda) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
+
+    
     
 }

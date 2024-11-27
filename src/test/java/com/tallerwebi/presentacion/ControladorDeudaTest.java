@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.models.Deuda;
+import com.tallerwebi.dominio.enums.TipoDeuda;
 import com.tallerwebi.dominio.interfaces.ServicioDeuda;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +37,8 @@ public class ControladorDeudaTest {
     @Test
     void testObtenerTodasLasDeudas() {
         
-        List<Deuda> deudasQueDebo = Arrays.asList(new Deuda("Juan", 200.0, null, null, 1L));
-        List<Deuda> deudasQueMeDeben = Arrays.asList(new Deuda("Carlos", 300.0, null, null, 1L));
+        List<Deuda> deudasQueDebo = Arrays.asList(new Deuda("Descripcion", 200.0, null, TipoDeuda.DEBO,"nombre", 1L));
+        List<Deuda> deudasQueMeDeben = Arrays.asList(new Deuda("Descripcion", 200.0, null, TipoDeuda.ME_DEBEN,"nombre", 1L));
         
         when(servicioDeuda.obtenerDeudasQueDebo(1L)).thenReturn(deudasQueDebo);
         when(servicioDeuda.obtenerDeudasQueMeDeben(1L)).thenReturn(deudasQueMeDeben);
@@ -53,7 +54,7 @@ public class ControladorDeudaTest {
     @Test
     void testAgregarDeuda() {
        
-        Deuda deuda = new Deuda("Juan", 200.0, null, null, 1L);
+        Deuda deuda = new Deuda("Descripcion", 200.0, null, TipoDeuda.DEBO,"nombre", 1L);
 
         controladorDeuda.agregarDeuda(deuda);
 

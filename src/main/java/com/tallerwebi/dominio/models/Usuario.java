@@ -1,9 +1,14 @@
 package com.tallerwebi.dominio.models;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -17,6 +22,13 @@ public class Usuario {
     private String rol;
     private Boolean activo = false;
     private Double saldo = 0.0;
+   
+     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Deuda> deudasPendientes = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Deuda> deudasPorCobrar = new LinkedHashSet<>();
+
 
     public Usuario(String username, String email, String password, String rol) {
         this.username = username;
@@ -78,5 +90,27 @@ public class Usuario {
 
     public void activar() {
         activo = true;
+    }
+
+    public Set<Deuda> getDeudasPendientes() {
+        return deudasPendientes;
+    }
+
+    public void setDeudasPendientes(Set<Deuda> deudasPendientes) {
+        this.deudasPendientes = deudasPendientes;
+    }
+
+    public Set<Deuda> getDeudasPorCobrar() {
+        return deudasPorCobrar;
+    }
+
+    public void setDeudasPorCobrar(Set<Deuda> deudasPorCobrar) {
+        this.deudasPorCobrar = deudasPorCobrar;
+    }
+    public void agregarDeudaPendiente(Deuda deuda){
+        this.deudasPendientes.add(deuda);
+    }
+    public void agregarDeudaPorCobrar(Deuda deuda){
+        this.deudasPorCobrar.add(deuda);
     }
 }
