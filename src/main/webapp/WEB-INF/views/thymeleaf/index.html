@@ -246,12 +246,12 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <form th:action="@{/objetivos/{id}/aportar(id=${objetivo.id})}" method="post">
+                                    <form th:action="@{/objetivos/{id}/actualizarMonto(id=${objetivo.id})}" method="post">
                                         <label>
                                             Monto:
-                                            <input type="number" name="montoAportado" min="1" required>
+                                            <input type="number" name="montoAAgregar" min="1" required>
                                         </label>
-                                        <button type="submit">Aportar</button>
+                                        <button type="submit">Actualizar Monto</button>
                                     </form>
                                 </td>
                             </tr>

@@ -149,7 +149,7 @@ public class ControladorObjetivos {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al actualizar el objetivo: " + e.getMessage());
         }
-        return "redirect:/objetivos";
+        return "redirect:/index";
     }
 
     @DeleteMapping("/{id}")
