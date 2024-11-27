@@ -135,25 +135,37 @@ document.querySelectorAll('.menu li').forEach(item => {
 
 
 function obtenerCategoriaMayorGasto() {
-const tiposEgresos = JSON.parse(sessionStorage.getItem("tiposEgresos")) || [];
+    const tiposEgresos = JSON.parse(sessionStorage.getItem("tiposEgresos")) || [];
 
-if (tiposEgresos.length === 0) {
-document.getElementById("categoriaMayorGasto").textContent = "No hay gastos registrados.";
-return;
-}
+    if (tiposEgresos.length === 0) {
+        
+        const alertaGastos = document.getElementById("alertaGastos");
+        if (alertaGastos) {
+            alertaGastos.style.display = "none";
+        }
+        return;
+    }
 
-const gastosPorCategoria = tiposEgresos.reduce((acumulador, gasto) => {
-acumulador[gasto.tipo] = (acumulador[gasto.tipo] || 0) + gasto.monto;
-return acumulador;
-}, {});
+    // Calcular los gastos por categoría
+    const gastosPorCategoria = tiposEgresos.reduce((acumulador, gasto) => {
+        acumulador[gasto.tipo] = (acumulador[gasto.tipo] || 0) + gasto.monto;
+        return acumulador;
+    }, {});
 
-const categoriaMayor = Object.keys(gastosPorCategoria).reduce((a, b) => 
-gastosPorCategoria[a] > gastosPorCategoria[b] ? a : b
-);
+    // Encontrar la categoría con más gastos
+    const categoriaMayor = Object.keys(gastosPorCategoria).reduce((a, b) =>
+        gastosPorCategoria[a] > gastosPorCategoria[b] ? a : b
+    );
 
-document.getElementById("categoriaMayorGasto").textContent = 
-`La categoría con más gastos es "${categoriaMayor}" con un total de $${gastosPorCategoria[categoriaMayor].toFixed(2)}.`;
+    // Actualizar el contenido del mensaje
+    document.getElementById("categoriaMayorGasto").textContent = 
+        `La categoría con más gastos es "${categoriaMayor}" con un total de $${gastosPorCategoria[categoriaMayor].toFixed(2)}.`;
+
+    // Mostrar la sección si está oculta
+    const alertaGastos = document.getElementById("alertaGastos");
+    if (alertaGastos) {
+        alertaGastos.style.display = "block";
+    }
 }
 
 document.addEventListener("DOMContentLoaded", obtenerCategoriaMayorGasto);
-
