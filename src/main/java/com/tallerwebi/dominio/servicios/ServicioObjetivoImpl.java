@@ -76,52 +76,41 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
             throw new SaldoInsuficiente("Saldo insuficiente para actualizar el objetivo.");
         }
 
-        objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
-        usuario.setSaldo(usuario.getSaldo() - montoAAgregar);
-
-        repositorioObjetivo.guardar(objetivo);
-
         Egreso egreso = new Egreso();
         egreso.setMonto(montoAAgregar);
-        egreso.setDescripcion("Actualización del objetivo: " + objetivo.getNombre());
+        egreso.setDescripcion("Aporte al objetivo: " + objetivo.getNombre());
         egreso.setFecha(LocalDate.now());
         egreso.setTipoEgreso(TipoEgreso.APORTE);
         egreso.setUserId(userId);
+
+        objetivo.setMontoActual(objetivo.getMontoActual() + montoAAgregar);
+        usuario.setSaldo(usuario.getSaldo() - montoAAgregar);
+        usuario.addTransaccion(egreso);
+
+        repositorioObjetivo.guardar(objetivo);
+        repositorioUsuario.modificar(usuario);
 
         servicioTransaccion.registrarTransaccionSinActualizarSaldo(egreso);
     }
 
     @Override
     @Transactional
-    public void aportarAObjetivo(Integer id, Double montoAportado, Long userIdAportante, String EmailDeusuarioAportado) throws SaldoInsuficiente {
+    public void aportarAObjetivo(Integer id, Double montoAportado, Long userIdAportante, String emailDeUsuarioAportado) throws SaldoInsuficiente {
         Objetivo objetivo = repositorioObjetivo.buscarObjetivo(id);
-        Usuario usuarioAportado = repositorioUsuario.buscar(EmailDeusuarioAportado);
-        if (objetivo == null) {
-            throw new IllegalArgumentException("El objetivo no existe.");
+        Usuario usuarioAportante = repositorioUsuario.buscarPorId(userIdAportante);
+
+        // Si se proporciona un email, buscar el usuario aportado (opcional)
+        Usuario usuarioAportado = emailDeUsuarioAportado != null
+                ? repositorioUsuario.buscar(emailDeUsuarioAportado)
+                : null;
+
+        if (usuarioAportante == null || objetivo == null || montoAportado <= 0) {
+            throw new IllegalArgumentException("Usuario, objetivo o monto inválidos");
         }
 
-        Usuario usuarioAportante = repositorioUsuario.buscarPorId(userIdAportante);
-        if (usuarioAportante == null) {
-            throw new IllegalArgumentException("Usuario aportante no encontrado.");
-        }
-        if (usuarioAportado == null) {
-            throw new IllegalArgumentException("Usuario aportado no encontrado.");
-        } else if (usuarioAportado.getObjetivos().isEmpty()) {
-            throw new IllegalArgumentException("El usuario al que quiere aportar no tiene objetivos.");
-        }
-        if (montoAportado <= 0) {
-            throw new IllegalArgumentException("No se puede aportar saldo negativo o igual a 0");
-        }
         if (usuarioAportante.getSaldo() < montoAportado) {
             throw new SaldoInsuficiente("Saldo insuficiente para realizar el aporte.");
         }
-
-        objetivo.setMontoActual(objetivo.getMontoActual() + montoAportado);
-        usuarioAportante.setSaldo(usuarioAportante.getSaldo() - montoAportado);
-        usuarioAportante.agregarObjetivoAportado(objetivo);
-
-        repositorioObjetivo.guardar(objetivo);
-        repositorioUsuario.modificar(usuarioAportante);
 
         Egreso egreso = new Egreso();
         egreso.setMonto(montoAportado);
@@ -129,6 +118,14 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         egreso.setFecha(LocalDate.now());
         egreso.setTipoEgreso(TipoEgreso.APORTE);
         egreso.setUserId(userIdAportante);
+
+        objetivo.setMontoActual(objetivo.getMontoActual() + montoAportado);
+        usuarioAportante.setSaldo(usuarioAportante.getSaldo() - montoAportado);
+        usuarioAportante.addTransaccion(egreso);
+        usuarioAportante.agregarObjetivoAportado(objetivo);
+
+        repositorioObjetivo.guardar(objetivo);
+        repositorioUsuario.modificar(usuarioAportante);
 
         servicioTransaccion.registrarTransaccionSinActualizarSaldo(egreso);
     }

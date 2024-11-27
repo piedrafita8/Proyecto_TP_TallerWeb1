@@ -71,7 +71,6 @@ public class ControladorObjetivos {
     public String aportarAObjetivo(
             @PathVariable Integer id,
             @RequestParam Double montoAportado,
-            @RequestParam(required = false) String emailDeUsuarioAportado,
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
@@ -86,9 +85,18 @@ public class ControladorObjetivos {
                 throw new IllegalArgumentException("El monto a aportar debe ser mayor a cero.");
             }
 
-            servicioObjetivo.aportarAObjetivo(id, montoAportado, userId, emailDeUsuarioAportado);
+            // Obtén el último email buscado y la categoría de la sesión
+            String ultimoEmailBuscado = (String) request.getSession().getAttribute("ultimoEmailBuscado");
+            CategoriaObjetivo ultimaCategoriaBuscada = (CategoriaObjetivo) request.getSession().getAttribute("ultimaCategoriaBuscada");
+
+            servicioObjetivo.aportarAObjetivo(id, montoAportado, userId, ultimoEmailBuscado);
 
             redirectAttributes.addFlashAttribute("mensaje", "Aporte realizado exitosamente.");
+
+            // Redirige de vuelta al método de búsqueda para mantener los resultados
+            if (ultimoEmailBuscado != null || ultimaCategoriaBuscada != null) {
+                return "redirect:/buscar-objetivos";
+            }
         } catch (SaldoInsuficiente e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -96,9 +104,6 @@ public class ControladorObjetivos {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al realizar el aporte: " + e.getMessage());
         }
-        
-        String ultimoEmailBuscado = (String) request.getSession().getAttribute("ultimoEmailBuscado");
-        CategoriaObjetivo ultimaCategoriaBuscada = (CategoriaObjetivo) request.getSession().getAttribute("ultimaCategoriaBuscada");
 
         return "redirect:/index";
     }
@@ -113,7 +118,12 @@ public class ControladorObjetivos {
     public String buscarObjetivos(
             @RequestParam(required = false) String emailUsuario,
             @RequestParam(required = false) CategoriaObjetivo categoria,
+            HttpServletRequest request,
             Model model) {
+
+        // Guardar en sesión para mantener el estado de búsqueda
+        request.getSession().setAttribute("ultimoEmailBuscado", emailUsuario);
+        request.getSession().setAttribute("ultimaCategoriaBuscada", categoria);
 
         List<Objetivo> objetivos;
 
@@ -149,7 +159,7 @@ public class ControladorObjetivos {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al actualizar el objetivo: " + e.getMessage());
         }
-        return "redirect:/objetivos";
+        return "redirect:/index";
     }
 
     @DeleteMapping("/{id}")
