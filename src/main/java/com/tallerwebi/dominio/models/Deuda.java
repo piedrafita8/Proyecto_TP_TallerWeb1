@@ -25,19 +25,18 @@ public class Deuda {
 
     private boolean pagado = false;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Relación con la entidad Usuario
     @JoinColumn(name = "usuario_id", nullable = false)
-    private Long usuarioId;
-
+    private Usuario usuario; 
     public Deuda() {}
 
-    public Deuda(String descripcion, Double monto, LocalDate fecha, TipoDeuda tipoDeuda, String nombrePersona, Long usuarioId) {
+    public Deuda(String descripcion, Double monto, LocalDate fecha, TipoDeuda tipoDeuda, String nombrePersona, Usuario usuario) {
         this.descripcion = descripcion;
         this.monto = monto;
         this.fecha = fecha;
         this.tipoDeuda = tipoDeuda;
         this.otraPersona = nombrePersona;
-        this.usuarioId = usuarioId;
+        this.usuario = usuario;
     }
 
 
@@ -49,12 +48,12 @@ public class Deuda {
     }
     
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsuarioId(Usuario usuario) {
+        this.usuario = usuario;
     }
 
    

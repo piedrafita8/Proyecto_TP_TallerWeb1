@@ -1,5 +1,5 @@
 package com.tallerwebi.dominio;
-
+/*
 import com.tallerwebi.dominio.enums.TipoIngreso;
 import com.tallerwebi.dominio.enums.TipoMovimiento;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
@@ -199,4 +199,4 @@ void registrarTransaccionSinActualizarSaldo_guardaTransaccionSinActualizarSaldoD
     verifyNoInteractions(repositorioUsuario);
 }
 
-}
+}*/

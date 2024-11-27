@@ -25,6 +25,7 @@ public class Usuario {
     private String rol;
     private Boolean activo = false;
     private Double saldo = 0.0;
+    
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Objetivo> objetivos = new ArrayList<>();
 

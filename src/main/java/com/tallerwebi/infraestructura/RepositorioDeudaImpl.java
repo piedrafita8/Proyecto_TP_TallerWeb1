@@ -1,69 +1,72 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.models.Deuda;
-import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.enums.TipoDeuda;
 import com.tallerwebi.dominio.interfaces.RepositorioDeuda;
-
+import com.tallerwebi.dominio.models.Deuda;
+import com.tallerwebi.dominio.models.Usuario;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
 public class RepositorioDeudaImpl implements RepositorioDeuda {
 
-    private final EntityManager entityManager;
+    private final SessionFactory sessionFactory;
 
-    public RepositorioDeudaImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public RepositorioDeudaImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    @Transactional
     public void guardar(Deuda deuda) {
+        Session session = sessionFactory.getCurrentSession();
         if (deuda.getId() == null) {
-            entityManager.persist(deuda);
+            session.save(deuda);
         } else {
-            entityManager.merge(deuda);
+            session.update(deuda);
         }
     }
 
     @Override
-    @Transactional
     public void eliminar(Long id) {
-        Deuda deuda = entityManager.find(Deuda.class, id);
+        Session session = sessionFactory.getCurrentSession();
+        Deuda deuda = session.get(Deuda.class, id);
         if (deuda != null) {
-            entityManager.remove(deuda);
+            session.delete(deuda);
         }
     }
 
     @Override
-    @Transactional
     public List<Deuda> obtenerDeudasPorUsuario(Usuario usuario, TipoDeuda tipoDeuda) {
-    String query = "SELECT d FROM Deuda d WHERE d.usuario = :usuario AND d.tipoDeuda = :tipoDeuda";
-    return entityManager.createQuery(query, Deuda.class)
-            .setParameter("usuario", usuario)
-            .setParameter("tipoDeuda", tipoDeuda)
-            .getResultList();
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Deuda> query = builder.createQuery(Deuda.class);
+        Root<Deuda> root = query.from(Deuda.class);
+
+        // Construcción de la consulta con filtros
+        Predicate usuarioPredicate = builder.equal(root.get("usuario"), usuario);
+        Predicate tipoDeudaPredicate = builder.equal(root.get("tipoDeuda"), tipoDeuda);
+        query.where(builder.and(usuarioPredicate, tipoDeudaPredicate));
+
+        return session.createQuery(query).getResultList();
     }
 
-
     @Override
-    @Transactional
     public void marcarComoPagada(Long id) {
-        Deuda deuda = entityManager.find(Deuda.class, id);
+        Session session = sessionFactory.getCurrentSession();
+        Deuda deuda = session.get(Deuda.class, id);
         if (deuda != null) {
             deuda.setPagado(true);
-            entityManager.merge(deuda);
+            session.update(deuda);
         }
     }
 
     @Override
     public Deuda obtenerPorId(Long id) {
-       return entityManager.find(Deuda.class, id) ;
+        return sessionFactory.getCurrentSession().get(Deuda.class, id);
     }
 }
 

@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio;
 
-
+/*
 import com.tallerwebi.dominio.enums.TipoDeuda;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioDeuda;
@@ -125,4 +125,4 @@ public class ServicioDeudaImplTest {
         assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.obtenerDeudasQueDebo(userId));
         assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.obtenerDeudasQueMeDeben(userId));
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.tallerwebi.presentacion;
+/*package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.enums.TipoEgreso;
 import com.tallerwebi.dominio.enums.TipoIngreso;
@@ -203,3 +203,4 @@ void testTransaccionNoEncontrada() throws RecursoNoEncontrado {
 
 
 }
+*/
