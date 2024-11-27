@@ -89,6 +89,16 @@
     <input type="text" name="nombre" placeholder="Nombre del Objetivo" required />
     <input type="number" name="montoObjetivo" placeholder="Monto del objetivo" required />
     <input type="date" name="fechaLimite" placeholder="Fecha límite" required />
+
+    <select name="categoria" required>
+      <option value="">Seleccione una categoría</option>
+      <option th:each="cat : ${T(com.tallerwebi.dominio.enums.CategoriaObjetivo).values()}"
+              th:value="${cat}"
+              th:text="${cat.toString()}">
+      </option>
+    </select>
+
+
     <button type="submit">Crear Objetivo</button>
   </form>
 

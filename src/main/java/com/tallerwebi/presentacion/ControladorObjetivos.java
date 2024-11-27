@@ -45,6 +45,7 @@ public class ControladorObjetivos {
     public ModelAndView crearObjetivo(@RequestParam String nombre,
                                       @RequestParam Double montoObjetivo,
                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaLimite,
+                                      @RequestParam CategoriaObjetivo categoria, // Nuevo parámetro
                                       RedirectAttributes redirectAttributes,
                                       HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
@@ -55,7 +56,7 @@ public class ControladorObjetivos {
             return modelAndView;
         }
         try {
-            servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, userId);
+            servicioObjetivo.crearObjetivo(nombre, montoObjetivo, fechaLimite, categoria, userId); // Modificar llamada
             redirectAttributes.addFlashAttribute("mensaje", "Objetivo creado exitosamente");
         } catch (ObjetivoExistente e) {
             redirectAttributes.addFlashAttribute("error", "El objetivo ya existe");

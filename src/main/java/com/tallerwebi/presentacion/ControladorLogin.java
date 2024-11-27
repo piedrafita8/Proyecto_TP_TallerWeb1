@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -127,34 +128,59 @@ public class ControladorLogin {
     @PostMapping("/buscar-objetivos")
     public ModelAndView buscarObjetivos(
             @RequestParam(required = false) String emailUsuario,
-            @RequestParam(required = false) CategoriaObjetivo categoria, // Cambio a enum
+            @RequestParam(required = false) CategoriaObjetivo categoria,
             HttpServletRequest request
     ) {
         ModelAndView modelAndView = new ModelAndView("index");
 
+        // Obtener el usuario de la sesión
         Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            modelAndView.setViewName("redirect:/login");
+            modelAndView.addObject("error", "Debe iniciar sesión para acceder a esta página.");
+            return modelAndView;
+        }
+
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
 
-        // Obtener todas las categorías usando el enum
+        // Agregar todas las categorías al modelo
         CategoriaObjetivo[] categorias = CategoriaObjetivo.values();
-        modelAndView.addObject("categorias", categorias);
 
-        // Filtrar objetivos
+        // Obtener todas las transacciones del usuario
+        List<Transaccion> transacciones = servicioTransaccion.obtenerTodasLasTransaccionesPorUserId(userId);
+
+        // Calcular ingresos y egresos
+        Double totalIngresos = transacciones.stream()
+                .filter(t -> t instanceof Ingreso)
+                .mapToDouble(Transaccion::getMonto)
+                .sum();
+
+        Double totalEgresos = transacciones.stream()
+                .filter(t -> t instanceof Egreso)
+                .mapToDouble(Transaccion::getMonto)
+                .sum();
+
+        // Filtrar objetivos según los parámetros
         List<Objetivo> objetivosFiltrados = servicioObjetivo.buscarObjetivosPorFiltros(emailUsuario, categoria);
-        modelAndView.addObject("objetivos", objetivosFiltrados);
 
-        // Mantener otros datos del usuario
-        modelAndView.addObject("saldo", usuario.getSaldo());
-        modelAndView.addObject("transacciones", servicioTransaccion.getTransaccionPorUserId(usuario.getId()));
-
+        // Obtener objetivos relacionados con el usuario
         List<Objetivo> objetivosAportados = servicioObjetivo.obtenerObjetivosAportados(userId);
         List<Objetivo> objetivosPersonales = servicioObjetivo.obtenerTodosLosObjetivosPorUsuario(userId);
 
+        // Agregar datos al modelo
+        modelAndView.addObject("saldo", usuario.getSaldo());
+        modelAndView.addObject("transacciones", transacciones);
+        modelAndView.addObject("montoIngreso", totalIngresos);
+        modelAndView.addObject("montoEgreso", totalEgresos);
+        modelAndView.addObject("categorias", categorias);
+        modelAndView.addObject("objetivos", objetivosFiltrados != null ? objetivosFiltrados : Collections.emptyList());
         modelAndView.addObject("objetivosPersonales", objetivosPersonales);
         modelAndView.addObject("objetivosAportados", objetivosAportados);
 
         return modelAndView;
     }
+
+
 
 
 
