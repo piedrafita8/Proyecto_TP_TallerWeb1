@@ -61,11 +61,11 @@
         </div>
     </div>
     <main>
-    <h1>Gestión de Deudas</h1>
+    <h2 class="gestion">Gestion de deudas</h2>
 <div class="container-agregar">
     <h2>Agregar Deuda</h2>
     <form th:action="@{/deudas}" method="post">
-        <label for="nombre">Descripcion:</label>
+        <label for="descripcion">Descripcion:</label>
         <input type="text" id="descripcion" name="descripcion" required />
 
         <label for="monto">Monto:</label>
@@ -80,8 +80,8 @@
             <option value="ME_DEBEN">Por Cobrar</option>
         </select>
 
-        <label for="destinatario">Destinatario:</label>
-        <input type="text" id="destinatario" name="destinatario" required />
+        <label for="otraPersona">Destinatario:</label>
+        <input type="text" id="otraPersona" name="otraPersona" required />
 
         <button type="submit" id="btn-save-deuda">Guardar</button>
     </form>
@@ -122,7 +122,7 @@
 </div>
     <!-- Tabla de deudas que le deben al usuario -->
     <div class="deudas-container">
-    <h2>Deudas que Me Deben</h2>
+    <h2>Deudas que Me deben</h2>
     <table>
         <thead>
             <tr>

@@ -52,7 +52,7 @@ public class Deuda {
         return usuario;
     }
 
-    public void setUsuarioId(Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 

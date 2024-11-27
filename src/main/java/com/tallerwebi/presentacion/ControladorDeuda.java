@@ -1,7 +1,10 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.models.Deuda;
+import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.interfaces.ServicioDeuda;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +18,11 @@ import java.util.List;
 public class ControladorDeuda {
 
     private final ServicioDeuda servicioDeuda;
+    private final ServicioUsuario servicioUsuario;
 
-    public ControladorDeuda(ServicioDeuda servicioDeuda) {
+    public ControladorDeuda(ServicioDeuda servicioDeuda, ServicioUsuario servicioUsuario) {
         this.servicioDeuda = servicioDeuda;
+        this.servicioUsuario = servicioUsuario;
     }
 
     @GetMapping
@@ -39,15 +44,19 @@ public class ControladorDeuda {
     }
 
     @PostMapping
-    public String agregarDeuda(@ModelAttribute Deuda deuda, RedirectAttributes redirectAttributes) {
-        try {
-            servicioDeuda.agregarDeuda(deuda);
-            redirectAttributes.addFlashAttribute("mensaje", "Deuda agregada exitosamente.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al agregar la deuda: " + e.getMessage());
-        }
-        return "redirect:/deudas";
+public String agregarDeuda(@ModelAttribute Deuda deuda, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    try {
+        Long userId = (Long) request.getSession().getAttribute("id");
+        Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId); 
+        deuda.setUsuario(usuario);
+
+        servicioDeuda.agregarDeuda(deuda);
+        redirectAttributes.addFlashAttribute("mensaje", "Deuda agregada exitosamente.");
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", "Error al agregar la deuda: " + e.getMessage());
     }
+    return "redirect:/deudas";
+}
 
     @DeleteMapping("/{deudaId}")
     public String eliminarDeuda(@PathVariable Long deudaId, RedirectAttributes redirectAttributes) {
