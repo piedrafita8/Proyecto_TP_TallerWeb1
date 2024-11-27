@@ -5,6 +5,8 @@ function marcarPagada(deudaId) {
 }
 
 function eliminarDeuda(deudaId) {
+    console.log("Intentando eliminar");
+    console.log("url:",`/deudas/${deudaId}`);
     fetch(`/deudas/${deudaId}`, {
         method: "DELETE",
     })

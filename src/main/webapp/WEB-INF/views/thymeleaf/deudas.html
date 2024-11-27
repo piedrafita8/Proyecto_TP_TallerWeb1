@@ -111,7 +111,7 @@
                 <td th:text="${deuda.otraPersona}"></td>
                 <td>
                     <input type="checkbox" th:checked="${deuda.pagado}" 
-                           th:onclick="'marcarPagada(' + deuda.id + ')'" />
+                           th:onclick="|marcarPagada(${deuda.id})|" />
                 </td>
                 <td>
                     <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
@@ -144,7 +144,7 @@
                 <td th:text="${deuda.otraPersona}"></td>
                 <td>
                     <input type="checkbox" th:checked="${deuda.pagado}" 
-                           th:onclick="'marcarPagada(' + deuda.id + ')'" />
+                           th:onclick="|marcarPagada(${deuda.id})|" />
                 </td>
                 <td>
                     <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>

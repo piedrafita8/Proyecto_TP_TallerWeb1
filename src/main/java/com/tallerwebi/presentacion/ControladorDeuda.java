@@ -78,10 +78,12 @@ public class ControladorDeuda {
 
     @DeleteMapping("/{deudaId}")
     public ResponseEntity<String> eliminarDeuda(@PathVariable Long deudaId) {
+        System.out.println("Eliminar "+deudaId);
         try {
             servicioDeuda.eliminarDeuda(deudaId);
             return ResponseEntity.ok("Deuda eliminada exitosamente.");
         } catch (Exception e) {
+            System.err.println("error"+e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                 .body("Error al eliminar la deuda: " + e.getMessage());
         }
