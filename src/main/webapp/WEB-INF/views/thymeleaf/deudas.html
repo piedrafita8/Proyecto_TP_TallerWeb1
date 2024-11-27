@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Deudas</title>
-    <link rel="stylesheet" th:href="@{/css/deudas.css}">
-    <link rel="stylesheet" href="../../../resources/core/css/deudas.css">
+    
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <link rel="stylesheet" href="../../../resources/core/css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" th:href="@{/css/deudas.css}">
+    <link rel="stylesheet" href="../../../resources/core/css/deudas.css">
 </head>
 <body>
     <div class="nav-container">
@@ -59,9 +60,35 @@
             </nav>
         </div>
     </div>
+    <main>
     <h1>Gestión de Deudas</h1>
+<div class="container-agregar">
+    <h2>Agregar Deuda</h2>
+    <form th:action="@{/deudas}" method="post">
+        <label for="nombre">Descripcion:</label>
+        <input type="text" id="descripcion" name="descripcion" required />
 
+        <label for="monto">Monto:</label>
+        <input type="number" id="monto" name="monto" required />
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required />
+
+        <label for="tipoDeuda">Tipo de Deuda:</label>
+        <select id="tipoDeuda" name="tipoDeuda">
+            <option value="DEBO">Pendiente</option>
+            <option value="ME_DEBEN">Por Cobrar</option>
+        </select>
+
+        <label for="destinatario">Destinatario:</label>
+        <input type="text" id="destinatario" name="destinatario" required />
+
+        <button type="submit" id="btn-save-deuda">Guardar</button>
+    </form>
+</div>
+<div class="container-mostrar"></div>
     <!-- Tabla de deudas que el usuario debe -->
+     <div class="deudas-container">
     <h2>Deudas que Debo</h2>
     <table>
         <thead>
@@ -72,7 +99,7 @@
                 <th>Tipo</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
-                <th>Acciones</th>
+                <th>Borrar</th>
             </tr>
         </thead>
         <tbody>
@@ -92,9 +119,9 @@
             </tr>
         </tbody>
     </table>
-    <button onclick="window.location.href='/deudas/form'">Agregar Deuda</button>
-
+</div>
     <!-- Tabla de deudas que le deben al usuario -->
+    <div class="deudas-container">
     <h2>Deudas que Me Deben</h2>
     <table>
         <thead>
@@ -105,7 +132,7 @@
                 <th>Tipo</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
-                <th>Acciones</th>
+                <th>Borrar</th>
             </tr>
         </thead>
         <tbody>
@@ -125,7 +152,9 @@
             </tr>
         </tbody>
     </table>
-    <button onclick="window.location.href='/deudas/form'">Agregar Deuda</button>
+    </div>
+</main>
+
 
     <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/index.js}"></script>

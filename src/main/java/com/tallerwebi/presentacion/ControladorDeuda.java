@@ -71,8 +71,4 @@ public class ControladorDeuda {
         return "redirect:/deudas";
     }
 
-    @GetMapping("/form")
-    public String mostrarFormularioDeuda() {
-        return "deudaForm"; 
-    }
 }
