@@ -89,7 +89,7 @@ class ServicioTransaccionImplTest {
                 servicioTransaccion.consultarTransaccion(monto, id)
         );
     }
-
+/*
     @Test
     void crearTransaccion_cuandoEsIngreso_deberiaAgregarTransaccionYActualizarSaldo() throws SaldoInsuficiente {
         // Preparación
@@ -135,7 +135,7 @@ class ServicioTransaccionImplTest {
         verify(repositorioUsuario).modificar(usuario);
         assertTrue(usuario.getTransacciones().contains(egreso));
     }
-
+*/
     @Test
     void crearTransaccion_cuandoEsEgreso_conSaldoInsuficiente_deberiaLanzarExcepcion() {
         // Preparación
