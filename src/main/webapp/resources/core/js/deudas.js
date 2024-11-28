@@ -8,13 +8,8 @@ function marcarPagada(deudaId) {
             const deudaRow = document.querySelector(`#deuda-${deudaId}`);
             const checkbox = deudaRow.querySelector("input[type='checkbox']");
             checkbox.checked = true; // Marca la deuda como pagada en la UI
-        } else {
-            console.error("Error al marcar como pagada:", response.statusText);
         }
     })
-    .catch(error => {
-        console.error("Error en la solicitud:", error);
-    });
 }
 
 function eliminarDeuda(deudaId) {

@@ -98,7 +98,7 @@
                 <th>Fecha</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
-                <th>Borrar</th>
+                <!--<th>Borrar</th>-->
             </tr>
         </thead>
         <tbody>
@@ -111,9 +111,9 @@
                     <input type="checkbox" th:checked="${deuda.pagado}" 
                            th:onclick="|marcarPagada(${deuda.id})|" />
                 </td>
-                <td>
+                <!--<td>
                     <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
-                </td>
+                </td>-->
             </tr>
         </tbody>
     </table>
@@ -129,7 +129,7 @@
                 <th>Fecha</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
-                <th>Borrar</th>
+                <!--<th>Borrar</th>-->
             </tr>
         </thead>
         <tbody>
@@ -142,9 +142,9 @@
                     <input type="checkbox" th:checked="${deuda.pagado}" 
                            th:onclick="|marcarPagada(${deuda.id})|" />
                 </td>
-                <td>
+                <!--<td>
                     <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
-                </td>
+                </td>-->
             </tr>
         </tbody>
     </table>
