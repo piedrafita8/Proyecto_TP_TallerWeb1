@@ -48,7 +48,7 @@ public class ControladorDeudaIntegTest {
     }
 
     private Long registrarYObtenerIdUsuario(String username, String password) throws Exception {
-        // Crear un usuario con el formulario de registro
+        
         MvcResult result = mockMvc.perform(post("/registrarme")
                         .param("username", username)
                         .param("password", password)
@@ -57,14 +57,13 @@ public class ControladorDeudaIntegTest {
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
 
-        // Ahora que el usuario está registrado, vamos a hacer login
+        
         MvcResult loginResult = mockMvc.perform(post("/validar-login")
                         .param("username", username)
                         .param("password", password))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
 
-        // Obtener el ID del usuario desde la sesión
         Long userId = (Long) loginResult.getRequest().getSession().getAttribute("id");
         return userId;
     }
@@ -74,10 +73,8 @@ public class ControladorDeudaIntegTest {
         String username = "testuser2";
         String password = "testpassword2";
 
-        // Registrar y obtener el ID del usuario
         Long userId = registrarYObtenerIdUsuario(username, password);
 
-        // Crear una deuda para eliminarla
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
         Deuda deuda = new Deuda();
         deuda.setMonto(100.0);
@@ -85,9 +82,8 @@ public class ControladorDeudaIntegTest {
         deuda.setUsuario(usuario);
         servicioDeuda.agregarDeuda(deuda);
 
-        // Verificar que la deuda fue creada
         MvcResult resultBeforeDelete = this.mockMvc.perform(get("/deudas")
-                        .sessionAttr("id", userId)) // Pasamos el ID del usuario en la sesión
+                        .sessionAttr("id", userId))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -96,25 +92,22 @@ public class ControladorDeudaIntegTest {
         assertThat(modelAndViewBeforeDelete.getViewName(), equalToIgnoringCase("deudas"));
         assertThat(modelAndViewBeforeDelete.getModel().containsKey("debo"), is(true));
 
-        // Realizar una solicitud DELETE para eliminar la deuda
         MvcResult resultDelete = this.mockMvc.perform(delete("/deudas/{deudaId}", deuda.getId())
-                        .sessionAttr("id", userId)) // Pasamos el ID del usuario en la sesión
-                .andExpect(status().is3xxRedirection()) // Esperamos redirección
+                        .sessionAttr("id", userId)) 
+                .andExpect(status().is3xxRedirection()) 
                 .andReturn();
 
-        // Verificar la redirección después de la eliminación
         assertThat(resultDelete.getResponse().getRedirectedUrl(), equalToIgnoringCase("/deudas"));
 
-        // Verificar que la deuda ya no existe
         MvcResult resultAfterDelete = this.mockMvc.perform(get("/deudas")
-                        .sessionAttr("id", userId)) // Pasamos el ID del usuario en la sesión
+                        .sessionAttr("id", userId)) 
                 .andExpect(status().isOk())
                 .andReturn();
 
         ModelAndView modelAndViewAfterDelete = resultAfterDelete.getModelAndView();
         assert modelAndViewAfterDelete != null;
         assertThat(modelAndViewAfterDelete.getViewName(), equalToIgnoringCase("deudas"));
-        assertThat(modelAndViewAfterDelete.getModel().containsKey("debo"), is(true)); // Verificamos si la deuda ya no está en el modelo
+        assertThat(modelAndViewAfterDelete.getModel().containsKey("debo"), is(true)); 
     }
     
     @Test
@@ -122,20 +115,17 @@ public class ControladorDeudaIntegTest {
         String username = "testuser";
         String password = "testpassword";
 
-        // Registrar y obtener el ID del usuario
         Long userId = registrarYObtenerIdUsuario(username, password);
 
-        // Crear una deuda para el usuario
         Usuario usuario = servicioUsuario.obtenerUsuarioPorId(userId);
         Deuda deuda = new Deuda();
         deuda.setMonto(100.0);
         deuda.setDescripcion("Deuda de prueba");
-        deuda.setUsuario(usuario); // Asociar la deuda al usuario creado
+        deuda.setUsuario(usuario); 
         servicioDeuda.agregarDeuda(deuda);
 
-        // Realizar una solicitud GET para acceder a la página de deudas
         MvcResult result = this.mockMvc.perform(get("/deudas")
-                        .sessionAttr("id", userId))  // Pasamos el ID del usuario en la sesión
+                        .sessionAttr("id", userId))  
                 .andExpect(status().isOk())
                 .andReturn();
 
