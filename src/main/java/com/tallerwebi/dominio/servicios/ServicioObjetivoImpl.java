@@ -2,11 +2,13 @@ package com.tallerwebi.dominio.servicios;
 
 import com.tallerwebi.dominio.enums.CategoriaObjetivo;
 import com.tallerwebi.dominio.enums.TipoEgreso;
+import com.tallerwebi.dominio.enums.TipoIngreso;
 import com.tallerwebi.dominio.excepcion.SaldoInsuficiente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioObjetivo;
 import com.tallerwebi.dominio.interfaces.ServicioTransaccion;
 import com.tallerwebi.dominio.models.Egreso;
+import com.tallerwebi.dominio.models.Ingreso;
 import com.tallerwebi.dominio.models.Objetivo;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
 import com.tallerwebi.dominio.interfaces.RepositorioObjetivo;
@@ -139,6 +141,42 @@ public class ServicioObjetivoImpl implements ServicioObjetivo {
         }
 
         return new ArrayList<>(usuario.getObjetivosAportados());
+    }
+
+    @Override
+    @Transactional
+    public void retirarObjetivoCumplido(Integer id, Long userId) throws IllegalArgumentException {
+        Objetivo objetivo = repositorioObjetivo.buscarObjetivo(id);
+
+        if (objetivo == null) {
+            throw new IllegalArgumentException("Objetivo no encontrado");
+        }
+
+        if (!objetivo.getUsuario().getId().equals(userId)) {
+            throw new IllegalArgumentException("El objetivo no pertenece al usuario");
+        }
+
+        if (objetivo.getMontoActual() < objetivo.getMontoObjetivo()) {
+            throw new IllegalArgumentException("El objetivo aún no está completado");
+        }
+
+        Usuario usuario = objetivo.getUsuario();
+        Double montoARetirar = objetivo.getMontoActual();
+
+        usuario.setSaldo(usuario.getSaldo() + montoARetirar);
+
+        Ingreso ingreso = new Ingreso();
+        ingreso.setMonto(montoARetirar);
+        ingreso.setDescripcion("Retiro de objetivo completado: " + objetivo.getNombre());
+        ingreso.setFecha(LocalDate.now());
+        ingreso.setTipoIngreso(TipoIngreso.OBJETIVO_COMPLETADO);
+        ingreso.setUserId(userId);
+
+        servicioTransaccion.registrarTransaccionSinActualizarSaldo(ingreso);
+
+        usuario.addTransaccion(ingreso);
+
+        repositorioUsuario.modificar(usuario);
     }
 
     @Override

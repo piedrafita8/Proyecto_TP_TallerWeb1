@@ -163,6 +163,30 @@ public class ControladorObjetivos {
         return "redirect:/index";
     }
 
+    @PostMapping("/{id}/retirar")
+    public String retirarObjetivoCumplido(
+            @PathVariable Integer id,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+
+        Long userId = (Long) request.getSession().getAttribute("id");
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión para retirar un objetivo.");
+            return "redirect:/login";
+        }
+
+        try {
+            servicioObjetivo.retirarObjetivoCumplido(id, userId);
+            redirectAttributes.addFlashAttribute("mensaje", "Objetivo retirado exitosamente. Monto agregado a su saldo.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al retirar el objetivo: " + e.getMessage());
+        }
+
+        return "redirect:/index";
+    }
+
     @DeleteMapping("/{id}")
     public String eliminarObjetivo(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         servicioObjetivo.eliminarObjetivo(id);
