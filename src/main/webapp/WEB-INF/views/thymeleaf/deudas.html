@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Deudas</title>
+    
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+    <link rel="stylesheet" href="../../../resources/core/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" th:href="@{/css/deudas.css}">
+    <link rel="stylesheet" href="../../../resources/core/css/deudas.css">
+</head>
+<body>
+    <div class="nav-container">
+        <div class="nav1">
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+                <h1>Finanzas SAT</h1>
+                <ul class="menu">
+                    <li id="active">
+                        <i class="fa-solid fa-chart-simple"></i><a href="index.html">Esquema</a>
+                    </li>
+    
+                    <li>
+                        <i class="fa-solid fa-arrow-up-wide-short"></i><a href="ingreso.html">Ingresos</a>
+                    </li>
+    
+                    <li>
+                        <i class="fa-solid fa-arrow-down-short-wide"></i><a href="gastos.html">Gastos</a>
+                    </li>
+    
+                    <li>
+                        <i class="fa-solid fa-medal"></i><a href="objetivos.html">Objetivos Personales</a>
+                    </li>
+    
+                    <li>
+                        <i class="fa-solid fa-medal"></i><a href="deudas.html">Deudas</a>
+                    </li>
+    
+                    <!--        <li>-->
+                    <!--          <a href="ajustes.html">Ajustes</a>-->
+                    <!--        </li>-->
+                </ul>
+            </nav>
+        </div>
+    
+        <div class="nav2">
+            <nav>
+                <ul class="menu">
+    
+                    <li>
+                        <i class="fa-regular fa-address-card"></i><a href="contacto.html">Contacto</a>
+                    </li>
+    
+                    <li>
+                        <i class="fa-solid fa-share-from-square"></i><a href="login.html">Cerrar sesion</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <main>
+    <h2 class="gestion">Gestion de deudas</h2>
+<div class="container-agregar">
+    <h3>Agregar Deuda</h3>
+    <form th:action="@{/deudas}" method="post">
+        <label for="descripcion">Descripcion:</label>
+        <input type="text" id="descripcion" name="descripcion" required />
+
+        <label for="monto">Monto:</label>
+        <input type="number" id="monto" name="monto" required />
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required />
+
+        <label for="tipoDeuda">Tipo de Deuda:</label>
+        <select id="tipoDeuda" name="tipoDeuda">
+            <option value="DEBO">Yo debo</option>
+            <option value="ME_DEBEN">Me deben</option>
+        </select>
+
+        <label for="otraPersona">Destinatario:</label>
+        <input type="text" id="otraPersona" name="otraPersona" required />
+
+        <button type="submit" id="btn-save-deuda">Guardar</button>
+    </form>
+</div>
+<div class="container-mostrar"></div>
+    <!-- Tabla de deudas que el usuario debe -->
+     <div class="deudas-container">
+    <h3>Deudas que Debo</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Descripcion</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+                <th>Destinatario</th>
+                <th>Pagada</th>
+                <th>Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="deuda : ${debo}" id="deuda-${deuda.id}">
+                <td th:text="${deuda.descripcion}"></td>
+                <td th:text="${deuda.monto}"></td>
+                <td th:text="${deuda.fecha}"></td>
+                <td th:text="${deuda.otraPersona}"></td>
+                <td>
+                    <input type="checkbox" th:checked="${deuda.pagado}" 
+                           th:onclick="|marcarPagada(${deuda.id})|" />
+                </td>
+                <td>
+                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+    <!-- Tabla de deudas que le deben al usuario -->
+    <div class="deudas-container">
+    <h3>Deudas que Me deben</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Descripcion</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+                <th>Destinatario</th>
+                <th>Pagada</th>
+                <th>Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="deuda : ${medeben}" id="deuda-${deuda.id}">
+                <td th:text="${deuda.descripcion}"></td>
+                <td th:text="${deuda.monto}"></td>
+                <td th:text="${deuda.fecha}"></td>
+                <td th:text="${deuda.otraPersona}"></td>
+                <td>
+                    <input type="checkbox" th:checked="${deuda.pagado}" 
+                           th:onclick="|marcarPagada(${deuda.id})|" />
+                </td>
+                <td>
+                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</main>
+
+
+    <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+    <script type="text/javascript" src="../../../resources/core/js/index.js"></script>
+    <script type="text/javascript" th:src="@{/js/ingresos.js}"></script>
+    <script type="text/javascript" src="../../../resources/core/js/ingresos.js"></script>
+    <script type="text/javascript" th:src="@{/js/gastos.js}"></script>
+    <script type="text/javascript" src="../../../resources/core/js/deudas.js"></script>
+    <script type="text/javascript" th:src="@{/js/deudas.js}"></script>
+    <script type="text/javascript" src="../../../resources/core/js/deudas.js"></script>
+</body>
+</html>
