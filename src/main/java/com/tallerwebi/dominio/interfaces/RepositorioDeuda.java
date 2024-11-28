@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 public interface RepositorioDeuda {
     public void guardar(Deuda deuda);
     public void eliminar(Long id);

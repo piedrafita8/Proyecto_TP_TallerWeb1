@@ -1,6 +1,5 @@
 package com.tallerwebi.dominio;
 
-/*
 import com.tallerwebi.dominio.enums.TipoDeuda;
 import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.RepositorioDeuda;
@@ -11,9 +10,12 @@ import com.tallerwebi.dominio.servicios.ServicioDeudaImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,10 +40,12 @@ public class ServicioDeudaImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void dadoUnaDeudaCuandoSeAgregaEntoncesEsGuardadaEnElRepositorio() {
         
         Usuario usuario = new Usuario("usuarioTest", "test@mail.com", "password", "ROLE_USER");
-        Deuda deuda = new Deuda("Préstamo", 100.0, LocalDate.now(), TipoDeuda.DEBO, "Persona1", 1L);
+        Deuda deuda = new Deuda("Préstamo", 100.0, LocalDate.now(), TipoDeuda.DEBO, "Persona1", usuario);
 
         servicioDeuda.agregarDeuda(deuda);
 
@@ -49,6 +53,8 @@ public class ServicioDeudaImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void dadoUnaDeudaCuandoSeEliminaEntoncesEsRemovidaDelRepositorio() {
         
         Long deudaId = 1L;
@@ -61,6 +67,8 @@ public class ServicioDeudaImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void dadoUnIdInexistenteCuandoSeEliminaEntoncesLanzaExcepcion() {
         
         Long deudaId = 1L;
@@ -70,6 +78,8 @@ public class ServicioDeudaImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void dadoUnaDeudaCuandoSeMarcaComoPagadaEntoncesElEstadoSeActualiza() {
         
         Long deudaId = 1L;
@@ -83,12 +93,14 @@ public class ServicioDeudaImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void dadoUnUsuarioConDeudasCuandoObtengoDeudasQueDeboEntoncesDevuelveSoloPendientes() {
        
         Long userId = 1L;
         Usuario usuario = new Usuario();
         List<Deuda> deudasPendientes = new ArrayList<>();
-        deudasPendientes.add(new Deuda("Préstamo", 100.0, LocalDate.now(), TipoDeuda.DEBO, "Persona1", 1L));
+        deudasPendientes.add(new Deuda("Préstamo", 100.0, LocalDate.now(), TipoDeuda.DEBO, "Persona1", usuario));
 
         when(repositorioUsuario.buscarPorId(userId)).thenReturn(usuario);
         when(repositorioDeuda.obtenerDeudasPorUsuario(usuario, TipoDeuda.DEBO)).thenReturn(deudasPendientes);
@@ -100,12 +112,14 @@ public class ServicioDeudaImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void dadoUnUsuarioConDeudasCuandoObtengoDeudasQueMeDebenEntoncesDevuelveSoloPorCobrar() {
         
         Long userId = 1L;
         Usuario usuario = new Usuario();
         List<Deuda> deudasPorCobrar = new ArrayList<>();
-        deudasPorCobrar.add(new Deuda("Cobro", 200.0, LocalDate.now(), TipoDeuda.ME_DEBEN, "Persona2", 1L));
+        deudasPorCobrar.add(new Deuda("Cobro", 200.0, LocalDate.now(), TipoDeuda.ME_DEBEN, "Persona2", usuario));
 
         when(repositorioUsuario.buscarPorId(userId)).thenReturn(usuario);
         when(repositorioDeuda.obtenerDeudasPorUsuario(usuario, TipoDeuda.ME_DEBEN)).thenReturn(deudasPorCobrar);
@@ -117,6 +131,8 @@ public class ServicioDeudaImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void dadoUnUsuarioInexistenteCuandoObtengoDeudasEntoncesLanzaExcepcion() {
         
         Long userId = 1L;
@@ -125,4 +141,4 @@ public class ServicioDeudaImplTest {
         assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.obtenerDeudasQueDebo(userId));
         assertThrows(RecursoNoEncontrado.class, () -> servicioDeuda.obtenerDeudasQueMeDeben(userId));
     }
-}*/
+}
