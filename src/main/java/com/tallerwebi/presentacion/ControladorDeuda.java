@@ -89,14 +89,14 @@ public class ControladorDeuda {
         }
 }
 
-    @PutMapping("/pagar/{deudaId}")
-    public String marcarComoPagada(@PathVariable Long deudaId, RedirectAttributes redirectAttributes) {
-        try {
-            servicioDeuda.marcarDeudaComoPagada(deudaId);
-            redirectAttributes.addFlashAttribute("mensaje", "Deuda marcada como pagada.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al marcar la deuda como pagada: " + e.getMessage());
-        }
-        return "redirect:/deudas";
+@PutMapping("/pagar/{deudaId}")
+public ResponseEntity<String> marcarComoPagada(@PathVariable Long deudaId) {
+    try {
+        servicioDeuda.marcarDeudaComoPagada(deudaId);
+        return ResponseEntity.ok("Deuda marcada como pagada.");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("Error al marcar la deuda como pagada: " + e.getMessage());
     }
+}
 }
