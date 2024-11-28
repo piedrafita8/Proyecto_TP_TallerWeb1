@@ -20,12 +20,10 @@ public class ControladorEliminarDeudaTest {
 
     @BeforeEach
     public void setUp() {
-        // Creamos las dependencias mockeadas
         servicioDeuda = mock(ServicioDeuda.class);
         servicioUsuario = mock(ServicioUsuario.class);
         redirectAttributes = mock(RedirectAttributes.class);
 
-        // Inicializamos el controlador
         controladorDeuda = new ControladorDeuda(servicioDeuda, servicioUsuario);
     }
 
@@ -33,16 +31,12 @@ public class ControladorEliminarDeudaTest {
     public void testEliminarDeuda_deudaEliminadaExitosamente() throws Exception {
         Long deudaId = 1L;
 
-        // Simulamos que el servicio elimina la deuda
         doNothing().when(servicioDeuda).eliminarDeuda(deudaId);
 
-        // Llamamos al método en el controlador
         String viewName = controladorDeuda.eliminarDeuda(deudaId, redirectAttributes);
 
-        // Verificamos la redirección
         assertThat(viewName, equalToIgnoringCase("redirect:/deudas"));
 
-        // Verificamos que el mensaje flash sea agregado correctamente
         verify(redirectAttributes).addFlashAttribute("mensaje", "Deuda eliminada exitosamente.");
     }
 
@@ -50,16 +44,12 @@ public class ControladorEliminarDeudaTest {
     public void testEliminarDeuda_deudaNoEncontrada() throws Exception {
         Long deudaId = 1L;
 
-        // Simulamos que el servicio lanza una excepción RecursoNoEncontrado
         doThrow(new RecursoNoEncontrado("Deuda no encontrada")).when(servicioDeuda).eliminarDeuda(deudaId);
 
-        // Llamamos al método en el controlador
         String viewName = controladorDeuda.eliminarDeuda(deudaId, redirectAttributes);
 
-        // Verificamos la redirección
         assertThat(viewName, equalToIgnoringCase("redirect:/deudas"));
 
-        // Verificamos que el mensaje de error sea agregado correctamente
         verify(redirectAttributes).addFlashAttribute("error", "Deuda no encontrada.");
     }
 
@@ -67,16 +57,12 @@ public class ControladorEliminarDeudaTest {
     public void testEliminarDeuda_errorGenerico() throws Exception {
         Long deudaId = 1L;
 
-        // Simulamos que el servicio lanza una excepción genérica
         doThrow(new RuntimeException("Error desconocido")).when(servicioDeuda).eliminarDeuda(deudaId);
 
-        // Llamamos al método en el controlador
         String viewName = controladorDeuda.eliminarDeuda(deudaId, redirectAttributes);
 
-        // Verificamos la redirección
         assertThat(viewName, equalToIgnoringCase("redirect:/deudas"));
 
-        // Verificamos que el mensaje de error sea agregado correctamente
         verify(redirectAttributes).addFlashAttribute("error", "Error al eliminar la deuda.");
     }
 
