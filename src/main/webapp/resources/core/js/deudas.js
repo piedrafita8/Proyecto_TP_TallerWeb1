@@ -4,10 +4,10 @@ function marcarPagada(deudaId) {
     })
     .then(response => {
         if (response.ok) {
-            // Aquí encontramos la fila por su id y actualizamos el checkbox
+            
             const deudaRow = document.querySelector(`#deuda-${deudaId}`);
             const checkbox = deudaRow.querySelector("input[type='checkbox']");
-            checkbox.checked = true; // Marca la deuda como pagada en la UI
+            checkbox.checked = true; 
         }
     })
 }
@@ -18,23 +18,17 @@ function eliminarDeuda(deudaId) {
     })
     .then(response => {
         
-        return response.text();  // Si el servidor responde con un texto, usa .text()
-        // Si el servidor responde con un JSON, usa .json()
+        return response.text();  
     })
     .then(responseText => {
-        console.log("Cuerpo de la respuesta:", responseText); // Muestra el cuerpo de la respuesta
+        console.log("Cuerpo de la respuesta:", responseText); 
 
         if (response.ok) {
-            // Si la respuesta fue exitosa, eliminamos la fila en la tabla
+            
             const deudaRow = document.querySelector(`#deuda-${deudaId}`);
             if (deudaRow) {
                 deudaRow.remove();
             }
-        } else {
-            console.error("Error al eliminar la deuda:", response.statusText);
         }
-    })
-    .catch(error => {
-        console.error("Error en la solicitud:", error);
     });
 }
