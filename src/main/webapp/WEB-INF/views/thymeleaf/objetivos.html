@@ -130,11 +130,22 @@
         </div>
 
         <div class="goal-actions">
-          <form th:action="@{/objetivos/{id}/actualizarMonto(id=${objetivo.id})}" method="post">
+
+          <form th:if="${objetivo.montoActual < objetivo.montoObjetivo}"
+                th:action="@{/objetivos/{id}/actualizarMonto(id=${objetivo.id})}"
+                method="post">
             <input type="number" name="montoAAgregar" placeholder="Monto a agregar" required />
             <button type="submit">Actualizar Monto</button>
           </form>
+
+
+          <form th:if="${objetivo.montoActual >= objetivo.montoObjetivo}"
+                th:action="@{/objetivos/{id}/retirar(id=${objetivo.id})}"
+                method="post" class="withdraw-form">
+            <button type="submit" class="btn-withdraw">Retirar Fondos</button>
+          </form>
         </div>
+
       </div>
     </li>
   </ul>

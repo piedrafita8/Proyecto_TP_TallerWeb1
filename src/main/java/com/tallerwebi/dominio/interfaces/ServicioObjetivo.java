@@ -22,4 +22,5 @@ public interface ServicioObjetivo {
 
     public List<Objetivo> buscarObjetivosPorFiltros(String emailUsuario, CategoriaObjetivo categoria);
     public List<Objetivo> obtenerObjetivosAportados(Long userId);
+    public void retirarObjetivoCumplido(Integer id, Long userId) throws IllegalArgumentException;
 }
