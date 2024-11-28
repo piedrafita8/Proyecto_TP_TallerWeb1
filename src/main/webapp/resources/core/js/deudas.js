@@ -10,12 +10,10 @@ function marcarPagada(deudaId) {
             checkbox.checked = true; // Marca la deuda como pagada en la UI
         } else {
             console.error("Error al marcar como pagada:", response.statusText);
-            alert("No se pudo marcar la deuda como pagada.");
         }
     })
     .catch(error => {
         console.error("Error en la solicitud:", error);
-        alert("Ocurrió un error al intentar marcar la deuda como pagada.");
     });
 }
 
@@ -24,7 +22,7 @@ function eliminarDeuda(deudaId) {
         method: "DELETE",
     })
     .then(response => {
-        console.log("Respuesta del servidor:", response); // Muestra toda la respuesta
+        
         return response.text();  // Si el servidor responde con un texto, usa .text()
         // Si el servidor responde con un JSON, usa .json()
     })
@@ -39,11 +37,9 @@ function eliminarDeuda(deudaId) {
             }
         } else {
             console.error("Error al eliminar la deuda:", response.statusText);
-            alert("No se pudo eliminar la deuda.");
         }
     })
     .catch(error => {
         console.error("Error en la solicitud:", error);
-        alert("Ocurrió un error al eliminar la deuda.");
     });
 }
