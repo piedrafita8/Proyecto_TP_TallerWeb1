@@ -1,0 +1,52 @@
+/* Estilo para las tablas de deudas */
+main{
+    display: flex;
+    flex-direction: column;
+}
+.container-mostrar{
+    display: flex;
+    flex-direction: row;
+}
+.deudas-container{
+    display: flex;
+    flex-direction: column;
+}
+
+table {
+    float: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+td {
+    background-color: #fff;
+}
+
+
+h2,h3 {
+    text-align: center;
+    margin: 1rem;
+    color: black;
+}
+
+.gestion {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: black;
+}
+/* Estilo para el formulario de agregar deuda */
+#btn-save-deuda{
+    margin-top: 20px;
+}
+label{
+    margin-top: 10px;
+}

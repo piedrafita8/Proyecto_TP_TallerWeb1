@@ -1,8 +1,10 @@
 package com.tallerwebi.dominio.models;
 
-import com.tallerwebi.dominio.enums.TipoIngreso;
 
 import javax.persistence.*;
+
+import com.tallerwebi.dominio.enums.TipoIngreso;
+
 import java.time.LocalDate;
 
 @Entity

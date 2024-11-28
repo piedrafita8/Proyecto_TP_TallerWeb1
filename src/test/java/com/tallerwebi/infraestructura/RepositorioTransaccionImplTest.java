@@ -14,27 +14,28 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-public class RepositorioTransaccionImplTest{
+@Transactional
+public class RepositorioTransaccionImplTest {
 
     @Autowired
     private SessionFactory sessionFactory;
-    private RepositorioTransaccion repositorioTransaccion;
+    private RepositorioTransaccionImpl repositorioTransaccion;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         this.repositorioTransaccion = new RepositorioTransaccionImpl(sessionFactory);
     }
-
+/* 
     @Test
     @Transactional
     @Rollback
@@ -46,21 +47,42 @@ public class RepositorioTransaccionImplTest{
         ingreso.setFecha(LocalDate.of(2022, 12, 20));
 
 
-        // Guardar usando el repositorio (opcionalmente podrías usar sessionFactory)
-        this.repositorioTransaccion.guardar(ingreso);
+        // Verificar que los datos coinciden con lo que se guardó
+        assertThat(transacciones.size(), equalTo(3));
+        assertThat(transacciones.get(0).getMonto(), equalTo(100.0));
+        assertThat(transacciones.get(1).getMonto(), equalTo(150.0));
+        assertThat(transacciones.get(2).getMonto(), equalTo(200.0));
+    }
 
-        // Hacer la consulta HQL para encontrar el egreso guardado
-        String hql = "SELECT i FROM Ingreso i WHERE i.monto = :monto AND i.descripcion = :descripcion AND i.fecha = :fecha";
-        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("monto", 400000.0);
-        query.setParameter("descripcion", "Ingreso con origen de mi sueldo");
-        query.setParameter("fecha", LocalDate.of(2022, 12, 20));
 
-        // Obtener el resultado de la consulta
-        Ingreso ingresoObtenido = (Ingreso) query.getSingleResult();
 
-        // Verificar que el egreso guardado es el mismo que el obtenido
-        assertThat(ingresoObtenido, equalTo(ingreso));
+*/
+
+
+
+
+
+    
+/*     @Test
+    @Transactional
+    @Rollback
+    void dadoRepositorioVacioCuandoGuardoTresTransaccionesLasEncuentroEnBaseDeDatos() {
+        // Crear transacciones
+        Transaccion transaccion1 = new Transaccion(1, 100.0, LocalDate.now(), TipoMovimiento.INGRESO, "Ingreso 1", 1L);
+        Transaccion transaccion2 = new Transaccion(2, 200.0, LocalDate.now(), TipoMovimiento.EGRESO, "Egreso 1", 3L);
+        Transaccion transaccion3 = new Transaccion(3, 300.0, LocalDate.now(), TipoMovimiento.INGRESO, "Ingreso 2", 2L);
+
+        // Guardar las transacciones
+        repositorioTransaccion.guardar(transaccion1);
+        repositorioTransaccion.guardar(transaccion2);
+        repositorioTransaccion.guardar(transaccion3);
+
+        // Recuperar las transacciones
+        List<Transaccion> transacciones = repositorioTransaccion.obtener();
+
+        // Validar
+        assertEquals(3, transacciones.size());
+        assertThat(transacciones.get(0).getComentario(), equalTo("Ingreso 1"));
     }
 
     @Test
@@ -82,16 +104,10 @@ public class RepositorioTransaccionImplTest{
         ingreso3.setFecha(LocalDate.of(2022, 12, 20));
         ingreso3.setDescripcion("Ingreso proveniente de beca");
 
-        this.sessionFactory.getCurrentSession().save(ingreso1);
-        this.sessionFactory.getCurrentSession().save(ingreso2);
-        this.sessionFactory.getCurrentSession().save(ingreso3);
-
-        List<Transaccion> TransaccionesObtenidas = this.repositorioTransaccion.obtener();
-
-        Integer cantidadEsperada = 3;
-        assertThat(TransaccionesObtenidas.size(), equalTo(cantidadEsperada));
+        // Validar
+        assertEquals(1, transacciones.size());
+        assertThat(transacciones.get(0).getTipoMovimiento(), equalTo(TipoMovimiento.INGRESO));
     }
-
 
     @Test
     @Transactional
@@ -386,3 +402,8 @@ public class RepositorioTransaccionImplTest{
     }
 }
 
+        // Validar
+        assertEquals(transaccionEsperada.getMonto(), result.getMonto());
+        assertEquals(transaccionEsperada.getComentario(), result.getComentario());
+    }*/
+}

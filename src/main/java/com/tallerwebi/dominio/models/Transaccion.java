@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.models;
 
 import javax.persistence.*;
+
+
 import java.time.LocalDate;
 
 @Entity
@@ -31,10 +33,11 @@ public abstract class Transaccion {
         this.usuario = usuario;
     }
 
-    public Transaccion(Double monto, String descripcion, LocalDate fecha) {
+    public Transaccion(Double monto, String descripcion, LocalDate fecha, Long userId) {
         this.monto = monto;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.userId=userId;
     }
 
     //Getters and Setters
