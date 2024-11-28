@@ -7,72 +7,127 @@ import com.tallerwebi.dominio.interfaces.ServicioDeuda;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
+import javax.servlet.http.HttpSession;
+
+import java.time.LocalDate;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ControladorDeudaTest {
 
-    @Mock
-    private ServicioDeuda servicioDeuda;
-
-    @Mock
-    private ServicioUsuario servicioUsuario;
-
-    @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private Model model;
-
-    @Mock
-    private RedirectAttributes redirectAttributes;
-
-    @InjectMocks
     private ControladorDeuda controladorDeuda;
 
-    private MockMvc mockMvc;
+    private ServicioDeuda servicioDeuda;
+    private ServicioUsuario servicioUsuario;
+
+    private HttpServletRequest request;
+    private HttpSession session;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controladorDeuda).build();
+        // Creamos las dependencias mockeadas
+        servicioDeuda = mock(ServicioDeuda.class);
+        servicioUsuario = mock(ServicioUsuario.class);
+
+        // Inicializamos el controlador
+        controladorDeuda = new ControladorDeuda(servicioDeuda, servicioUsuario);
+
+        // Mockeamos la solicitud HTTP y la sesión
+        request = mock(HttpServletRequest.class);
+        session = mock(HttpSession.class);
+        when(request.getSession()).thenReturn(session);
     }
 
-    
+    @Test
+    public void testMostrarDeudas_usuarioNoAutenticado() throws Exception {
+        // Simulamos que no hay usuario en la sesión
+        when(session.getAttribute("id")).thenReturn(null);
+
+        // Llamamos al método y verificamos el resultado
+        String viewName = controladorDeuda.mostrarDeudas(request, mock(org.springframework.ui.Model.class));
+        assertThat(viewName, equalToIgnoringCase("redirect:/login"));
+    }
+
+    @Test
+    public void testMostrarDeudas_usuarioAutenticado() throws Exception {
+        Long userId = 1L;
+        when(session.getAttribute("id")).thenReturn(userId);
+
+        Usuario usuario=new Usuario();
+        // Simulamos las respuestas de los servicios
+        List<Deuda> deudas = List.of(new Deuda("Deuda de prueba", 100.0, LocalDate.now(), TipoDeuda.DEBO, "Otra Persona", usuario));
+        when(servicioDeuda.obtenerDeudasQueDebo(userId)).thenReturn(deudas);
+        when(servicioDeuda.obtenerDeudasQueMeDeben(userId)).thenReturn(deudas);
+
+        // Creamos un objeto Model mockeado
+        org.springframework.ui.Model model = mock(org.springframework.ui.Model.class);
+
+        // Llamamos al método y verificamos el resultado
+        String viewName = controladorDeuda.mostrarDeudas(request, model);
+        assertThat(viewName, equalToIgnoringCase("deudas"));
+        verify(model).addAttribute("debo", deudas);
+        verify(model).addAttribute("medeben", deudas);
+    }
+
+    @Test
+    public void testAgregarDeuda_usuarioNoAutenticado() throws Exception {
+        when(session.getAttribute("id")).thenReturn(null);
+
+        // Llamamos al método y verificamos el resultado
+        String viewName = controladorDeuda.agregarDeuda(new Deuda(), request, mock(org.springframework.web.servlet.mvc.support.RedirectAttributes.class));
+        assertThat(viewName, equalToIgnoringCase("redirect:/login"));
+    }
+
+    @Test
+    public void testAgregarDeuda_usuarioAutenticado() throws Exception {
+        Long userId = 1L;
+        when(session.getAttribute("id")).thenReturn(userId);
+
+        // Simulamos que el servicio devuelve un usuario con id 1
+        Usuario usuario = new Usuario();
+        usuario.setId(userId);
+        when(servicioUsuario.obtenerUsuarioPorId(userId)).thenReturn(usuario);
+
+        Deuda deuda = new Deuda();
+        deuda.setMonto(100.0);
+        deuda.setDescripcion("Deuda de prueba");
+
+        // Simulamos la llamada al servicio para agregar la deuda
+        doNothing().when(servicioDeuda).agregarDeuda(any(Deuda.class));
+
+        // Llamamos al método
+        String viewName = controladorDeuda.agregarDeuda(deuda, request, mock(org.springframework.web.servlet.mvc.support.RedirectAttributes.class));
+        assertThat(viewName, equalToIgnoringCase("redirect:/deudas"));
+    }
 
     @Test
     public void testEliminarDeuda() throws Exception {
         Long deudaId = 1L;
+
+        // Simulamos que el servicio elimina la deuda
         doNothing().when(servicioDeuda).eliminarDeuda(deudaId);
 
-        mockMvc.perform(delete("/deudas/{deudaId}", deudaId))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Deuda eliminada exitosamente."));
+        // Llamamos al método y verificamos el resultado
+        String response = controladorDeuda.eliminarDeuda(deudaId).getBody();
+        assertThat(response, equalToIgnoringCase("Deuda eliminada exitosamente."));
     }
 
     @Test
     public void testMarcarDeudaComoPagada() throws Exception {
         Long deudaId = 1L;
+
+        // Simulamos que el servicio marca la deuda como pagada
         doNothing().when(servicioDeuda).marcarDeudaComoPagada(deudaId);
 
-        mockMvc.perform(put("/deudas/pagar/{deudaId}", deudaId))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Deuda marcada como pagada."));
+        // Llamamos al método y verificamos el resultado
+        String response = controladorDeuda.marcarComoPagada(deudaId).getBody();
+        assertThat(response, equalToIgnoringCase("Deuda marcada como pagada."));
     }
 }
