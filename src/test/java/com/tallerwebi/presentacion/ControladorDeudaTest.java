@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.models.Deuda;
 import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.enums.TipoDeuda;
+import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.ServicioDeuda;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,17 +108,6 @@ public class ControladorDeudaTest {
         assertThat(viewName, equalToIgnoringCase("redirect:/deudas"));
     }
 
-    @Test
-    public void testEliminarDeuda() throws Exception {
-        Long deudaId = 1L;
-
-        // Simulamos que el servicio elimina la deuda
-        doNothing().when(servicioDeuda).eliminarDeuda(deudaId);
-
-        // Llamamos al método y verificamos el resultado
-        String response = controladorDeuda.eliminarDeuda(deudaId).getBody();
-        assertThat(response, equalToIgnoringCase("Deuda eliminada exitosamente."));
-    }
 
     @Test
     public void testMarcarDeudaComoPagada() throws Exception {

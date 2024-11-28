@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.models.Deuda;
 import com.tallerwebi.dominio.models.Usuario;
 import com.tallerwebi.dominio.enums.TipoDeuda;
 import com.tallerwebi.dominio.excepcion.ObjetivoExistente;
+import com.tallerwebi.dominio.excepcion.RecursoNoEncontrado;
 import com.tallerwebi.dominio.interfaces.ServicioDeuda;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 
@@ -76,18 +77,22 @@ public class ControladorDeuda {
     }
 
 
-    @DeleteMapping("/{deudaId}")
-    public ResponseEntity<String> eliminarDeuda(@PathVariable Long deudaId) {
-        System.out.println("Eliminar "+deudaId);
+    
+
+    @RequestMapping(value = "/{deudaId}", method = RequestMethod.DELETE)
+    public String eliminarDeuda(@PathVariable Long deudaId, RedirectAttributes redirectAttributes) {
         try {
             servicioDeuda.eliminarDeuda(deudaId);
-            return ResponseEntity.ok("Deuda eliminada exitosamente.");
+            redirectAttributes.addFlashAttribute("mensaje", "Deuda eliminada exitosamente.");
+            return "redirect:/deudas";
+        } catch (RecursoNoEncontrado e) {
+            redirectAttributes.addFlashAttribute("error", "Deuda no encontrada.");
+            return "redirect:/deudas";
         } catch (Exception e) {
-            System.err.println("error"+e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("Error al eliminar la deuda: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar la deuda.");
+            return "redirect:/deudas";
         }
-}
+    }
 
 @PutMapping("/pagar/{deudaId}")
 public ResponseEntity<String> marcarComoPagada(@PathVariable Long deudaId) {

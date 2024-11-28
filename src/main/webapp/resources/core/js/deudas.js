@@ -24,10 +24,19 @@ function eliminarDeuda(deudaId) {
         method: "DELETE",
     })
     .then(response => {
+        console.log("Respuesta del servidor:", response); // Muestra toda la respuesta
+        return response.text();  // Si el servidor responde con un texto, usa .text()
+        // Si el servidor responde con un JSON, usa .json()
+    })
+    .then(responseText => {
+        console.log("Cuerpo de la respuesta:", responseText); // Muestra el cuerpo de la respuesta
+
         if (response.ok) {
-            // Aquí encontramos la fila por su id y la eliminamos
+            // Si la respuesta fue exitosa, eliminamos la fila en la tabla
             const deudaRow = document.querySelector(`#deuda-${deudaId}`);
-            deudaRow.remove(); // Elimina la fila de la tabla
+            if (deudaRow) {
+                deudaRow.remove();
+            }
         } else {
             console.error("Error al eliminar la deuda:", response.statusText);
             alert("No se pudo eliminar la deuda.");

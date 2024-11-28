@@ -7,6 +7,8 @@ import com.tallerwebi.dominio.interfaces.RepositorioDeuda;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioDeuda;
 import com.tallerwebi.dominio.models.Deuda;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class ServicioDeudaImpl implements ServicioDeuda {
     private final RepositorioDeuda repositorioDeuda;
     private final RepositorioUsuario repositorioUsuario;
 
+    @Autowired
     public ServicioDeudaImpl(RepositorioDeuda repositorioDeuda, RepositorioUsuario repositorioUsuario) {
         this.repositorioDeuda = repositorioDeuda;
         this.repositorioUsuario = repositorioUsuario;
