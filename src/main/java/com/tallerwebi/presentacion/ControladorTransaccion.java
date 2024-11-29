@@ -99,6 +99,7 @@ public class ControladorTransaccion {
 
         // Verificar sesión del usuario
         Long userId = (Long) request.getSession().getAttribute("id");
+
         if (userId == null) {
             modelAndView.addObject("error", "No se pudo identificar al usuario");
             return modelAndView;

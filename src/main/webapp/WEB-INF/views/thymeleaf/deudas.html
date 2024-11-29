@@ -35,7 +35,7 @@
                     </li>
     
                     <li>
-                        <i class="fa-solid fa-medal"></i><a href="deudas.html">Deudas</a>
+                        <i class="fa-solid fa-comment-dollar"></i><a href="deudas.html">Deudas</a>
                     </li>
     
                     <!--        <li>-->
@@ -98,7 +98,7 @@
                 <th>Fecha</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
-                <th>Borrar</th>
+<!--                <th>Borrar</th>-->
             </tr>
         </thead>
         <tbody>
@@ -111,9 +111,9 @@
                     <input type="checkbox" th:checked="${deuda.pagado}" 
                            th:onclick="|marcarPagada(${deuda.id})|" />
                 </td>
-                <td>
-                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
-                </td>
+<!--                <td>-->
+<!--                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>-->
+<!--                </td>-->
             </tr>
         </tbody>
     </table>
@@ -129,7 +129,7 @@
                 <th>Fecha</th>
                 <th>Destinatario</th>
                 <th>Pagada</th>
-                <th>Borrar</th>
+<!--                <th>Borrar</th>-->
             </tr>
         </thead>
         <tbody>
@@ -142,9 +142,9 @@
                     <input type="checkbox" th:checked="${deuda.pagado}" 
                            th:onclick="|marcarPagada(${deuda.id})|" />
                 </td>
-                <td>
-                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>
-                </td>
+<!--                <td>-->
+<!--                    <button th:onclick="|eliminarDeuda(${deuda.id})|">X</button>-->
+<!--                </td>-->
             </tr>
         </tbody>
     </table>
